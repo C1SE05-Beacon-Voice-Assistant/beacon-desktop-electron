@@ -15,10 +15,6 @@
   "keywords": [],
   "license": "MIT",
   "dependencies": {
-    "@emotion/react": "^11.11.1",
-    "@emotion/styled": "^11.11.0",
-    "@mui/icons-material": "^5.14.11",
-    "@mui/material": "^5.14.11",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-hot-loader": "4.13.0",
@@ -69,8 +65,8 @@
   "config": {
     "forge": {
       "packagerConfig": {
-        "name": "Beacon",
-        "executableName": "Beacon",
+        "name": "Electron starter",
+        "executableName": "electron-starter",
         "icon": "assets/icon",
         "extraResource": [
           "assets"
@@ -101,7 +97,7 @@
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "Beacon"
+            "name": "Electron Starter"
           }
         },
         {
