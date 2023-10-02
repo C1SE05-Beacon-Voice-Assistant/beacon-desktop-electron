@@ -1,0 +1,30 @@
+"use strict";
+/*
+ * ATTENTION: An "eval-source-map" devtool has been used.
+ * This devtool is neither made for production nor for readable output files.
+ * It uses "eval()" calls to create a separate source file with attached SourceMaps in the browser devtools.
+ * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
+ * or disable the default devtool with "devtool: false".
+ * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
+ */
+self["webpackHotUpdateelectron_react_typescript"]("main_window",{
+
+/***/ "./src/layouts/main/main-layout.tsx":
+/*!******************************************!*\
+  !*** ./src/layouts/main/main-layout.tsx ***!
+  \******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ MainLayout)\n/* harmony export */ });\n/* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ \"./node_modules/@babel/runtime/helpers/esm/slicedToArray.js\");\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n/* harmony import */ var _sidebar_sidebar_layout__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../sidebar/sidebar-layout */ \"./src/layouts/sidebar/sidebar-layout.tsx\");\n/* harmony import */ var _header_header_layout__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../header/header-layout */ \"./src/layouts/header/header-layout.tsx\");\n/* harmony import */ var _mui_material_Box__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @mui/material/Box */ \"./node_modules/@mui/material/Box/Box.js\");\n/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ \"./node_modules/react/jsx-runtime.js\");\n\n\n\n\n\n\n\nfunction MainLayout(_ref) {\n  var children = _ref.children;\n\n  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false),\n      _useState2 = (0,_babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__[\"default\"])(_useState, 2),\n      open = _useState2[0],\n      setOpen = _useState2[1];\n\n  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_mui_material_Box__WEBPACK_IMPORTED_MODULE_5__[\"default\"], {\n    sx: {\n      display: 'flex'\n    },\n    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_sidebar_sidebar_layout__WEBPACK_IMPORTED_MODULE_2__[\"default\"], {\n      open: open,\n      setOpen: setOpen\n    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_header_header_layout__WEBPACK_IMPORTED_MODULE_3__[\"default\"], {\n      setOpen: setOpen,\n      open: open\n    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(\"h1\", {\n      style: {},\n      children: \"Nguyen Thanh Tung\"\n    })]\n  });\n}//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi9zcmMvbGF5b3V0cy9tYWluL21haW4tbGF5b3V0LnRzeCIsIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7OztBQUFBO0FBQ0E7QUFDQTtBQUNBOzs7QUFNZSxTQUFTSyxVQUFULE9BQXVDO0FBQUEsTUFBakJDLFFBQWlCLFFBQWpCQSxRQUFpQjs7QUFDcEQsa0JBQXdCTCwrQ0FBUSxDQUFDLEtBQUQsQ0FBaEM7QUFBQTtBQUFBLE1BQU9NLElBQVA7QUFBQSxNQUFhQyxPQUFiOztBQUNBLHNCQUNFLHdEQUFDLHlEQUFEO0FBQUssTUFBRSxFQUFFO0FBQUVDLE1BQUFBLE9BQU8sRUFBRTtBQUFYLEtBQVQ7QUFBQSw0QkFDRSx1REFBQywrREFBRDtBQUFlLFVBQUksRUFBRUYsSUFBckI7QUFBMkIsYUFBTyxFQUFFQztBQUFwQyxNQURGLGVBR0UsdURBQUMsNkRBQUQ7QUFBYyxhQUFPLEVBQUVBLE9BQXZCO0FBQWdDLFVBQUksRUFBRUQ7QUFBdEMsTUFIRixlQUlJO0FBQUksV0FBSyxFQUFFLEVBQVg7QUFBQSxnQkFBZTtBQUFmLE1BSko7QUFBQSxJQURGO0FBUUQiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9lbGVjdHJvbi1yZWFjdC10eXBlc2NyaXB0Ly4vc3JjL2xheW91dHMvbWFpbi9tYWluLWxheW91dC50c3g/MGQ3ZiJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgUmVhY3QsIHsgUmVhY3ROb2RlLCB1c2VTdGF0ZSB9IGZyb20gJ3JlYWN0J1xyXG5pbXBvcnQgU2lkZUJhckxheW91dCBmcm9tICcuLi9zaWRlYmFyL3NpZGViYXItbGF5b3V0J1xyXG5pbXBvcnQgSGVhZGVyTGF5b3V0IGZyb20gJy4uL2hlYWRlci9oZWFkZXItbGF5b3V0J1xyXG5pbXBvcnQgQm94IGZyb20gJ0BtdWkvbWF0ZXJpYWwvQm94J1xyXG5pbXBvcnQgQ3NzQmFzZWxpbmUgZnJvbSAnQG11aS9tYXRlcmlhbC9Dc3NCYXNlbGluZSdcclxuaW50ZXJmYWNlIE1haW5MYXlvdXRQcm9wcyB7XHJcbiAgY2hpbGRyZW46IFJlYWN0Tm9kZVxyXG59XHJcblxyXG5leHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBNYWluTGF5b3V0KHsgY2hpbGRyZW4gfTogYW55KSB7XHJcbiAgY29uc3QgW29wZW4sIHNldE9wZW5dID0gdXNlU3RhdGUoZmFsc2UpXHJcbiAgcmV0dXJuIChcclxuICAgIDxCb3ggc3g9e3sgZGlzcGxheTogJ2ZsZXgnIH19PlxyXG4gICAgICA8U2lkZUJhckxheW91dCBvcGVuPXtvcGVufSBzZXRPcGVuPXtzZXRPcGVufSAvPlxyXG5cclxuICAgICAgPEhlYWRlckxheW91dCBzZXRPcGVuPXtzZXRPcGVufSBvcGVuPXtvcGVufSAvPlxyXG4gICAgICAgIDxoMSBzdHlsZT17e319Pk5ndXllbiBUaGFuaCBUdW5nPC9oMT5cclxuICAgIDwvQm94PlxyXG4gIClcclxufVxyXG4iXSwibmFtZXMiOlsiUmVhY3QiLCJ1c2VTdGF0ZSIsIlNpZGVCYXJMYXlvdXQiLCJIZWFkZXJMYXlvdXQiLCJCb3giLCJNYWluTGF5b3V0IiwiY2hpbGRyZW4iLCJvcGVuIiwic2V0T3BlbiIsImRpc3BsYXkiXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///./src/layouts/main/main-layout.tsx\n");
+
+/***/ })
+
+},
+/******/ function(__webpack_require__) { // webpackRuntimeModules
+/******/ /* webpack/runtime/getFullHash */
+/******/ (() => {
+/******/ 	__webpack_require__.h = () => ("31871c9ad5b22679d249")
+/******/ })();
+/******/ 
+/******/ }
+);
