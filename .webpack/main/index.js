@@ -509,7 +509,7 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      preload: 'F:\\beacon-desktop-electron\\.webpack\\renderer\\main_window\\preload.js'
+      preload: 'G:\\DTU\\Scientific_Research\\Development\\beacon-desktop-electron\\.webpack\\renderer\\main_window\\preload.js'
     }
   });
   mainWindow.loadURL('http://localhost:3000/main_window');

@@ -1,16 +1,22 @@
+const path = require('path')
+const webpack = require('webpack')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const { spawn } = require('child_process')
+const defaultInclude = path.resolve(__dirname, 'src')
+
 module.exports = {
-  mode: 'developement',
+  mode: 'development',
   module: {
     rules: [
       {
         test: /\.css$/,
         use: [
           {
-            loader: 'style-loader'
+            loader: 'style-loader',
           },
           {
-            loader: 'css-loader'
-          }
+            loader: 'css-loader',
+          },
         ],
         include: defaultInclude,
       },
@@ -31,17 +37,19 @@ module.exports = {
       },
       {
         test: /\.(eot|svg|ttf|woff|woff2)$/,
-        use: [{ loader: 'file-loader?name=font/[name]__[hash:base64:5].[ext]' }],
-        include: defaultInclude
-      }
-    ]
+        use: [
+          { loader: 'file-loader?name=font/[name]__[hash:base64:5].[ext]' },
+        ],
+        include: defaultInclude,
+      },
+    ],
   },
   target: 'electron-renderer',
   plugins: [
     new HtmlWebpackPlugin(),
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('development')
-    })
+      'process.env.NODE_ENV': JSON.stringify('development'),
+    }),
   ],
   devtool: 'cheap-source-map',
   devServer: {
@@ -49,19 +57,19 @@ module.exports = {
     stats: {
       colors: true,
       chunks: false,
-      children: false
+      children: false,
     },
     before() {
-      spawn(
-        'electron',
-        ['.'],
-        { shell: true, env: process.env, stdio: 'inherit' }
-      )
-      .on('close', code => process.exit(0))
-      .on('error', spawnError => console.error(spawnError))
-    }
+      spawn('electron', ['.'], {
+        shell: true,
+        env: process.env,
+        stdio: 'inherit',
+      })
+        .on('close', code => process.exit(0))
+        .on('error', spawnError => console.error(spawnError))
+    },
   },
   resolve: {
-    extensions: ['.js', '.json', '.jsx']
-  }
+    extensions: ['.js', '.json', '.jsx'],
+  },
 }
