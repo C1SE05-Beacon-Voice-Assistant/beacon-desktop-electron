@@ -185,7 +185,7 @@ export default function App() {
   return (
     <div>
       <MainLayout>
-        <h1>Nguyen Trieu Tien</h1>
+        <h1 className="home">Nguyen Trieu Tien</h1>
       </MainLayout>
     </div>
   )
