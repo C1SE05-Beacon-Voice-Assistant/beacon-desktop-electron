@@ -1,0 +1,10 @@
+.bot {
+  }
+  .bot img {
+    object-fit: cover;
+  }
+  .vector {
+    position: absolute;
+    transform: scale(2);
+    left: 35%;
+  }

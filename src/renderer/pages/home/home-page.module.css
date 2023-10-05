@@ -1,0 +1,40 @@
+.home__container {
+  justify-content: center;
+  text-align: center;
+}
+.home__container .vector {
+  position: absolute;
+  top: 50%;
+  left: 70%;
+  transform: translate(-50%, -50%) scale(4);
+  z-index: -1;
+}
+.title {
+  margin-top: -140px;
+}
+.title div {
+  text-align: center;
+  font-size: 50px;
+  margin-bottom: 20px;
+}
+.vector img {
+  width: 65%;
+  margin-left: -200px;
+}
+.title button {
+  width: 200px;
+  background-color: var(--yellow-900);
+  height: 50px;
+  border-radius: 6px;
+  border: none;
+  outline: none;
+  font-size: 20px;
+  letter-spacing: 2px;
+  padding: 5px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+.title button:hover {
+  color: var(--yellow-900);
+  background-color: var(--white-900);
+}

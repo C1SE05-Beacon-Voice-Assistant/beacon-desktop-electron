@@ -1,0 +1,30 @@
+.setting__option {
+  width: 100%;
+}
+.setting__container {
+    width: 460px;
+}
+.setting__option--detail {
+    padding-left: 50px;
+}
+.container {
+    display: flex;
+    width: 100%;
+}
+.item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.setting__option h1 {
+    border-bottom: 1px solid var(--white-900);
+    padding: 20px 0;
+}
+.item button {
+    padding: 10px 30px;
+    border-radius: 6px;
+    background-color: var(--yellow-900);
+    font-weight: 600;
+}
+.bot{
+}
