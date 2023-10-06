@@ -2,20 +2,23 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
-import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
+import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
+import { styled, useTheme } from "@mui/material/styles";
+import * as React from "react";
+import { useNavigate } from "react-router-dom";
 import HomeIcon from "~/components/icons/home-icon";
-import TimeIcon from "~/components/icons/time-icon";
+import InforIcon from "~/components/icons/infor-icon";
 import LogoIcon from "~/components/icons/logo-icon";
 import SettingIcon from "~/components/icons/setting-icon";
 import InforIcon from "~/components/icons/infor-icon";
-import { AppRouter } from "~/components/constants/app-routes";
+import TimeIcon from "~/components/icons/time-icon";
+import { AppRouter } from "~/constants/appRoutes";
 
 const drawerWidth = 240;
 
@@ -31,7 +34,7 @@ type SideBarLayoutProps = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
-export default function SideBarLayout(props: SideBarLayoutProps) {
+export default function DefaultSidebar(props: SideBarLayoutProps) {
   const { open, setOpen } = props;
   const theme = useTheme();
   const [selectedIndex, setSelectedIndex] = useState<number | null>(1);
@@ -73,7 +76,7 @@ export default function SideBarLayout(props: SideBarLayoutProps) {
                         setSelectedIndex(index);
                         history(
                           index === 2
-                            ? AppRouter.COVERSITION_HISTORY
+                            ? AppRouter.CONVERSATION
                             : index === 3
                             ? AppRouter.SETTING
                             : index === 4
@@ -91,7 +94,7 @@ export default function SideBarLayout(props: SideBarLayoutProps) {
                           lineHeight: "40px",
                           flexShrink: "0",
                           backgroundColor:
-                            index === selectedIndex && index !== 0
+                            index === selectedIndex
                               ? "var(--yellow-900)"
                               : "var(--gray-700)",
                         }}
