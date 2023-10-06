@@ -1,6 +1,7 @@
-import styles from "./bot.module.css";
+import styles from "./Bot.module.css";
 import BotImage from "~/assets/bot.png";
 import Vector from "~/assets/vector.png";
+
 export default function Bot() {
   return (
     <div className={styles.bot}>

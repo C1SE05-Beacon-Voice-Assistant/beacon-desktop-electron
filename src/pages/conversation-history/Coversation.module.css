@@ -1,0 +1,30 @@
+.container {
+  display: flex;
+  align-items: center;
+}
+.content {
+  display: flex;
+  flex-direction: column;
+}
+.time {
+    margin-bottom: 10px;
+}
+.conversion {
+  display: flex;
+  align-items: center;
+  border: 1px solid rgb(72, 67, 67);
+  width: 500px;
+  border-radius: 50px;
+  padding: 10px;
+}
+.conversion img {
+  width: 60px;
+  height: 60px;
+  line-height: 60px;
+  border: 1px solid rgb(72, 67, 67);
+  border-radius: 50px;
+  margin-right: 10px;
+}
+.bot {
+  margin-left: 100px;
+}
