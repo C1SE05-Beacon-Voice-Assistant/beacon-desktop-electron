@@ -18,4 +18,5 @@ export default function MainLayout({ children }: MainLayoutProps) {
 }
 const Main = styled("div")({
   width: "100%",
+  margin: "170px 100px 0 100px"
 });

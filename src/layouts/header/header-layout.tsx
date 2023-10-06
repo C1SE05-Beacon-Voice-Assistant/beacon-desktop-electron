@@ -6,7 +6,7 @@ import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import { APP_NAME } from "~/components/constants/app-name";
-
+import { TypeAnimation } from 'react-type-animation';
 const drawerWidth = 240;
 
 interface AppBarProps extends MuiAppBarProps {
@@ -54,7 +54,18 @@ export default function HeaderLayout(props: HeaderLayouttProps) {
             sx={{ mr: 2, ...(open && { display: "none" }) }}
           ></IconButton>
           <div style={{ color: "var(--white-900)", fontSize: 20 }}>
-            {`${APP_NAME} - Trợ lý giọng nói`}
+          <TypeAnimation
+      sequence={[
+        // Same substring at the start will only be typed out once, initially
+        `${APP_NAME} - Trợ lý giọng nói`,
+        1000, // wait 1s before replacing "Mice" with "Hamsters"
+      ]}
+      wrapper="span"
+      speed={50}
+      style={{ fontSize: '1.5em', display: 'inline-block' }}
+      repeat={Infinity}
+    />
+
           </div>
         </Toolbar>
       </AppBar>
