@@ -1,0 +1,33 @@
+.about__team--content {
+  display: flex;
+  justify-content: space-between;
+}
+.about__team--info h1 {
+  color: var(--yellow-900);
+}
+.about__team-description {
+  width: 80%;
+}
+.about__team-description p {
+  font-size: 20px;
+}
+.about__team--info {
+  margin-top: 80px;
+}
+.about__team--detail {
+  margin-right: 20px;
+  text-align: center;
+}
+.about__team--info img {
+  width: 280px;
+  height: 280px;
+  border-radius: 10px;
+}
+.full-name {
+  font-size: 20px;
+  margin-top: 20px;
+}
+.about__team--cpright {
+  text-align: right;
+  margin-top: 100px;
+}

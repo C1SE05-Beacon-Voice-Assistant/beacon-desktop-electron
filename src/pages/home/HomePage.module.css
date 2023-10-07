@@ -1,0 +1,106 @@
+.home__container {
+  justify-content: center;
+  text-align: center;
+  position: relative;
+}
+.home__container .vector {
+  position: absolute;
+  width: 100%;
+  top: -100px;
+}
+.title {
+  margin-top: -200px;
+  position: relative;
+}
+.title div {
+  text-align: center;
+  font-size: 40px;
+}
+.vector img {
+  width: 65%;
+  margin-left: -200px;
+  z-index: -1;
+}
+.title button {
+  width: 200px;
+  background-color: var(--yellow-900);
+  height: 50px;
+  border-radius: 6px;
+  border: none;
+  outline: none;
+  font-size: 20px;
+  letter-spacing: 2px;
+  padding: 5px;
+  cursor: pointer;
+  transition: 0.2s ease;
+  z-index: 1;
+  margin-top: 20px;
+}
+.title button:hover {
+  color: var(--yellow-900);
+  background-color: var(--white-900);
+}
+
+.container {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin:  auto;
+}
+.microphone  {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50px;
+  height: 50px;
+  background-color: var(--yellow-900);
+  border-radius: 100%;
+  padding: 10px;
+}
+.microphone img  {
+  width: 100%;
+  height: 100%;
+}
+.circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  opacity: 0.8;
+  border: 1px solid var(--yellow-900);
+}
+
+.circle-a {
+  width: 40px;
+  height: 40px;
+  animation: pulse 1s infinite;
+}
+
+.circle-b {
+  width: 70px;
+  height: 70px;
+  animation: pulse 2s infinite;
+}
+
+.circle-c {
+  width: 90px;
+  height: 90px;
+  animation: pulse 3s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.4);
+    opacity: 0.4;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.6);
+    opacity: 0;
+  }
+}

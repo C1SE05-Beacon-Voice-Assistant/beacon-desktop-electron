@@ -34,7 +34,7 @@
 │   ├── pages
 │   │   ├── Home.tsx
 │   │   ├── about
-│   │   |  ├── About.tsx
+│   │   |  ├── index.tsx
 │   │   |  ├── about.module.css
 │   │   |  ├── ...
 │   │   ├── ...

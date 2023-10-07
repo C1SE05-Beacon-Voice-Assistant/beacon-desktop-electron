@@ -90,3 +90,6 @@ typings/
 
 # Electron-Forge
 out/
+
+# Beacon packages
+beacon-package/venv*
