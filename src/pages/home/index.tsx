@@ -27,7 +27,6 @@ export default function HomePage() {
         {!isStart && (
           <button onClick={window.electron.sendToPython}>Bắt đầu!</button>
         )}
-        <textarea name="text" id="text"></textarea>
       </div>
       {isStart && (
         <div className={styles.container}>

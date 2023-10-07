@@ -47,23 +47,22 @@ function DefaultHeader(props: HeaderLayoutProps) {
       >
         <Toolbar>
           <IconButton
-            color="inherit"
             aria-label="open drawer"
             onClick={() => setOpen(true)}
             edge="start"
             sx={{ mr: 2, ...(open && { display: "none" }) }}
-          ></IconButton>
+          >
+            +
+          </IconButton>
           <div style={{ color: "var(--white-900)", fontSize: 20 }}>
             <TypeAnimation
               sequence={[
                 // Same substring at the start will only be typed out once, initially
                 `${APP_NAME} - Trợ lý giọng nói`,
-                1000, // wait 1s before replacing "Mice" with "Hamsters"
               ]}
               wrapper="span"
               speed={50}
               style={{ fontSize: "1.5em", display: "inline-block" }}
-              repeat={Infinity}
             />
           </div>
         </Toolbar>

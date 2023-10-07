@@ -59,9 +59,7 @@ export default function SideBarLayout(props: SideBarLayoutProps) {
             open={open}
           >
             <DrawerHeader>
-              <IconButton onClick={() => setOpen(false)}>
-                {theme.direction === "ltr" ? <button /> : <button />}
-              </IconButton>
+              <IconButton onClick={() => setOpen(false)}>-</IconButton>
             </DrawerHeader>
             <Divider />
             <List>
@@ -73,7 +71,7 @@ export default function SideBarLayout(props: SideBarLayoutProps) {
                         setSelectedIndex(index);
                         history(
                           index === 2
-                            ? AppRouter.CONVERSATION
+                            ? AppRouter.CO
                             : index === 3
                             ? AppRouter.SETTING
                             : index === 4
