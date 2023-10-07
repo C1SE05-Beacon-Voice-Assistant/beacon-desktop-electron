@@ -1,6 +1,6 @@
 import { useState } from "react";
 import bot from "~/assets/bot.png";
-import vector from "~/assets/vector.png";
+import vector from "~/assets/vector.svg";
 import styles from "./HomePage.module.css";
 
 import microphone from "~/assets/microphone.png";
