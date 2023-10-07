@@ -1,9 +1,11 @@
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
-import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
@@ -14,6 +16,7 @@ import HomeIcon from "~/components/icons/home-icon";
 import InforIcon from "~/components/icons/infor-icon";
 import LogoIcon from "~/components/icons/logo-icon";
 import SettingIcon from "~/components/icons/setting-icon";
+import InforIcon from "~/components/icons/infor-icon";
 import TimeIcon from "~/components/icons/time-icon";
 import { AppRouter } from "~/constants/appRoutes";
 
@@ -34,7 +37,9 @@ type SideBarLayoutProps = {
 export default function DefaultSidebar(props: SideBarLayoutProps) {
   const { open, setOpen } = props;
   const theme = useTheme();
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(1);
   const history = useNavigate();
+
   return (
     <>
       {open && (
@@ -47,8 +52,8 @@ export default function DefaultSidebar(props: SideBarLayoutProps) {
               "& .MuiDrawer-paper": {
                 width: drawerWidth,
                 boxSizing: "border-box",
-                backgroundColor: "#292929",
-                color: "#fff",
+                backgroundColor: "var(--gray-700)",
+                color: "var(--white-900)",
                 boxShadow: "none",
               },
             }}
@@ -63,11 +68,12 @@ export default function DefaultSidebar(props: SideBarLayoutProps) {
             </DrawerHeader>
             <Divider />
             <List>
-              {["Logo", "Home", "Time", "Setting", "Information"].map(
-                (text, index) => (
-                  <ListItem key={text}>
+              {[LogoIcon, HomeIcon, TimeIcon, SettingIcon, InforIcon].map(
+                (IconComponent, index) => (
+                  <ListItem key={index}>
                     <ListItemButton
-                      onClick={() =>
+                      onClick={() => {
+                        setSelectedIndex(index);
                         history(
                           index === 2
                             ? AppRouter.CONVERSATION
@@ -76,33 +82,38 @@ export default function DefaultSidebar(props: SideBarLayoutProps) {
                             : index === 4
                             ? AppRouter.ABOUT_TEAM
                             : AppRouter.HOME
-                        )
-                      }
+                        );
+                      }}
                     >
-                      {index === 0 ? (
-                        <Icon>
-                          <LogoIcon />
-                        </Icon>
-                      ) : index === 1 ? (
-                        <Icon>
-                          <HomeIcon />
-                        </Icon>
-                      ) : index === 2 ? (
-                        <>
-                          <Icon>
-                            <TimeIcon />
-                          </Icon>
-                        </>
-                      ) : index === 3 ? (
-                        <Icon>
-                          <SettingIcon />
-                        </Icon>
-                      ) : (
-                        <Icon>
-                          <InforIcon />
-                        </Icon>
-                      )}
-                      <ListItemText primary={index === 0 ? "" : text} />
+                      <Icon
+                        style={{
+                          borderRadius: "15%",
+                          padding: "5px",
+                          width: "40px",
+                          height: "40px",
+                          lineHeight: "40px",
+                          flexShrink: "0",
+                          backgroundColor:
+                            index === selectedIndex
+                              ? "var(--yellow-900)"
+                              : "var(--gray-700)",
+                        }}
+                      >
+                        <IconComponent />
+                      </Icon>
+                      <ListItemText
+                        primary={
+                          index == 1
+                            ? "Home"
+                            : index == 2
+                            ? "Coversition"
+                            : index == 3
+                            ? "Setting"
+                            : index == 4
+                            ? "About team"
+                            : ""
+                        }
+                      />
                     </ListItemButton>
                   </ListItem>
                 )
