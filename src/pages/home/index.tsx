@@ -5,7 +5,7 @@ import styles from "./HomePage.module.css";
 
 import microphone from "~/assets/microphone.png";
 export default function HomePage() {
-  const [isStart, setIsStart] = useState<Boolean | null>(false);
+  const [isStart, setIsStart] = useState<boolean | null>(false);
   return (
     <section className={styles.home__container}>
       <div className={styles.bot}>
@@ -24,11 +24,10 @@ export default function HomePage() {
             </p>
           )}
         </div>
-        {!isStart && <button onClick={() => setIsStart(true)}>Bắt đầu!</button>}
+        {!isStart && (
+          <button onClick={window.electron.sendToPython}>Bắt đầu!</button>
+        )}
         <textarea name="text" id="text"></textarea>
-        <button id="btn" onClick={window.electron.sendToPython}>
-          Bắt đầu!
-        </button>
       </div>
       {isStart && (
         <div className={styles.container}>
