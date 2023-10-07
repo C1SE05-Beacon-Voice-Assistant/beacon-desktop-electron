@@ -96,4 +96,5 @@ out/
 beacon-package/venv*
 beacon-package/__pycache__
 beacon-package/*/__pycache__
+.idea
 

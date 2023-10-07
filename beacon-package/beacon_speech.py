@@ -2,14 +2,12 @@ import os
 import random
 import re
 import time
-from sys import argv
 
 import azure.cognitiveservices.speech as speechsdk
 from dotenv import load_dotenv
-
 from g4f import ChatCompletion, Provider
 
-# from utils import talk
+from utils import talk
 
 load_dotenv()
 
@@ -17,11 +15,19 @@ SPEECH_KEY, SPEECH_REGION = os.getenv("SPEECH_KEY"), os.getenv("SPEECH_REGION")
 
 
 def generate_gpt_response(messages):
+    _providers = [
+        Provider.Aivvm,
+        Provider.Bing,
+        Provider.ChatBase,
+        Provider.Raycast,
+        Provider.Liaobots,
+    ]
+
     res = ChatCompletion.create(
-        model="gpt-3.5-turbo",
+        model="gpt-4",
         provider=Provider.Aivvm,
         messages=messages,
-        # stream=True,
+        stream=True,
     )
 
     result_str = []
@@ -30,7 +36,6 @@ def generate_gpt_response(messages):
 
     # convert list to string
     result_str = "".join(result_str)
-    print(result_str)
     # remove code block
     txt = result_str
     txt = re.sub(r"```[^\S\r\n]*[a-z]*\n.*?\n```", "", txt, 0, re.DOTALL)
@@ -108,7 +113,8 @@ class BeaconSpeech:
         return None
 
     def wake_up(self):
-        model = speechsdk.KeywordRecognitionModel("hey-beacon.table")
+        current_path = os.path.dirname(os.path.realpath(__file__))
+        model = speechsdk.KeywordRecognitionModel(current_path + "/hey-beacon.table")
 
         keyword_recognizer = speechsdk.KeywordRecognizer()
 
@@ -151,7 +157,8 @@ class BeaconSpeech:
                 if user_input is not None:
                     self.history.append({"role": "user", "content": user_input})
                     self.speech_from_text("Đang xử lý...")
-                    # response = generate_gpt_response(self.history)
+                    print("Processing...")
+                    response = generate_gpt_response(self.history)
                     self.history.append({"role": "assistant", "content": response})
                     self.speech_from_text(response)
                 else:
@@ -168,7 +175,11 @@ class BeaconSpeech:
 
 
 if __name__ == "__main__":
-    # test text to speech
-    beacon = BeaconSpeech("Beacon", "Hanoi")
-    beacon.speech_from_text(argv[1])
-    print()
+    beacon = BeaconSpeech("Beacon", "Việt Nam")
+
+    beacon.speech_from_text(talk.wake_up)
+    while True:
+        try:
+            beacon.wake_up()
+        except EOFError:
+            break
