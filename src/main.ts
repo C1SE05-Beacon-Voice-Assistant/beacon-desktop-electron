@@ -1,141 +1,290 @@
-/* eslint global-require: off, no-console: off, promise/always-return: off */
+import {
+  app,
+  Menu,
+  shell,
+  BrowserWindow,
+  MenuItemConstructorOptions,
+} from 'electron';
 
-/**
- * This module executes inside of electron's main process. You can start
- * electron renderer process from here and communicate with the other processes
- * through IPC.
- *
- * When running `npm run build` or `npm run build:main`, this file is compiled to
- * `./src/main.js` using webpack. This gives us some performance wins.
- */
-import path from "path";
-import { app, BrowserWindow, shell, ipcMain } from "electron";
-import { autoUpdater } from "electron-updater";
-import log from "electron-log";
-import MenuBuilder from "./menu";
-import { resolveHtmlPath } from "./util";
-
-class AppUpdater {
-  constructor() {
-    // log.transports.file.level = "info";
-    // autoUpdater.logger = log;
-    autoUpdater.checkForUpdatesAndNotify();
-  }
+interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
+  selector?: string;
+  submenu?: DarwinMenuItemConstructorOptions[] | Menu;
 }
 
-let mainWindow: BrowserWindow | null = null;
+export default class MenuBuilder {
+  mainWindow: BrowserWindow;
 
-// ipcMain.on("ipc-example", async (event, arg) => {
-//   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
-//   console.log(msgTemplate(arg));
-//   event.reply("ipc-example", msgTemplate("pong"));
-// });
-
-// if (process.env.NODE_ENV === "production") {
-//   const sourceMapSupport = require("source-map-support");
-//   sourceMapSupport.install();
-// }
-
-// const isDebug =
-//   process.env.NODE_ENV === "development" || process.env.DEBUG_PROD === "true";
-
-// if (isDebug) {
-//   require("electron-debug")();
-// }
-
-const installExtensions = async () => {
-  const installer = require("electron-devtools-installer");
-  const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
-  const extensions = ["REACT_DEVELOPER_TOOLS"];
-
-  return installer
-    .default(
-      extensions.map((name) => installer[name]),
-      forceDownload
-    )
-    .catch(console.log);
-};
-
-const createWindow = async () => {
-  // if (isDebug) {
-  //   await installExtensions();
-  // }
-
-  const RESOURCES_PATH = app.isPackaged
-    ? path.join(process.resourcesPath, "assets")
-    : path.join(__dirname, "./assets");
-
-  const getAssetPath = (...paths: string[]): string => {
-    return path.join(RESOURCES_PATH, ...paths);
-  };
-
-  mainWindow = new BrowserWindow({
-    show: false,
-    width: 850  ,
-    height: 560,
-    icon: getAssetPath("icon.png"),
-    webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
-    },
-  });
-
-  if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
-    mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
-  } else {
-    mainWindow.loadFile(
-      path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`)
-    );
+  constructor(mainWindow: BrowserWindow) {
+    this.mainWindow = mainWindow;
   }
 
-  mainWindow.on("ready-to-show", () => {
-    if (!mainWindow) {
-      throw new Error('"mainWindow" is not defined');
+  buildMenu(): Menu {
+    if (
+      process.env.NODE_ENV === 'development' ||
+      process.env.DEBUG_PROD === 'true'
+    ) {
+      this.setupDevelopmentEnvironment();
     }
-    if (process.env.START_MINIMIZED) {
-      mainWindow.minimize();
-    } else {
-      mainWindow.show();
-    }
-  });
 
-  mainWindow.on("closed", () => {
-    mainWindow = null;
-  });
+    const template =
+      process.platform === 'darwin'
+        ? this.buildDarwinTemplate()
+        : this.buildDefaultTemplate();
 
-  const menuBuilder = new MenuBuilder(mainWindow);
-  menuBuilder.buildMenu();
+    const menu = Menu.buildFromTemplate(template);
+    Menu.setApplicationMenu(menu);
 
-  // Open urls in the user's browser
-  mainWindow.webContents.setWindowOpenHandler((edata) => {
-    shell.openExternal(edata.url);
-    return { action: "deny" };
-  });
-
-  // Remove this if your app does not use auto updates
-  // eslint-disable-next-line
-  new AppUpdater();
-};
-
-/**
- * Add event listeners...
- */
-
-app.on("window-all-closed", () => {
-  // Respect the OSX convention of having the application in memory even
-  // after all windows have been closed
-  if (process.platform !== "darwin") {
-    app.quit();
+    return menu;
   }
-});
 
-app
-  .whenReady()
-  .then(() => {
-    createWindow();
-    app.on("activate", () => {
-      // On macOS it's common to re-create a window in the app when the
-      // dock icon is clicked and there are no other windows open.
-      if (mainWindow === null) createWindow();
+  setupDevelopmentEnvironment(): void {
+    this.mainWindow.webContents.on('context-menu', (_, props) => {
+      const { x, y } = props;
+
+      Menu.buildFromTemplate([
+        {
+          label: 'Inspect element',
+          click: () => {
+            this.mainWindow.webContents.inspectElement(x, y);
+          },
+        },
+      ]).popup({ window: this.mainWindow });
     });
-  })
-  .catch(console.log);
+  }
+
+  buildDarwinTemplate(): MenuItemConstructorOptions[] {
+    const subMenuAbout: DarwinMenuItemConstructorOptions = {
+      label: 'Electron',
+      submenu: [
+        {
+          label: 'About ElectronReact',
+          selector: 'orderFrontStandardAboutPanel:',
+        },
+        { type: 'separator' },
+        { label: 'Services', submenu: [] },
+        { type: 'separator' },
+        {
+          label: 'Hide ElectronReact',
+          accelerator: 'Command+H',
+          selector: 'hide:',
+        },
+        {
+          label: 'Hide Others',
+          accelerator: 'Command+Shift+H',
+          selector: 'hideOtherApplications:',
+        },
+        { label: 'Show All', selector: 'unhideAllApplications:' },
+        { type: 'separator' },
+        {
+          label: 'Quit',
+          accelerator: 'Command+Q',
+          click: () => {
+            app.quit();
+          },
+        },
+      ],
+    };
+    const subMenuEdit: DarwinMenuItemConstructorOptions = {
+      label: 'Edit',
+      submenu: [
+        { label: 'Undo', accelerator: 'Command+Z', selector: 'undo:' },
+        { label: 'Redo', accelerator: 'Shift+Command+Z', selector: 'redo:' },
+        { type: 'separator' },
+        { label: 'Cut', accelerator: 'Command+X', selector: 'cut:' },
+        { label: 'Copy', accelerator: 'Command+C', selector: 'copy:' },
+        { label: 'Paste', accelerator: 'Command+V', selector: 'paste:' },
+        {
+          label: 'Select All',
+          accelerator: 'Command+A',
+          selector: 'selectAll:',
+        },
+      ],
+    };
+    const subMenuViewDev: MenuItemConstructorOptions = {
+      label: 'View',
+      submenu: [
+        {
+          label: 'Reload',
+          accelerator: 'Command+R',
+          click: () => {
+            this.mainWindow.webContents.reload();
+          },
+        },
+        {
+          label: 'Toggle Full Screen',
+          accelerator: 'Ctrl+Command+F',
+          click: () => {
+            this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen());
+          },
+        },
+        {
+          label: 'Toggle Developer Tools',
+          accelerator: 'Alt+Command+I',
+          click: () => {
+            this.mainWindow.webContents.toggleDevTools();
+          },
+        },
+      ],
+    };
+    const subMenuViewProd: MenuItemConstructorOptions = {
+      label: 'View',
+      submenu: [
+        {
+          label: 'Toggle Full Screen',
+          accelerator: 'Ctrl+Command+F',
+          click: () => {
+            this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen());
+          },
+        },
+      ],
+    };
+    const subMenuWindow: DarwinMenuItemConstructorOptions = {
+      label: 'Window',
+      submenu: [
+        {
+          label: 'Minimize',
+          accelerator: 'Command+M',
+          selector: 'performMiniaturize:',
+        },
+        { label: 'Close', accelerator: 'Command+W', selector: 'performClose:' },
+        { type: 'separator' },
+        { label: 'Bring All to Front', selector: 'arrangeInFront:' },
+      ],
+    };
+    const subMenuHelp: MenuItemConstructorOptions = {
+      label: 'Help',
+      submenu: [
+        {
+          label: 'Learn More',
+          click() {
+            shell.openExternal('https://electronjs.org');
+          },
+        },
+        {
+          label: 'Documentation',
+          click() {
+            shell.openExternal(
+              'https://github.com/electron/electron/tree/main/docs#readme'
+            );
+          },
+        },
+        {
+          label: 'Community Discussions',
+          click() {
+            shell.openExternal('https://www.electronjs.org/community');
+          },
+        },
+        {
+          label: 'Search Issues',
+          click() {
+            shell.openExternal('https://github.com/electron/electron/issues');
+          },
+        },
+      ],
+    };
+
+    const subMenuView =
+      process.env.NODE_ENV === 'development' ||
+      process.env.DEBUG_PROD === 'true'
+        ? subMenuViewDev
+        : subMenuViewProd;
+
+    return [subMenuAbout, subMenuEdit, subMenuView, subMenuWindow, subMenuHelp];
+  }
+
+  buildDefaultTemplate() {
+    const templateDefault = [
+      {
+        label: '&File',
+        submenu: [
+          {
+            label: '&Open',
+            accelerator: 'Ctrl+O',
+          },
+          {
+            label: '&Close',
+            accelerator: 'Ctrl+W',
+            click: () => {
+              this.mainWindow.close();
+            },
+          },
+        ],
+      },
+      {
+        label: '&View',
+        submenu:
+          process.env.NODE_ENV === 'development' ||
+          process.env.DEBUG_PROD === 'true'
+            ? [
+                {
+                  label: '&Reload',
+                  accelerator: 'Ctrl+R',
+                  click: () => {
+                    this.mainWindow.webContents.reload();
+                  },
+                },
+                {
+                  label: 'Toggle &Full Screen',
+                  accelerator: 'F11',
+                  click: () => {
+                    this.mainWindow.setFullScreen(
+                      !this.mainWindow.isFullScreen()
+                    );
+                  },
+                },
+                {
+                  label: 'Toggle &Developer Tools',
+                  accelerator: 'Alt+Ctrl+I',
+                  click: () => {
+                    this.mainWindow.webContents.toggleDevTools();
+                  },
+                },
+              ]
+            : [
+                {
+                  label: 'Toggle &Full Screen',
+                  accelerator: 'F11',
+                  click: () => {
+                    this.mainWindow.setFullScreen(
+                      !this.mainWindow.isFullScreen()
+                    );
+                  },
+                },
+              ],
+      },
+      {
+        label: 'Help',
+        submenu: [
+          {
+            label: 'Learn More',
+            click() {
+              shell.openExternal('https://electronjs.org');
+            },
+          },
+          {
+            label: 'Documentation',
+            click() {
+              shell.openExternal(
+                'https://github.com/electron/electron/tree/main/docs#readme'
+              );
+            },
+          },
+          {
+            label: 'Community Discussions',
+            click() {
+              shell.openExternal('https://www.electronjs.org/community');
+            },
+          },
+          {
+            label: 'Search Issues',
+            click() {
+              shell.openExternal('https://github.com/electron/electron/issues');
+            },
+          },
+        ],
+      },
+    ];
+
+    return templateDefault;
+  }
+}
