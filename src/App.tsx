@@ -11,22 +11,18 @@ import "@fontsource/open-sans/600.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { ThemeProvider } from "@mui/system";
-import HomePage from "./pages/home/home-page";
+import HomePage from "./pages/home";
 import { AppRouter } from "./components/constants/app-routes";
-import ConversitionHistory from "./pages/conversition-history/conversition-history-page";
+import ConversitionHistory from "./pages/conversition-history";
 import MainLayout from "./layouts/main/main-layout";
-import SettingPage from "./pages/setting/setting-page";
-import AboutTeam from "./pages/about-team/about-team-page";
+import SettingPage from "./pages/setting";
+import AboutTeam from "./pages/about-team";
 
 const queryClient = new QueryClient();
 
 export default function App() {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    navigate(AppRouter.ABOUT_TEAM);
-  }, []);
 
   const theme = createTheme({
     palette: {

@@ -1,6 +1,6 @@
 import bot from "~/assets/bot.png";
 import styles from "./coversition.module.css";
-import Bot from "~/components/bot/bot";
+import Bot from "~/components/bot";
 export default function ConversitionHistory() {
   return (
     <div className={styles.container}>

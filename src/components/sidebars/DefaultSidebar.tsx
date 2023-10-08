@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
@@ -10,15 +8,14 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import { styled, useTheme } from "@mui/material/styles";
-import * as React from "react";
 import { useNavigate } from "react-router-dom";
 import HomeIcon from "~/components/icons/home-icon";
-import InforIcon from "~/components/icons/infor-icon";
 import LogoIcon from "~/components/icons/logo-icon";
 import SettingIcon from "~/components/icons/setting-icon";
 import InforIcon from "~/components/icons/infor-icon";
 import TimeIcon from "~/components/icons/time-icon";
 import { AppRouter } from "~/constants/appRoutes";
+import { List } from "@mui/material";
 
 const drawerWidth = 240;
 

@@ -1,4 +1,4 @@
-import Bot from "~/components/bot/bot";
+import Bot from "~/components/bot";
 import styles from "./about-team.module.css";
 import teamMember from "~/assets/team-member.svg";
 export default function AboutTeam() {

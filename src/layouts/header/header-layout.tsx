@@ -6,7 +6,6 @@ import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import { APP_NAME } from "~/components/constants/app-name";
-import { TypeAnimation } from "react-type-animation";
 const drawerWidth = 240;
 
 interface AppBarProps extends MuiAppBarProps {

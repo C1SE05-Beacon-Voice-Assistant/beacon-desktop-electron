@@ -1,4 +1,4 @@
-import Bot from "~/components/bot/bot";
+import Bot from "~/components/bot";
 import styles from "./setting.module.css";
 export default function SettingPage() {
   return (
