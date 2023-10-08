@@ -17,38 +17,27 @@ import SettingIcon from "~/components/icons/setting-icon";
 import InforIcon from "~/components/icons/infor-icon";
 import { AppRouter } from "~/components/constants/app-routes";
 
-const drawerWidth = 240;
-
-const DrawerHeader = styled("div")(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
-  padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
-  ...theme.mixins.toolbar,
-  justifyContent: "flex-end",
-}));
 type SideBarLayoutProps = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 export default function SideBarLayout(props: SideBarLayoutProps) {
   const { open, setOpen } = props;
-  const theme = useTheme();
   const [selectedIndex, setSelectedIndex] = useState<number | null>(1);
   const history = useNavigate();
 
   return (
     <>
       {open && (
-        <Box sx={{ display: "flex" }}>
+        <Box sx={{ display: "flex"}}>
           <CssBaseline />
           <Drawer
             sx={{
-              width: drawerWidth,
               flexShrink: 0,
               "& .MuiDrawer-paper": {
-                width: drawerWidth,
+              width: 56,
                 boxSizing: "border-box",
+                paddingX: 1,
                 backgroundColor: "var(--gray-700)",
                 color: "var(--white-900)",
                 boxShadow: "none",
@@ -58,17 +47,12 @@ export default function SideBarLayout(props: SideBarLayoutProps) {
             anchor="left"
             open={open}
           >
-            <DrawerHeader>
-              <IconButton onClick={() => setOpen(false)}>
-                {theme.direction === "ltr" ? <button /> : <button />}
-              </IconButton>
-            </DrawerHeader>
-            <Divider />
             <List>
               {[LogoIcon, HomeIcon, TimeIcon, SettingIcon, InforIcon].map(
                 (IconComponent, index) => (
-                  <ListItem key={index}>
+                  <ListItem style={{padding: 0, margin: 0}} key={index}>
                     <ListItemButton
+                      style={{padding: 0, marginBottom: "15px",  borderRadius: "15px",}}
                       onClick={() => {
                         setSelectedIndex(index);
                         history(
@@ -84,7 +68,7 @@ export default function SideBarLayout(props: SideBarLayoutProps) {
                     >
                       <Icon
                         style={{
-                          borderRadius: "15%",
+                          borderRadius: "15px",
                           padding: "5px",
                           width: "40px",
                           height: "40px",
@@ -98,25 +82,11 @@ export default function SideBarLayout(props: SideBarLayoutProps) {
                       >
                         <IconComponent />
                       </Icon>
-                      <ListItemText
-                        primary={
-                          index == 1
-                            ? "Home"
-                            : index == 2
-                            ? "Coversition"
-                            : index == 3
-                            ? "Setting"
-                            : index == 4
-                            ? "About team"
-                            : ""
-                        }
-                      />
                     </ListItemButton>
                   </ListItem>
                 )
               )}
             </List>
-            <Divider />
           </Drawer>
         </Box>
       )}

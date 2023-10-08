@@ -7,7 +7,7 @@ interface MainLayoutProps {
   children?: ReactNode;
 }
 export default function MainLayout({ children }: MainLayoutProps) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   return (
     <Box sx={{ display: "flex" }}>
       <SideBarLayout open={open} setOpen={setOpen} />
@@ -18,5 +18,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
 }
 const Main = styled("div")({
   width: "100%",
-  margin: "170px 100px 0 100px"
+  overflow: "hidden",
+  padding: "90px 20px 0 100px",
+  height: "max-content"
 });

@@ -25,7 +25,7 @@ export default function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    navigate("/");
+    navigate(AppRouter.ABOUT_TEAM);
   }, []);
 
   const theme = createTheme({

@@ -9,45 +9,55 @@ export default function ConversitionHistory() {
         <div className={styles.content}>
           <div className={styles.time}>Hôm nay</div>
           <div className={styles.conversion}>
-            <img src={bot} alt="" />
+            <div className={styles.img}>
+              <img src={bot} alt="" />
+            </div>
             <div className={styles.message}>
-              Tôi muốn nghe nhạc trên youtube
+              Tôi muốn nghe nhạc trên youtube...
             </div>
           </div>
         </div>
         <div className={styles.content}>
           <div className={styles.time}>Hôm nay</div>
           <div className={styles.conversion}>
-            <img src={bot} alt="" />
+            <div className={styles.img}>
+              <img src={bot} alt="" />
+            </div>
             <div className={styles.message}>
-              Tôi muốn nghe nhạc trên youtube
+              Tôi muốn nghe nhạc trên youtube...
             </div>
           </div>
-        </div>
+        </div>{" "}
         <div className={styles.content}>
           <div className={styles.time}>Hôm nay</div>
           <div className={styles.conversion}>
-            <img src={bot} alt="" />
+            <div className={styles.img}>
+              <img src={bot} alt="" />
+            </div>
             <div className={styles.message}>
-              Tôi muốn nghe nhạc trên youtube
+              Tôi muốn nghe nhạc trên youtube...
             </div>
           </div>
-        </div>
+        </div>{" "}
         <div className={styles.content}>
           <div className={styles.time}>Hôm nay</div>
           <div className={styles.conversion}>
-            <img src={bot} alt="" />
+            <div className={styles.img}>
+              <img src={bot} alt="" />
+            </div>
             <div className={styles.message}>
-              Tôi muốn nghe nhạc trên youtube
+              Tôi muốn nghe nhạc trên youtube...
             </div>
           </div>
-        </div>
+        </div>{" "}
         <div className={styles.content}>
           <div className={styles.time}>Hôm nay</div>
           <div className={styles.conversion}>
-            <img src={bot} alt="" />
+            <div className={styles.img}>
+              <img src={bot} alt="" />
+            </div>
             <div className={styles.message}>
-              Tôi muốn nghe nhạc trên youtube
+              Tôi muốn nghe nhạc trên youtube...
             </div>
           </div>
         </div>

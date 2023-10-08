@@ -17,31 +17,31 @@ import { resolveHtmlPath } from "./util";
 
 class AppUpdater {
   constructor() {
-    log.transports.file.level = "info";
-    autoUpdater.logger = log;
+    // log.transports.file.level = "info";
+    // autoUpdater.logger = log;
     autoUpdater.checkForUpdatesAndNotify();
   }
 }
 
 let mainWindow: BrowserWindow | null = null;
 
-ipcMain.on("ipc-example", async (event, arg) => {
-  const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
-  console.log(msgTemplate(arg));
-  event.reply("ipc-example", msgTemplate("pong"));
-});
+// ipcMain.on("ipc-example", async (event, arg) => {
+//   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
+//   console.log(msgTemplate(arg));
+//   event.reply("ipc-example", msgTemplate("pong"));
+// });
 
-if (process.env.NODE_ENV === "production") {
-  const sourceMapSupport = require("source-map-support");
-  sourceMapSupport.install();
-}
+// if (process.env.NODE_ENV === "production") {
+//   const sourceMapSupport = require("source-map-support");
+//   sourceMapSupport.install();
+// }
 
-const isDebug =
-  process.env.NODE_ENV === "development" || process.env.DEBUG_PROD === "true";
+// const isDebug =
+//   process.env.NODE_ENV === "development" || process.env.DEBUG_PROD === "true";
 
-if (isDebug) {
-  require("electron-debug")();
-}
+// if (isDebug) {
+//   require("electron-debug")();
+// }
 
 const installExtensions = async () => {
   const installer = require("electron-devtools-installer");
@@ -57,9 +57,9 @@ const installExtensions = async () => {
 };
 
 const createWindow = async () => {
-  if (isDebug) {
-    await installExtensions();
-  }
+  // if (isDebug) {
+  //   await installExtensions();
+  // }
 
   const RESOURCES_PATH = app.isPackaged
     ? path.join(process.resourcesPath, "assets")
@@ -71,10 +71,9 @@ const createWindow = async () => {
 
   mainWindow = new BrowserWindow({
     show: false,
-    width: 1024,
-    height: 728,
+    width: 850  ,
+    height: 560,
     icon: getAssetPath("icon.png"),
-    fullscreen: true,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
     },

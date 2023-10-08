@@ -1,17 +1,19 @@
 import { useState } from "react";
 import bot from "~/assets/bot.png";
-import vector from "~/assets/vector.png";
+import vector from "~/assets/vector.svg";
 import styles from "./home-page.module.css";
 import microphone from "~/assets/microphone.png";
 export default function HomePage() {
   const [isStart, setIsStart] = useState<Boolean | null>(false);
   return (
     <section className={styles.home__container}>
+      <div className={styles.bot__vector}>
       <div className={styles.bot}>
         <img src={bot} alt={bot} />
       </div>
       <div className={styles.vector}>
         <img src={vector} alt={vector} />
+      </div>
       </div>
       <div className={styles.title}>
         <div>
@@ -28,7 +30,7 @@ export default function HomePage() {
       {isStart && (
         <div className={styles.container}>
           <div className={styles.microphone}>
-            <img src={microphone} alt="" />
+            <img src={microphone} alt={microphone} />
           </div>
           <div className={`${styles.circle} ${styles["circle-a"]}`}></div>
           <div className={`${styles.circle} ${styles["circle-b"]}`}></div>

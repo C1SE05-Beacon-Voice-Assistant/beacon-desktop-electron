@@ -5,9 +5,10 @@ export default function SettingPage() {
     <>
       <div className={styles.container}>
         <div className={styles.setting__container}>
-          <div className="">
+          <div className={styles.title}>
             <h1>Cài đặt</h1>
           </div>
+          <div className={styles.setting__content}>
           <div className={styles.setting__option}>
             <h1>Cài đặt chung</h1>
             <div className={styles["setting__option--detail"]}>
@@ -20,7 +21,7 @@ export default function SettingPage() {
                 <button>Micro Array 1</button>
               </div>
               <div className={styles.item}>
-                <h3>Âm lượng chung</h3>
+              <h3>Âm lượng chung</h3>
                 <button>Micro Array 1</button>
               </div>
             </div>
@@ -34,8 +35,9 @@ export default function SettingPage() {
               </div>
             </div>
           </div>
+          </div>
         </div>
-        <Bot />
+        <Bot marginLeft={true}/>
       </div>
     </>
   );

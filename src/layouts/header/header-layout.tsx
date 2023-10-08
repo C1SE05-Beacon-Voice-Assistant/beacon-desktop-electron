@@ -6,7 +6,7 @@ import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import { APP_NAME } from "~/components/constants/app-name";
-import { TypeAnimation } from 'react-type-animation';
+import { TypeAnimation } from "react-type-animation";
 const drawerWidth = 240;
 
 interface AppBarProps extends MuiAppBarProps {
@@ -41,9 +41,10 @@ export default function HeaderLayout(props: HeaderLayouttProps) {
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar
+
         position="fixed"
         open={open}
-        style={{ backgroundColor: "#292929" }}
+        style={{ backgroundColor: "var(--black-color)", width: "100%", height: "100", textAlign: "center" }}
       >
         <Toolbar>
           <IconButton
@@ -53,19 +54,8 @@ export default function HeaderLayout(props: HeaderLayouttProps) {
             edge="start"
             sx={{ mr: 2, ...(open && { display: "none" }) }}
           ></IconButton>
-          <div style={{ color: "var(--white-900)", fontSize: 20 }}>
-          <TypeAnimation
-      sequence={[
-        // Same substring at the start will only be typed out once, initially
-        `${APP_NAME} - Trợ lý giọng nói`,
-        1000, // wait 1s before replacing "Mice" with "Hamsters"
-      ]}
-      wrapper="span"
-      speed={50}
-      style={{ fontSize: '1.5em', display: 'inline-block' }}
-      repeat={Infinity}
-    />
-
+          <div style={{ color: "var(--white-900)", fontSize: 20,  margin: "0 auto"}}>
+            {`${APP_NAME} - Trợ lý giọng nói`}
           </div>
         </Toolbar>
       </AppBar>

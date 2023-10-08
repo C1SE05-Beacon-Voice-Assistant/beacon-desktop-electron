@@ -1,6 +1,17 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+h1, h2, h3, h4, h5, h6 {
+  padding: 0;
+  margin: 0;
+}
 :root {
   --yellow-900: #ffd600;
   --white-900: #f0f0f0;
-  --gray-900: #000000;
+  --gray-600: #9B9B9B;
   --gray-700: #292929;
+  --gray-800: #000000;
+  --black-color: #161616;
 }
