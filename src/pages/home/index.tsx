@@ -25,7 +25,7 @@ export default function HomePage() {
             </p>
           )}
         </div>
-        {!isStart && <button onClick={() => setIsStart(true)}>Bắt đầu!</button>}
+        {!isStart && <button>Bắt đầu!</button>}
       </div>
       {isStart && (
         <div className={styles.container}>

@@ -1,0 +1,18 @@
+[
+  {
+    "text": "Mở bài hát Chúng ta không thuộc về nhau",
+    "target": "command"
+  },
+  {
+    "text": "Cách tính tổng 2 số a và b",
+    "target": "question"
+  },
+  {
+    "text": "Tìm kiếm bài báo mới nhất hiện nay",
+    "target": "command"
+  },
+  {
+    "text": "Viết một đoạn văn dài 1 trang",
+    "target": "question"
+  }
+]
