@@ -1,7 +1,7 @@
 import { useState } from "react";
 import bot from "~/assets/bot.png";
 import vector from "~/assets/vector.svg";
-import styles from "./home-page.module.css";
+import styles from "./HomePage.module.css";
 import microphone from "~/assets/microphone.png";
 export default function HomePage() {
   const [isStart, setIsStart] = useState<Boolean | null>(false);
@@ -25,7 +25,7 @@ export default function HomePage() {
             </p>
           )}
         </div>
-        {!isStart && <button>Bắt đầu!</button>}
+        {!isStart && <button onClick={ window.electron.wakeUp} >Bắt đầu!</button>}
       </div>
       {isStart && (
         <div className={styles.container}>

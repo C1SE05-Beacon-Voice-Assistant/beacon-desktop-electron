@@ -1,6 +1,10 @@
 import Bot from "~/components/bot";
-import styles from "./about-team.module.css";
-import teamMember from "~/assets/team-member.svg";
+import styles from "./AboutTeam.module.css";
+import qb from "~/assets/qb.svg";
+import qt from "~/assets/qt.svg"
+import tt from "~/assets/tt.svg"
+import ttt from "~/assets/ttt.svg"
+import vv from "~/assets/vv.svg"
 export default function AboutTeam() {
   return (
     <>
@@ -26,7 +30,15 @@ export default function AboutTeam() {
             <div className={`${styles["about__team--content"]}`}>
               <div className={styles["about__team--detail"]}>
                 <div className="avatar">
-                  <img src={teamMember} alt="" />
+                  <img src={qt} alt="" />
+                </div>
+                <div className={styles["full-name"]}>Trương Quốc Thắng</div>
+              </div>
+            </div>
+            <div className={`${styles["about__team--content"]}`}>
+              <div className={styles["about__team--detail"]}>
+                <div className="avatar">
+                  <img src={qb} alt="" />
                 </div>
                 <div className={styles["full-name"]}>Phạm Quốc Bảo</div>
               </div>
@@ -34,33 +46,25 @@ export default function AboutTeam() {
             <div className={`${styles["about__team--content"]}`}>
               <div className={styles["about__team--detail"]}>
                 <div className="avatar">
-                  <img src={teamMember} alt="" />
+                  <img src={tt} alt="" />
                 </div>
-                <div className={styles["full-name"]}>Phạm Quốc Bảo</div>
+                <div className={styles["full-name"]}>Nguyễn Triều Tiên</div>
               </div>
             </div>
             <div className={`${styles["about__team--content"]}`}>
               <div className={styles["about__team--detail"]}>
                 <div className="avatar">
-                  <img src={teamMember} alt="" />
+                  <img src={ttt} alt="" />
                 </div>
-                <div className={styles["full-name"]}>Phạm Quốc Bảo</div>
+                <div className={styles["full-name"]}>Thân Thị Thảo</div>
               </div>
             </div>
             <div className={`${styles["about__team--content"]}`}>
               <div className={styles["about__team--detail"]}>
                 <div className="avatar">
-                  <img src={teamMember} alt="" />
+                  <img src={vv} alt="" />
                 </div>
-                <div className={styles["full-name"]}>Phạm Quốc Bảo</div>
-              </div>
-            </div>
-            <div className={`${styles["about__team--content"]}`}>
-              <div className={styles["about__team--detail"]}>
-                <div className="avatar">
-                  <img src={teamMember} alt="" />
-                </div>
-                <div className={styles["full-name"]}>Phạm Quốc Bảo</div>
+                <div className={styles["full-name"]}>Nguyễn Văn Vĩ</div>
               </div>
             </div>
           </div>
