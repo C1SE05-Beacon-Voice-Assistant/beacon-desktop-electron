@@ -1,3 +1,3 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import "~/index";
+import "~/react";
 import "~/index.css";
