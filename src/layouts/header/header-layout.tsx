@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -28,35 +28,48 @@ const AppBar = styled(MuiAppBar, {
     }),
   }),
 }));
-type HeaderLayouttProps = {
+type HeaderLayoutProps = {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   open: boolean;
 };
 
-export default function HeaderLayout(props: HeaderLayouttProps) {
+export default function HeaderLayout(props: HeaderLayoutProps) {
   const { setOpen, open } = props;
 
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar
-
         position="fixed"
         open={open}
-        style={{ backgroundColor: "var(--black-color)", width: "100%", height: "100", textAlign: "center" }}
+        style={{
+          backgroundColor: "var(--black-color)",
+          width: "100%",
+          height: "50px",
+          textAlign: "center",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
       >
-        <Toolbar>
-          <IconButton
+        <div>
+          {/* <IconButton
             color="inherit"
             aria-label="open drawer"
             onClick={() => setOpen(true)}
             edge="start"
             sx={{ mr: 2, ...(open && { display: "none" }) }}
-          ></IconButton>
-          <div style={{ color: "var(--white-900)", fontSize: 20,  margin: "0 auto"}}>
+          ></IconButton> */}
+          <div
+            style={{
+              color: "var(--white-900)",
+              fontSize: 20,
+              margin: "0 auto",
+            }}
+          >
             {`${APP_NAME} - Trợ lý giọng nói`}
           </div>
-        </Toolbar>
+        </div>
       </AppBar>
     </Box>
   );

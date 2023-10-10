@@ -1,10 +1,11 @@
 import Bot from "~/components/bot";
 import styles from "./AboutTeam.module.css";
-import qb from "~/assets/qb.svg";
-import qt from "~/assets/qt.svg"
-import tt from "~/assets/tt.svg"
-import ttt from "~/assets/ttt.svg"
-import vv from "~/assets/vv.svg"
+import QuocBao from "~/assets/qb.svg";
+import QuocThang from "~/assets/qt.svg";
+import TrieuTien from "~/assets/tt.svg";
+import ThiThao from "~/assets/ttt.svg";
+import VanVi from "~/assets/vv.svg";
+
 export default function AboutTeam() {
   return (
     <>
@@ -17,8 +18,8 @@ export default function AboutTeam() {
               trên hệ điều hành Windows 10 và Windows 11. Ứng dụng này có các
               tính năng cho phép người dùng giao tiếp với trợ lý, tìm kiếm và
               đọc báo, nghe nhạc, cũng như cung cấp hướng dẫn sử dụng ứng dụng.
-              Đây là một phần mềm dành cho người mù và những người muốn kiểm
-              soát máy tính của mình.
+              Đây là một phần mềm dành cho người khiếm thị và những người có nhu
+              cầu sử dụng trợ lý giọng nói.
             </p>
           </div>
         </div>
@@ -30,7 +31,7 @@ export default function AboutTeam() {
             <div className={`${styles["about__team--content"]}`}>
               <div className={styles["about__team--detail"]}>
                 <div className="avatar">
-                  <img src={qt} alt="" />
+                  <img src={QuocThang} alt="" />
                 </div>
                 <div className={styles["full-name"]}>Trương Quốc Thắng</div>
               </div>
@@ -38,7 +39,7 @@ export default function AboutTeam() {
             <div className={`${styles["about__team--content"]}`}>
               <div className={styles["about__team--detail"]}>
                 <div className="avatar">
-                  <img src={qb} alt="" />
+                  <img src={QuocBao} alt="" />
                 </div>
                 <div className={styles["full-name"]}>Phạm Quốc Bảo</div>
               </div>
@@ -46,7 +47,7 @@ export default function AboutTeam() {
             <div className={`${styles["about__team--content"]}`}>
               <div className={styles["about__team--detail"]}>
                 <div className="avatar">
-                  <img src={tt} alt="" />
+                  <img src={TrieuTien} alt="" />
                 </div>
                 <div className={styles["full-name"]}>Nguyễn Triều Tiên</div>
               </div>
@@ -54,7 +55,7 @@ export default function AboutTeam() {
             <div className={`${styles["about__team--content"]}`}>
               <div className={styles["about__team--detail"]}>
                 <div className="avatar">
-                  <img src={ttt} alt="" />
+                  <img src={ThiThao} alt="" />
                 </div>
                 <div className={styles["full-name"]}>Thân Thị Thảo</div>
               </div>
@@ -62,7 +63,7 @@ export default function AboutTeam() {
             <div className={`${styles["about__team--content"]}`}>
               <div className={styles["about__team--detail"]}>
                 <div className="avatar">
-                  <img src={vv} alt="" />
+                  <img src={VanVi} alt="" />
                 </div>
                 <div className={styles["full-name"]}>Nguyễn Văn Vĩ</div>
               </div>
@@ -70,10 +71,10 @@ export default function AboutTeam() {
           </div>
         </div>
         <div className={styles["about__team--cpright"]}>
-          <h3>Capstone project 1 - Trường Đạo tạo Quốc Tế - Đại học Duy Tân</h3>
+          <h3>C1SE.05 - Trường Đạo tạo Quốc Tế - Đại học Duy Tân</h3>
         </div>
       </div>
-      <Bot  isShowIcon={false}/>
+      <Bot isShowIcon={false} />
     </>
   );
 }

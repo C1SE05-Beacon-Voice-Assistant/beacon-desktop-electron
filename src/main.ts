@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import path from "path";
 import { app, BrowserWindow, shell, ipcMain } from "electron";
+import type { BrowserWindowConstructorOptions } from "electron";
 import { autoUpdater } from "electron-updater";
 import log from "electron-log";
 import MenuBuilder from "./menu";
@@ -62,17 +63,31 @@ const createWindow = async () => {
     return path.join(RESOURCES_PATH, ...paths);
   };
 
-  mainWindow = new BrowserWindow({
+  let config: BrowserWindowConstructorOptions = {
     show: false,
-    width: 833,
-    height: 562,
+    width: parseInt(process.env.ELECTRON_WIDTH) || 833,
+    height: parseInt(process.env.ELECTRON_HEIGHT) || 562,
     icon: getAssetPath("icon.png"),
     webPreferences: {
       nodeIntegration: true,
       // contextIsolation: false,
       preload: path.join(__dirname, "preload.js"),
     },
-  });
+    resizable: false,
+  };
+
+  if (process.env.NODE_ENV === "production") {
+    config = {
+      ...config,
+      autoHideMenuBar: true,
+      webPreferences: {
+        ...config.webPreferences,
+        devTools: false,
+      },
+    };
+  }
+
+  mainWindow = new BrowserWindow(config);
 
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
     mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);

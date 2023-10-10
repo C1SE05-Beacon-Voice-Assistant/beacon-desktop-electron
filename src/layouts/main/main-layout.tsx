@@ -19,6 +19,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
 const Main = styled("div")({
   width: "100%",
   overflow: "hidden",
+  maxHeight: "100vh",
   padding: "90px 20px 0 100px",
-  height: "max-content"
+  height: "max-content",
 });
