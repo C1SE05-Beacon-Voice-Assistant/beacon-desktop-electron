@@ -3,17 +3,19 @@ import bot from "~/assets/bot.png";
 import vector from "~/assets/vector.svg";
 import styles from "./HomePage.module.css";
 import microphone from "~/assets/microphone.png";
+
 export default function HomePage() {
-  const [isStart, setIsStart] = useState<Boolean | null>(false);
+  const [isStart, setIsStart] = useState<boolean | null>(false);
+
   return (
     <section className={styles.home__container}>
       <div className={styles.bot__vector}>
-      <div className={styles.bot}>
-        <img src={bot} alt={bot} />
-      </div>
-      <div className={styles.vector}>
-        <img src={vector} alt={vector} />
-      </div>
+        <div className={styles.bot}>
+          <img src={bot} alt={bot} />
+        </div>
+        <div className={styles.vector}>
+          <img src={vector} alt={vector} />
+        </div>
       </div>
       <div className={styles.title}>
         <div>
@@ -25,7 +27,7 @@ export default function HomePage() {
             </p>
           )}
         </div>
-        {!isStart && <button onClick={ window.electron.wakeUp} >Bắt đầu!</button>}
+        {!isStart && <button onClick={window.electron.wakeUp}>Bắt đầu!</button>}
       </div>
       {isStart && (
         <div className={styles.container}>

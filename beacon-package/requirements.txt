@@ -1,6 +1,8 @@
 python-dotenv~=1.0.0
 azure-cognitiveservices-speech
-selenium
+azure-ai-language-conversations
 SpeechRecognition
 pyaudio~=0.2.11
-g4f
+
+g4f~=0.0.3.4
+PyExecJS~=1.5.1

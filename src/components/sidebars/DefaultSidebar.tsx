@@ -94,6 +94,7 @@ export default function DefaultSidebar(props: SideBarLayoutProps) {
                             index === selectedIndex
                               ? "var(--yellow-900)"
                               : "var(--gray-700)",
+                          boxSizing: "content-box",
                         }}
                       >
                         <IconComponent />
