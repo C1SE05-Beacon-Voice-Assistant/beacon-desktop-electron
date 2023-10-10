@@ -66,13 +66,28 @@ cd ..
 - See [preload.js](./electron/preload.js) for the code that handles the communication between the Electron app and the Python script.
 
 ```js
-function sendToPython() {
+function wakeUp() {
   ...
 }
 
 contextBridge.exposeInMainWorld("electron", {
-  sendToPython: sendToPython,
+  wakeUp: wakeUp,
 });
+```
+
+- See [Type](./src/types.d.ts) for the type definitions of the functions in [preload.js](./electron/preload.js)
+
+```ts
+export interface IElectron {
+  wakeUp: () => void;
+  // declare other functions here
+}
+
+declare global {
+  interface Window extends Window {
+    electron: IElectron;
+  }
+}
 ```
 
 - See [HomePage](./src/pages/home/index.tsx) for the code that calls the functions in [preload.js](./electron/preload.js)
@@ -82,7 +97,7 @@ const HomePage = () => {
   ...
   return (
     <div>
-      <button onClick={window.electron.sendToPython}>Send to Python</button>
+      <button onClick={window.electron.wakeUp}>Send to Python</button>
     </div>
   )
   ...
