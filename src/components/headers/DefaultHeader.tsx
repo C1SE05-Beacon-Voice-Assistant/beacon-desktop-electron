@@ -1,11 +1,9 @@
-import React from "react";
-import { styled } from "@mui/material/styles";
+import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import { APP_NAME } from "~/components/constants/app-name";
+import { styled } from "@mui/material/styles";
+import { APP_NAME } from "~/util/constants";
+
 const drawerWidth = 240;
 
 interface AppBarProps extends MuiAppBarProps {
@@ -28,20 +26,14 @@ const AppBar = styled(MuiAppBar, {
     }),
   }),
 }));
-type HeaderLayoutProps = {
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  open: boolean;
-};
 
-export default function HeaderLayout(props: HeaderLayoutProps) {
-  const { setOpen, open } = props;
-
+export default function HeaderLayout() {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar
         position="fixed"
-        open={open}
+        open={true}
         style={{
           backgroundColor: "var(--black-color)",
           width: "100%",
@@ -52,23 +44,14 @@ export default function HeaderLayout(props: HeaderLayoutProps) {
           justifyContent: "center",
         }}
       >
-        <div>
-          {/* <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={() => setOpen(true)}
-            edge="start"
-            sx={{ mr: 2, ...(open && { display: "none" }) }}
-          ></IconButton> */}
-          <div
-            style={{
-              color: "var(--white-900)",
-              fontSize: 20,
-              margin: "0 auto",
-            }}
-          >
-            {`${APP_NAME} - Trợ lý giọng nói`}
-          </div>
+        <div
+          style={{
+            color: "var(--white-900)",
+            fontSize: 20,
+            margin: "0 auto",
+          }}
+        >
+          {`${APP_NAME} - Trợ lý giọng nói`}
         </div>
       </AppBar>
     </Box>

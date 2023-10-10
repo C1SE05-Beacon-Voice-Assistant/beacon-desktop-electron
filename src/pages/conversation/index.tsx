@@ -1,8 +1,8 @@
 import bot from "~/assets/bot.png";
-import styles from "./coversition.module.css";
+import styles from "./Conversation.module.css";
 import Bot from "~/components/bot";
 
-export default function ConversitionHistory() {
+export default function Conversation() {
   return (
     <div className={styles.container}>
       <div className="body">
