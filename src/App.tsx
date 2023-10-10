@@ -1,32 +1,20 @@
-import {
-  MemoryRouter as Router,
-  Routes,
-  Route,
-  useNavigate,
-} from "react-router-dom";
-import { createTheme, CssBaseline } from "@mui/material";
 import "@fontsource/open-sans";
-import "@fontsource/open-sans/800.css";
 import "@fontsource/open-sans/600.css";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import "@fontsource/open-sans/800.css";
+import { CssBaseline, createTheme } from "@mui/material";
 import { ThemeProvider } from "@mui/system";
-import HomePage from "./pages/home";
-import { AppRouter } from "./components/constants/app-routes";
-import ConversitionHistory from "./pages/conversition-history";
-import MainLayout from "./layouts/main/main-layout";
-import SettingPage from "./pages/setting";
-import AboutTeam from "./pages/about-team";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Route, Routes } from "react-router-dom";
+import MainLayout from "~/layouts/MainLayout";
+import { AppRouter } from "~/util/constants/appRoutes";
+import { AboutPage, ConversationPage, HomePage, SettingPage } from "./pages";
 
 const queryClient = new QueryClient();
 
 export default function App() {
-  const [isDarkMode, setIsDarkMode] = useState(true);
-  const navigate = useNavigate();
-
   const theme = createTheme({
     palette: {
-      mode: isDarkMode ? "dark" : "light",
+      mode: "dark",
     },
   });
 
@@ -35,15 +23,15 @@ export default function App() {
       <QueryClientProvider client={queryClient}>
         <MainLayout>
           <CssBaseline />
-          <div className={isDarkMode ? "gradient-dark" : "gradient-light"}>
+          <div className="gradient-dark">
             <Routes>
               <Route path={AppRouter.HOME} element={<HomePage />} />
               <Route
-                path={AppRouter.COVERSITION_HISTORY}
-                element={<ConversitionHistory />}
+                path={AppRouter.CONVERSATION}
+                element={<ConversationPage />}
               />
               <Route path={AppRouter.SETTING} element={<SettingPage />} />
-              <Route path={AppRouter.ABOUT_TEAM} element={<AboutTeam />} />
+              <Route path={AppRouter.ABOUT_TEAM} element={<AboutPage />} />
             </Routes>
           </div>
         </MainLayout>
