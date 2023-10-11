@@ -27,7 +27,7 @@ export default function HomePage() {
             </p>
           )}
         </div>
-        {!isStart && <button onClick={window.electron.wakeUp}>Bắt đầu!</button>}
+        {!isStart && <button onClick={() => setIsStart(true)}>Bắt đầu!</button>}
       </div>
       {isStart && (
         <div className={styles.container}>
