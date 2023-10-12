@@ -30,6 +30,6 @@ class VolumeController:
 
 
 if __name__ == "__main__":
-    speech = "Tôi muốn đặt âm lượng ở mức 31"
+    speech = "Tăng âm lượng lên 3 bước. Sau đó, giảm âm lượng đi 2 bước"
     volume_control = VolumeController()
     volume_control.control_volume(speech)
