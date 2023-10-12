@@ -3,9 +3,8 @@ azure-cognitiveservices-speech
 azure-ai-language-conversations
 SpeechRecognition
 pyaudio~=0.2.11
-
 g4f~=0.0.3.4
 PyExecJS~=1.5.1
-pycaw~=20230407
+pycaw
 PyAutoGUI~=0.9.54
 selenium~=4.14.0
