@@ -3,7 +3,6 @@ const { PythonShell } = require("python-shell");
 const { contextBridge } = require("electron");
 
 function wakeUp() {
-  console.log("Nguyen Thanh Tung");
   const options = {
     mode: "text",
     pythonPath: "./beacon-package/venv39/Scripts/python.exe",
