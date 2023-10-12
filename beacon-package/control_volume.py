@@ -8,7 +8,7 @@ import pyautogui
 
 class VolumeController:
     def __int__(self):
-        pyautogui.FAILSAFE = False
+        pyautogui.FAILSAFE = True
 
     @staticmethod
     def reset_volume(volume):
@@ -27,7 +27,8 @@ class VolumeController:
         print(cmd_number)
         for _ in range(cmd_number):
             pyautogui.press("volumeup")
-
+        if(action_number % 2   == 0):
+            pyautogui.press("volumedown")
 
 if __name__ == "__main__":
     speech = "Tăng âm lượng lên 3 bước. Sau đó, giảm âm lượng đi 2 bước"
