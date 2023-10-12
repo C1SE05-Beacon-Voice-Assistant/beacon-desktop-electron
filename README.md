@@ -29,6 +29,12 @@ npm install
 cd beacon-package
 ```
 
+- Copy `.env.example` to `.env`
+
+```bash
+cp .env.example .env
+```
+
 - Create virtual environment name `venv39` in the `beacon-package` directory
 
 ```bash
