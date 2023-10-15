@@ -1,4 +1,5 @@
-const dotenv = require('dotenv');
+/* eslint-disable @typescript-eslint/no-var-requires */
+const dotenv = require("dotenv");
 const sdk = require("microsoft-cognitiveservices-speech-sdk");
 
 dotenv.config();
@@ -7,24 +8,31 @@ class BeaconSpeech {
   constructor(name, location) {
     this.name = name;
     this.location = location;
-    this.speechConfig = sdk.SpeechConfig.fromSubscription(process.env.SPEECH_KEY, process.env.SPEECH_REGION);
+    this.speechConfig = sdk.SpeechConfig.fromSubscription(
+      process.env.SPEECH_KEY,
+      process.env.SPEECH_REGION
+    );
     this.recognizer = new sdk.SpeechRecognizer(this.speechConfig);
   }
 
   recognize(audio) {
     return new Promise((resolve, reject) => {
-      this.recognizer.recognizeOnceAsync(audio, (result) => {
-        if (result.reason === sdk.ResultReason.RecognizedSpeech) {
-          console.log("Recognizing..." + result.text);
-          resolve(result.text);
-        } else {
-          console.log("Could not recognize speech");
-          resolve(null);
+      this.recognizer.recognizeOnceAsync(
+        audio,
+        (result) => {
+          if (result.reason === sdk.ResultReason.RecognizedSpeech) {
+            console.log("Recognizing..." + result.text);
+            resolve(result.text);
+          } else {
+            console.log("Could not recognize speech");
+            resolve(null);
+          }
+        },
+        (error) => {
+          console.log("Error: " + error);
+          reject(error);
         }
-      }, (error) => {
-        console.log("Error: " + error);
-        reject(error);
-      });
+      );
     });
   }
 
@@ -56,22 +64,15 @@ if (require.main === module) {
   const beacon = new BeaconSpeech("Beacon", "Hanoi");
   console.log("Say something...");
   beacon.backgroundListen();
-  beacon.recognizeFromMicrophone()
+  beacon
+    .recognizeFromMicrophone()
     .then((text) => {
       // Process the recognized text
-      
     })
     .catch((error) => {
       console.error("Error: " + error);
     });
 }
-
-
-
-
-
-
-
 
 // const dotenv = require('dotenv');
 // const sdk = require("microsoft-cognitiveservices-speech-sdk");

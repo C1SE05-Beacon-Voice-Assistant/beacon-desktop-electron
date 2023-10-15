@@ -3,6 +3,7 @@ export declare const MAIN_WINDOW_VITE_NAME: string;
 
 export interface IElectron {
   wakeUp: () => void;
+  recognizeFromMicrophone: () => Promise<string>;
 }
 
 declare global {

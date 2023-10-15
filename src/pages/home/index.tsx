@@ -6,6 +6,20 @@ import microphone from "~/assets/microphone.png";
 
 export default function HomePage() {
   const [isStart, setIsStart] = useState<boolean | null>(false);
+  console.log(window.electron.recognizeFromMicrophone);
+
+  const handleStart = () => {
+    setIsStart(true);
+    window.electron
+      .recognizeFromMicrophone()
+      .then((text: string) => {
+        // Process the recognized text
+        console.log(text);
+      })
+      .catch((error: any) => {
+        console.error("Error: " + error);
+      });
+  };
 
   return (
     <section className={styles.home__container}>
@@ -27,7 +41,8 @@ export default function HomePage() {
             </p>
           )}
         </div>
-        {!isStart && <button onClick={() => setIsStart(true)}>Bắt đầu!</button>}
+        <button onClick={handleStart}>Bắt đầu!</button>
+        {/* {!isStart && <button onClick={handleStart}>Bắt đầu!</button>} */}
       </div>
       {isStart && (
         <div className={styles.container}>
