@@ -98,3 +98,4 @@ beacon-package/__pycache__
 beacon-package/*/__pycache__
 .idea
 *.wav
+/.vscode
