@@ -1,4 +1,7 @@
 from sys import argv
+import sys
+import pprint
+from controllers.listen_to_music_controller import ListenMusicController
 
 
 def calc(text):
@@ -11,4 +14,5 @@ def calc(text):
 
 
 if __name__ == "__main__":
-    print(calc(argv[1]))
+    # pprint.pprint(sys.path)
+    # print(calc(argv[1]))
