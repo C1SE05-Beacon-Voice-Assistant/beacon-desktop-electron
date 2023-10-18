@@ -12,6 +12,11 @@
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx ."
   },
+  "repository": "https://github.com/C1SE05-Beacon-Voice-Assistant/beacon-desktop-electron",
+  "publish": {
+    "provider": "github",
+    "releaseType" :"release"
+  },
   "build": {
     "appId": "com.beacomteam.autoupdater",
     "productName": "Autoupdater app",

@@ -138,13 +138,15 @@ app.on("window-all-closed", () => {
   }
 });
 
-app.on("ready", () => {
-  createWindow();
-});
-
-
 
 // Basic flags
 autoUpdater.autoDownload = false;
 // tự động cài khi thoát ứng dụng
 autoUpdater.autoInstallOnAppQuit = true;  
+
+
+app.on("ready", () => {
+  createWindow();
+
+  autoUpdater.checkForUpdates();
+});
