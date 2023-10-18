@@ -1,5 +1,6 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
+from selenium.common.exceptions import NoSuchElementException
 
 from constants.news_enum import NewsSearchType
 from utils.driver import ChromeDriver
@@ -29,7 +30,7 @@ class ReadNewsController:
             A list of dictionaries containing the title, description, and URL of the found articles.
         """
         try:
-            artc = "https://timkiem.vnexpress.net/?q={0}".format(article)
+            artc = f"https://timkiem.vnexpress.net/?q={0}".format(article)
             self.driver.get(artc)
             articles_list = self.driver.find_elements(
                 By.XPATH, "//div[@id='result_search']/article[position()<4]"
