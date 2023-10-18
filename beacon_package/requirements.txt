@@ -5,6 +5,12 @@ SpeechRecognition
 pyaudio~=0.2.11
 g4f~=0.0.3.4
 PyExecJS~=1.5.1
-pycaw
+pycaw~=20230407
 PyAutoGUI~=0.9.54
-selenium~=4.14.0
+selenium~=4.12.0
+
+requests~=2.31.0
+comtypes~=1.2.0
+
+bs4~=0.0.1
+beautifulsoup4~=4.12.2

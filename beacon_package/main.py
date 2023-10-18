@@ -1,7 +1,7 @@
 from sys import argv
 import sys
 import pprint
-from controllers.listen_to_music_controller import ListenMusicController
+from controllers import ListenMusicController, ReadNewsController
 
 
 def calc(text):
@@ -14,5 +14,7 @@ def calc(text):
 
 
 if __name__ == "__main__":
-    # pprint.pprint(sys.path)
+    pprint.pprint(sys.path)
+    # read_news = ReadNewsController()
+    # read_news.read_by_type()
     # print(calc(argv[1]))
