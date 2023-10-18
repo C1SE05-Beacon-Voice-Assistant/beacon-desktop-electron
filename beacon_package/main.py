@@ -1,7 +1,7 @@
 from sys import argv
 import sys
 import pprint
-from controllers import ListenMusicController, ReadNewsController, VolumeController
+from controllers import ListenMusicController, ReadNewsController, VolumeController, TextToSpeechController
 
 
 def calc(text):
@@ -34,4 +34,10 @@ if __name__ == "__main__":
     # speech = 'Tôi muốn đặt âm lượng ở mức 31'
     # volume_control = VolumeController()
     # volume_control.control_volume(speech)
+
+    # text_to_speech = TextToSpeechController()
+    # text_to_speech.synthesize_speech_to_file(
+    #     "Hôm nay đẹp quá ta ơi", "output.wav"
+    # )
+
     # print(calc(argv[1]))
