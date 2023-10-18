@@ -2,7 +2,7 @@
 import path from "path";
 import { app, BrowserWindow, shell, ipcMain } from "electron";
 import type { BrowserWindowConstructorOptions } from "electron";
-import { autoUpdater } from "electron-updater";
+import { autoUpdater, AppUpdater as ExternalAppUpdater} from "electron-updater";
 import log from "electron-log";
 import MenuBuilder from "./menu";
 
@@ -141,3 +141,10 @@ app.on("window-all-closed", () => {
 app.on("ready", () => {
   createWindow();
 });
+
+
+
+// Basic flags
+autoUpdater.autoDownload = false;
+// tự động cài khi thoát ứng dụng
+autoUpdater.autoInstallOnAppQuit = true;  
