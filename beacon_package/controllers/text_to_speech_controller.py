@@ -2,19 +2,36 @@ import azure.cognitiveservices.speech as speechsdk
 from dotenv import load_dotenv
 import os
 
-load_dotenv("../.env")
+load_dotenv(".env")
 
 SPEECH_KEY, SPEECH_REGION = os.getenv("SPEECH_KEY"), os.getenv("SPEECH_REGION")
+SPEECH_VOICE = os.getenv("SPEECH_VOICE")
 
 
 class TextToSpeechController:
+    """
+    A class that provides functionality to synthesize speech from text using Azure Cognitive Services.
+    """
+
     def __init__(self):
+        """
+        Initializes a new instance of the TextToSpeechController class.
+        """
         self.speech_config = speechsdk.SpeechConfig(
             subscription=SPEECH_KEY, region=SPEECH_REGION
         )
-        self.speech_config.speech_synthesis_voice_name = "vi-VN-NamMinhNeural"
+        self.speech_config.speech_synthesis_voice_name = SPEECH_VOICE
 
     def synthesize_speech(self, text):
+        """
+        Synthesizes speech from the given text.
+
+        Args:
+            text (str): The text to synthesize speech from.
+
+        Returns:
+            bytes: The audio stream of the synthesized speech.
+        """
         speech_synthesizer = speechsdk.SpeechSynthesizer(
             speech_config=self.speech_config
         )
@@ -30,6 +47,13 @@ class TextToSpeechController:
         return None
 
     def synthesize_speech_to_file(self, text, file_name):
+        """
+        Synthesizes speech from the given text and saves it to a file.
+
+        Args:
+            text (str): The text to synthesize speech from.
+            file_name (str): The name of the file to save the synthesized speech to.
+        """
         audio_stream = self.synthesize_speech(text)
 
         if audio_stream is not None:
@@ -44,6 +68,4 @@ class TextToSpeechController:
 
 if __name__ == "__main__":
     text_to_speech = TextToSpeechController()
-    text_to_speech.synthesize_speech_to_file(
-        "Hôm nay đẹp quá ta ơi", "output.wav"
-    )
+    text_to_speech.synthesize_speech_to_file("Hôm nay đẹp quá ta ơi", "output.wav")

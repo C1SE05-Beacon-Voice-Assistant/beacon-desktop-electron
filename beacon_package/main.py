@@ -1,7 +1,12 @@
 from sys import argv
 import sys
 import pprint
-from controllers import ListenMusicController, ReadNewsController, VolumeController, TextToSpeechController
+from controllers import (
+    ListenMusicController,
+    ReadNewsController,
+    VolumeController,
+    TextToSpeechController,
+)
 
 
 def calc(text):
@@ -35,9 +40,7 @@ if __name__ == "__main__":
     # volume_control = VolumeController()
     # volume_control.control_volume(speech)
 
-    # text_to_speech = TextToSpeechController()
-    # text_to_speech.synthesize_speech_to_file(
-    #     "Hôm nay đẹp quá ta ơi", "output.wav"
-    # )
+    text_to_speech = TextToSpeechController()
+    text_to_speech.synthesize_speech_to_file("Hôm nay đẹp quá ta ơi", "output.wav")
 
     # print(calc(argv[1]))
