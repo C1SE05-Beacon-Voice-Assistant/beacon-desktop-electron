@@ -50,6 +50,8 @@ const installExtensions = async () => {
     .catch(console.log);
 };
 
+let displayMessage: (message: string) => void; // Chỉ định kiểu dữ liệu của biến displayMessage
+
 const createWindow = async () => {
   if (isDebug) {
     await installExtensions();
@@ -112,6 +114,12 @@ const createWindow = async () => {
     mainWindow = null;
   });
 
+  displayMessage = (message: string): void => { // Chỉ định kiểu trả về của hàm displayMessage là void
+    console.log("showMessage trapped");
+    console.log(message);
+    mainWindow.webContents.send("updateMessage", message);
+  };
+
   const menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();
 
@@ -148,5 +156,11 @@ autoUpdater.autoInstallOnAppQuit = true;
 app.on("ready", () => {
   createWindow();
 
-  autoUpdater.checkForUpdates();
+  // autoUpdater.checkForUpdates();
+  // displayMessage(`Checking for updates`);
+  if (app.isPackaged || process.env.FORCE_DEV_UPDATE_CONFIG) {
+    autoUpdater.checkForUpdates();
+    displayMessage(`Checking for updates. Current version ${app.getVersion()}`);
+  }
 });
+

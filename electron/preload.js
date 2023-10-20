@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { PythonShell } = require("python-shell");
-const { contextBridge } = require("electron");
+const { contextBridge, ipcRenderer } = require("electron");
 const dotenv = require("dotenv");
 const sdk = require("microsoft-cognitiveservices-speech-sdk");
 
@@ -88,3 +88,8 @@ contextBridge.exposeInMainWorld("electron", {
   wakeUp: wakeUp,
   recognizeFromMicrophone: beacon.recognizeFromMicrophone.bind(beacon),
 });
+
+let bridge = {
+  updateMessage: (callback) => ipcRenderer.on("updateMessage", callback),
+};
+contextBridge.exposeInMainWorld("bridge", bridge);

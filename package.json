@@ -15,16 +15,16 @@
   "repository": "https://github.com/C1SE05-Beacon-Voice-Assistant/beacon-desktop-electron",
   "publish": {
     "provider": "github",
-    "releaseType" :"release"
+    "releaseType": "release"
   },
   "build": {
-    "appId": "com.beacomteam.autoupdater",
+    "appId": "com.beaconteam.autoupdater",
     "productName": "Autoupdater app",
     "win": {
       "target": "nsis"
     },
     "directories": {
-      "output":"out"
+      "output": "out"
     }
   },
   "dependencies": {
