@@ -2,7 +2,10 @@
 import path from "path";
 import { app, BrowserWindow, shell, ipcMain } from "electron";
 import type { BrowserWindowConstructorOptions } from "electron";
-import { autoUpdater, AppUpdater as ExternalAppUpdater} from "electron-updater";
+import {
+  autoUpdater,
+  AppUpdater as ExternalAppUpdater,
+} from "electron-updater";
 import log from "electron-log";
 import MenuBuilder from "./menu";
 
@@ -49,8 +52,6 @@ const installExtensions = async () => {
     )
     .catch(console.log);
 };
-
-let displayMessage: (message: string) => void; // Chỉ định kiểu dữ liệu của biến displayMessage
 
 const createWindow = async () => {
   if (isDebug) {
@@ -114,12 +115,6 @@ const createWindow = async () => {
     mainWindow = null;
   });
 
-  displayMessage = (message: string): void => { // Chỉ định kiểu trả về của hàm displayMessage là void
-    console.log("showMessage trapped");
-    console.log(message);
-    // mainWindow.webContents.send("updateMessage", message);
-  };
-
   const menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();
 
@@ -132,6 +127,8 @@ const createWindow = async () => {
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
   new AppUpdater();
+
+  return mainWindow;
 };
 
 /**
@@ -146,30 +143,29 @@ app.on("window-all-closed", () => {
   }
 });
 
-
 // Basic flags
 autoUpdater.autoDownload = false;
 // tự động cài khi thoát ứng dụng
-autoUpdater.autoInstallOnAppQuit = true;  
-
+autoUpdater.autoInstallOnAppQuit = true;
 
 app.on("ready", () => {
-  createWindow();
+  createWindow()
+    .then((mainWindow) => {
+      // clear the console
+      console.clear();
 
-  // autoUpdater.checkForUpdates();
-  // displayMessage(`Checking for updates`);
-  console.log("check log");
-  
-  // if (app.isPackaged || process.env.FORCE_DEV_UPDATE_CONFIG) {
-    console.log("is already");
-    
-    autoUpdater.checkForUpdates();
-    displayMessage("Checking for updates.");
-    console.log(12345);
+      autoUpdater.checkForUpdates();
+      console.log(mainWindow.webContents);
 
-  // }
+      mainWindow.webContents.on("did-finish-load", () => {
+        mainWindow.webContents.send("updateMessage", app.getVersion());
+      });
+      console.log(12345);
+    })
+    .catch((err) => {
+      console.log("162", err);
+    });
 });
-
 
 // /*New Update Available*/
 // autoUpdater.on("update-available", (info) => {
@@ -190,6 +186,3 @@ app.on("ready", () => {
 // autoUpdater.on("error", (info) => {
 //   curWindow.showMessage(info);
 // });
-
-
-
