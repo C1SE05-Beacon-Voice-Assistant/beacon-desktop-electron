@@ -1,4 +1,3 @@
-import re
 from sys import argv
 import sys
 import pprint
@@ -14,10 +13,6 @@ from utils.driver import ChromeDriver
 driver = ChromeDriver().get_driver()
 
 if __name__ == "__main__":
-    # set utf-8 encoding
-    sys.stdout.reconfigure(encoding="utf-8")
-    sys.stdin.reconfigure(encoding="utf-8")
-
     print("Beacon is running")
     if len(argv) < 2:
         print("Please enter feature")
@@ -43,14 +38,23 @@ if __name__ == "__main__":
                 read_news.read_by_type()
                 continue
             # if query match "chơi nhạc", "nghe nhạc":
-            if re.match(r"chơi nhạc|nghe nhạc", query):
+            if query in ["chơi nhạc", "nghe nhạc"]:
                 print("Chơi nhạc")
                 listen_music = ListenMusicController(query, "MP3", True, driver=driver)
                 listen_music.listen_to_music()
+                while True:
+                    listen_query = input("Enter your query: ")
+                    if listen_query == "exit":
+                        break
+                    if listen_query == "pause":
+                        listen_music.toggle_play()
+                        continue
+                    if listen_query == "play":
+                        listen_music.toggle_play()
+                        continue
                 continue            
         except EOFError as e:
             print(e)
             break
 
-    # driver.quit()
     exit(0)
