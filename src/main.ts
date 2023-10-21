@@ -117,7 +117,7 @@ const createWindow = async () => {
   displayMessage = (message: string): void => { // Chỉ định kiểu trả về của hàm displayMessage là void
     console.log("showMessage trapped");
     console.log(message);
-    mainWindow.webContents.send("updateMessage", message);
+    // mainWindow.webContents.send("updateMessage", message);
   };
 
   const menuBuilder = new MenuBuilder(mainWindow);
@@ -158,9 +158,38 @@ app.on("ready", () => {
 
   // autoUpdater.checkForUpdates();
   // displayMessage(`Checking for updates`);
-  if (app.isPackaged || process.env.FORCE_DEV_UPDATE_CONFIG) {
+  console.log("check log");
+  
+  // if (app.isPackaged || process.env.FORCE_DEV_UPDATE_CONFIG) {
+    console.log("is already");
+    
     autoUpdater.checkForUpdates();
-    displayMessage(`Checking for updates. Current version ${app.getVersion()}`);
-  }
+    displayMessage("Checking for updates.");
+    console.log(12345);
+
+  // }
 });
+
+
+// /*New Update Available*/
+// autoUpdater.on("update-available", (info) => {
+//   createWindow.displayMessage(`Update available. Current version ${app.getVersion()}`);
+//   let pth = autoUpdater.downloadUpdate();
+//   createWindow.displayMessage(pth);
+// });
+
+// autoUpdater.on("update-not-available", (info) => {
+//   curWindow.showMessage(`No update available. Current version ${app.getVersion()}`);
+// });
+
+// /*Download Completion Message*/
+// autoUpdater.on("update-downloaded", (info) => {
+//   curWindow.showMessage(`Update downloaded. Current version ${app.getVersion()}`);
+// });
+
+// autoUpdater.on("error", (info) => {
+//   curWindow.showMessage(info);
+// });
+
+
 

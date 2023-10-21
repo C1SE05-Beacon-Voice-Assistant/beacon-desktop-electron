@@ -6,8 +6,13 @@ export interface IElectron {
   recognizeFromMicrophone: () => Promise<string>;
 }
 
+export interface IBridge{
+  
+}
+
 declare global {
   interface Window extends Window {
     electron: IElectron;
+    bridge: IBridge;
   }
 }

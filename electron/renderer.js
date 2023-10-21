@@ -4,6 +4,7 @@ import "~/index.css";
 
 document.addEventListener("DOMContentLoaded", function () {
     window.bridge.updateMessage(updateMessage);
+    console.log("hiihi");
 });
   
 function updateMessage(event, message) {
