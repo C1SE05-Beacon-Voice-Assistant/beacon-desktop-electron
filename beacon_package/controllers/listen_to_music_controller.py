@@ -1,5 +1,6 @@
 import re
 import time
+import asyncio
 
 from selenium.common import ElementNotInteractableException
 from selenium.webdriver.common.by import By

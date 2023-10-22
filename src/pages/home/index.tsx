@@ -33,7 +33,13 @@ export default function HomePage() {
             </p>
           )}
         </div>
-        <input type="text" id="input" />
+        <input
+          type="text"
+          id="input"
+          style={{
+            display: "block",
+          }}
+        />
         <button type="button" onClick={handleInput}>
           Nhập
         </button>

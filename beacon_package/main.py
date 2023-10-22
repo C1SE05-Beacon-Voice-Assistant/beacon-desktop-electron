@@ -23,10 +23,12 @@ if __name__ == "__main__":
         print("Please enter feature")
         exit(1)
 
+    read_news = ReadNewsController(driver=driver)
     volume_control = VolumeController()
     while True:
         try:
-            query = input("Enter command: ")
+            # wait for user input
+            query = input("Enter your query: ")
             # if query match "thoát", "dừng", "tắt":
             if query in ["thoát", "dừng", "tắt"]:
                 print("Đã thoát")
@@ -39,18 +41,28 @@ if __name__ == "__main__":
             # if query match "đọc", "đọc tin tức", "đọc báo":
             if query in ["đọc", "đọc tin tức", "đọc báo"]:
                 print("Đọc tin tức")
-                read_news = ReadNewsController(driver=driver)
                 read_news.read_by_type()
                 continue
             # if query match "chơi nhạc", "nghe nhạc":
-            if re.match(r"chơi nhạc|nghe nhạc", query):
-                print("Chơi nhạc")
-                listen_music = ListenMusicController(query, "MP3", True, driver=driver)
-                listen_music.listen_to_music()
-                continue            
+            # if re.match(r"chơi nhạc|nghe nhạc", query):
+            #     print("Chơi nhạc")
+            #     listen_music = ListenMusicController(query, "MP3", True, driver=driver)
+            #     listen_music.listen_to_music()
+            #     continue
+
+            if query == "play":
+                print("Play")
+                listen_music.toggle_play()
+                continue
+
+            if query == "pause":
+                print("Pause")
+                listen_music.toggle_play()
+                continue
+
         except EOFError as e:
             print(e)
-            break
+            # break
 
     # driver.quit()
     exit(0)
