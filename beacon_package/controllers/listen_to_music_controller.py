@@ -31,17 +31,17 @@ class ListenMusicController:
         self.is_check = is_check
         self.is_running_on_youtube = False
 
-    def __del__(self):
-        """
-        Destructor method that quits the driver.
-        """
-        self.driver.quit()
+    # def __del__(self):
+    #     """
+    #     Destructor method that quits the driver.
+    #     """
+    #     self.driver.quit()
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        """
-        Exit method that quits the driver.
-        """
-        self.driver.quit()
+    # def __exit__(self, exc_type, exc_val, exc_tb):
+    #     """
+    #     Exit method that quits the driver.
+    #     """
+    #     self.driver.quit()
 
     def __enter__(self):
         """
