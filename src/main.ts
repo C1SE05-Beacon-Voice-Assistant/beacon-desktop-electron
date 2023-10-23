@@ -82,16 +82,16 @@ const createWindow = async () => {
   if (process.env.NODE_ENV === "production") {
     config = {
       ...config,
-      autoHideMenuBar: true,
+      autoHideMenuBar: false,
       webPreferences: {
         ...config.webPreferences,
-        devTools: false,
+        devTools: true,
       },
     };
   }
 
   mainWindow = new BrowserWindow(config);
-
+  mainWindow.webContents.openDevTools();
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
     mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
   } else {
@@ -166,7 +166,7 @@ app.on("ready", () => {
       console.log("162", err);
     });
 });
-
+if (require("electron-squirrel-startup")) app.quit();
 // /*New Update Available*/
 // autoUpdater.on("update-available", (info) => {
 //   createWindow.displayMessage(`Update available. Current version ${app.getVersion()}`);

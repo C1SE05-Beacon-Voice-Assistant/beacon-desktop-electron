@@ -92,6 +92,9 @@ typings/
 # Electron-Forge
 out/
 
+# Electron Builder
+dist/
+
 # Beacon packages
 beacon-package/venv*
 beacon-package/__pycache__

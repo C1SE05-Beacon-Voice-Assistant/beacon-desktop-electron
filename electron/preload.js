@@ -1,10 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { PythonShell } = require("python-shell");
 const { contextBridge, ipcRenderer } = require("electron");
-const dotenv = require("dotenv");
 const sdk = require("microsoft-cognitiveservices-speech-sdk");
-
-dotenv.config();
 
 class BeaconSpeech {
   constructor(name, location) {

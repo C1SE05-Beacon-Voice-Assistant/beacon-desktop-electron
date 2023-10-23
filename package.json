@@ -11,22 +11,12 @@
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
-    "dist": "electron-builder"
+    "dist": "electron-builder build --win --dir"
   },
   "repository": "https://github.com/C1SE05-Beacon-Voice-Assistant/beacon-desktop-electron",
   "publish": {
     "provider": "github",
     "releaseType": "release"
-  },
-  "build": {
-    "appId": "com.beaconteam.autoupdater",
-    "productName": "Autoupdater app",
-    "win": {
-      "target": "nsis"
-    },
-    "directories": {
-      "output": "dist"
-    }
   },
   "dependencies": {
     "@electron/asar": "^3.2.7",
@@ -36,7 +26,6 @@
     "@mui/material": "^5.14.11",
     "@tanstack/react-query": "^4.35.7",
     "axios": "^1.4.0",
-    "electron-builder": "^24.6.4",
     "electron-squirrel-startup": "^1.0.0",
     "microsoft-cognitiveservices-speech-sdk": "^1.32.0",
     "node-record-lpcm16": "^1.0.1",
@@ -67,6 +56,7 @@
     "@typescript-eslint/parser": "^5.0.0",
     "dotenv": "^16.3.1",
     "electron": "26.3.0",
+    "electron-builder": "^24.6.4",
     "electron-debug": "^3.2.0",
     "electron-devtools-installer": "^3.2.0",
     "electron-log": "^4.4.8",
