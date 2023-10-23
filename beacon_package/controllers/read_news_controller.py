@@ -1,9 +1,12 @@
-from selenium.webdriver.common.by import By
-from selenium.webdriver.remote.webelement import WebElement
-from selenium.common.exceptions import NoSuchElementException
+try:
+    from selenium.webdriver.common.by import By
+    from selenium.webdriver.remote.webelement import WebElement
+    from selenium.common.exceptions import NoSuchElementException
+except ImportError:
+    print("Error when import selenium")
 
-from constants.news_enum import NewsSearchType
-from utils.read_news import NewsReader
+from constants import NewsSearchType
+from utils import NewsReader
 
 
 class ReadNewsController:

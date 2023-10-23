@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { PythonShell } = require("python-shell");
+const {
+  Builder,
+  By,
+  until,
+  WebElementCondition,
+} = require("selenium-webdriver");
 const { contextBridge } = require("electron");
-const dotenv = require("dotenv");
 const sdk = require("microsoft-cognitiveservices-speech-sdk");
-
-dotenv.config();
 
 class BeaconSpeech {
   constructor(name, location) {
@@ -64,40 +66,27 @@ class BeaconSpeech {
 }
 
 const beacon = new BeaconSpeech("Beacon", "Hanoi");
-// beacon.backgroundListen();
 
-const defaultOptions = {
-  mode: "text",
-  pythonPath: "./beacon_package/venv39/Scripts/python.exe",
-  pythonOptions: ["-u"], // get print results in real-time
-  scriptPath: "./beacon_package",
-};
-const shell = new PythonShell("main.py", {
-  ...defaultOptions,
-  args: ["start"],
-});
+function start(url) {
+  const driver = new Builder().forBrowser("chrome").build();
 
-const outputFromUser = (message) => {
-  console.log(message);
-  shell.send(message);
-
-  shell.on("message", (message) => {
-    console.log(message);
-  });
-
-  shell.end((err, code, signal) => {
-    if (err) throw err;
-    console.log(`The exit code was: ${code}`);
-    console.log(`The exit signal was: ${signal}`);
-    console.log("finished");
-  });
-
-  shell.on("error", (err) => {
-    console.log(err);
-  });
-};
+  driver
+    .get(url)
+    .then(() => driver.findElement(By.id("video-title")))
+    .then((el) => el.click())
+    .then(() =>
+      driver.wait(
+        until.elementLocated(By.css(".ytp-ad-skip-button-icon")),
+        20000
+      )
+    )
+    .then((el) => {
+      console.log(el);
+      return el.click();
+    });
+}
 
 contextBridge.exposeInMainWorld("electron", {
   recognizeFromMicrophone: beacon.recognizeFromMicrophone.bind(beacon),
-  outputFromUser,
+  start,
 });

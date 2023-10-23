@@ -1,7 +1,6 @@
 import re
-from sys import argv
 import sys
-import pprint
+from browser import document
 from controllers import (
     ListenMusicController,
     ReadNewsController,
@@ -9,60 +8,73 @@ from controllers import (
     TextToSpeechController,
 )
 
-from utils.driver import ChromeDriver
+from utils.driver import ChromeDriverCustom
 
-driver = ChromeDriver().get_driver()
 
-if __name__ == "__main__":
-    # set utf-8 encoding
-    sys.stdout.reconfigure(encoding="utf-8")
-    sys.stdin.reconfigure(encoding="utf-8")
+def main(query_input: str):
+    print("Bắt đầu chạy chương trình")
+    driver = ChromeDriverCustom().start()
+    print("Chạy xong driver")
 
-    print("Beacon is running")
-    if len(argv) < 2:
-        print("Please enter feature")
-        exit(1)
-
-    read_news = ReadNewsController(driver=driver)
-    volume_control = VolumeController()
+    input_str = query_input
     while True:
         try:
-            # wait for user input
-            query = input("Enter your query: ")
-            # if query match "thoát", "dừng", "tắt":
-            if query in ["thoát", "dừng", "tắt"]:
-                print("Đã thoát")
-                break
-            # if query match "tăng", "giảm", "tắt":
-            if query in ["tăng", "giảm"]:
-                print("Tăng giảm âm lượng")
-                volume_control.control_volume(query)
-                continue
-            # if query match "đọc", "đọc tin tức", "đọc báo":
-            if query in ["đọc", "đọc tin tức", "đọc báo"]:
-                print("Đọc tin tức")
+            if re.search(r"nghe nhạc", input_str):
+                print("Nghe nhạc")
+                cmd = ListenMusicController(
+                    speech=input_str, search_type="MP3", is_check=True, driver=driver
+                )
+                cmd.listen_to_music()
+            elif re.search(r"đọc báo", input_str):
+                print("Đọc báo")
+                read_news = ReadNewsController(driver=driver)
                 read_news.read_by_type()
-                continue
-            # if query match "chơi nhạc", "nghe nhạc":
-            # if re.match(r"chơi nhạc|nghe nhạc", query):
-            #     print("Chơi nhạc")
-            #     listen_music = ListenMusicController(query, "MP3", True, driver=driver)
-            #     listen_music.listen_to_music()
-            #     continue
 
-            if query == "play":
-                print("Play")
-                listen_music.toggle_play()
-                continue
+            # elif re.search(r"tăng âm lượng", query):
+            #     VolumeController().run(driver)
+            # elif re.search(r"đọc văn bản", query):
+            #     TextToSpeechController().run(driver)
+            else:
+                print("Không có chức năng này")
 
-            if query == "pause":
-                print("Pause")
-                listen_music.toggle_play()
-                continue
+            input_str = input("Nhập câu lệnh: ")
+            # wait for user input
+            if input_str == "dừng":
+                break
 
         except EOFError as e:
-            print(e)
-            # break
+            print("Lỗi: ", e)
+            break
+        except ValueError as e:
+            print("Lỗi giá trị: ", e)
+            break
+        except TypeError as e:
+            print("Lỗi kiểu dữ liệu: ", e)
+            break
 
-    # driver.quit()
-    exit(0)
+    driver.quit()
+
+
+def click(ev):
+    query = document["zone"].value
+    if query:
+        main(query)
+
+
+# bind event 'click' on button to callback function
+document["echo"].bind("click", click)
+
+
+# if __name__ == "__main__":
+#     # set utf-8 encoding
+#     sys.stdout.reconfigure(encoding="utf-8")
+#     sys.stdin.reconfigure(encoding="utf-8")
+#     sys.stdout.flush()
+#     print(len(argv))
+#     if len(argv) > 1:
+#         query = argv[1]
+#         print("Câu lệnh: ", query)
+#         main(query)
+#     else:
+#         print("Vui lòng nhập câu lệnh")
+#         exit(1)

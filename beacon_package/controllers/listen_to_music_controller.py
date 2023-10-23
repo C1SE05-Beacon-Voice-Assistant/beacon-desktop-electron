@@ -1,13 +1,14 @@
 import re
 import time
-import asyncio
+from constants import Platforms
 
-from selenium.common import ElementNotInteractableException
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-
-from constants.platforms import Platforms
+try:
+    from selenium.common import ElementNotInteractableException
+    from selenium.webdriver.common.by import By
+    from selenium.webdriver.support.ui import WebDriverWait
+    from selenium.webdriver.support import expected_conditions as EC
+except ImportError:
+    print("Error when import selenium")
 
 
 class ListenMusicController:
