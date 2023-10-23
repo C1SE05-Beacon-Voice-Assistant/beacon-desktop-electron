@@ -6,7 +6,7 @@ import microphone from "~/assets/microphone.png";
 
 export default function HomePage() {
   const [isStart, setIsStart] = useState<boolean | null>(false);
-
+  
   return (
     <section className={styles.home__container}>
       <div className={styles.bot__vector}>
@@ -27,7 +27,9 @@ export default function HomePage() {
             </p>
           )}
         </div>
-        {!isStart && <button onClick={() => setIsStart(true)}>Bắt đầu!</button>}
+        {!isStart && <button onClick={() =>{
+           window.electron.wakeUp()
+        }}>Bắt đầu!</button>}
       </div>
       {isStart && (
         <div className={styles.container}>
