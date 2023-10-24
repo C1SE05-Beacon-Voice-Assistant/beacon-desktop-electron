@@ -1,10 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const {
-  Builder,
-  By,
-  until,
-  WebElementCondition,
-} = require("selenium-webdriver");
+const { Builder, By, until } = require("selenium-webdriver");
 const { contextBridge } = require("electron");
 const sdk = require("microsoft-cognitiveservices-speech-sdk");
 
@@ -17,6 +12,8 @@ class BeaconSpeech {
       "southeastasia"
     );
     this.speechConfig.speechRecognitionLanguage = "vi-VN";
+    this.autoDetectSourceLanguageConfig =
+      sdk.AutoDetectSourceLanguageConfig.fromLanguages(["vi-VN", "en-US"]);
   }
 
   recognize(audioConfig) {
@@ -53,21 +50,60 @@ class BeaconSpeech {
 
   backgroundListen() {
     const audioConfig = sdk.AudioConfig.fromDefaultMicrophoneInput();
-    const recognizer = new sdk.SpeechRecognizer(this.speechConfig, audioConfig);
+    const speechRecognizer = new sdk.SpeechRecognizer(
+      this.speechConfig,
+      audioConfig,
+      this.autoDetectSourceLanguageConfig
+    );
 
-    recognizer.recognized = (_, result) => {
-      console.log("Recognized in background: " + result.text);
+    speechRecognizer.recognizing = (s, e) => {
+      console.log(`RECOGNIZING: Text=${e.result.text}`);
     };
 
-    recognizer.startContinuousRecognitionAsync();
+    speechRecognizer.recognized = (s, e) => {
+      if (e.result.reason == sdk.ResultReason.RecognizedSpeech) {
+        console.log(`RECOGNIZED: Text=${e.result.text}`);
+        // if result include "dừng" => stop
+        let text = e.result.text.toLowerCase();
+        if (text.includes("dừng")) {
+          speechRecognizer.stopContinuousRecognitionAsync();
+        } else if (text.includes("bài nhạc")) {
+          const songName = text.split("bài nhạc")[1].trim();
+          start(songName);
+        }
+      } else if (e.result.reason == sdk.ResultReason.NoMatch) {
+        console.log("NOMATCH: Speech could not be recognized.");
+      }
+    };
 
-    // To stop background listening, call recognizer.stopContinuousRecognitionAsync()
+    speechRecognizer.canceled = (s, e) => {
+      console.log(`CANCELED: Reason=${e.reason}`);
+
+      if (e.reason == sdk.CancellationReason.Error) {
+        console.log(`"CANCELED: ErrorCode=${e.errorCode}`);
+        console.log(`"CANCELED: ErrorDetails=${e.errorDetails}`);
+        console.log(
+          "CANCELED: Did you set the speech resource key and region values?"
+        );
+      }
+
+      speechRecognizer.stopContinuousRecognitionAsync();
+    };
+
+    speechRecognizer.sessionStopped = (s, e) => {
+      console.log("\nSession stopped event.");
+      speechRecognizer.stopContinuousRecognitionAsync();
+    };
+
+    speechRecognizer.startContinuousRecognitionAsync();
   }
 }
 
 const beacon = new BeaconSpeech("Beacon", "Hanoi");
+beacon.backgroundListen();
 
-function start(url) {
+function start(songName) {
+  const url = `https://www.youtube.com/results?search_query=${songName}`;
   const driver = new Builder().forBrowser("chrome").build();
 
   driver
