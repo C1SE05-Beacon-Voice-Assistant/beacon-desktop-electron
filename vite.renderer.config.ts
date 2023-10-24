@@ -11,4 +11,7 @@ export default defineConfig({
     },
   },
   plugins: [alias()],
+  server: {
+    port: 3000,
+  },
 });

@@ -2,4 +2,3 @@ appId: "com.beaconteam.autoupdater"
 productName: "AutoUpdater"
 directories:
   output: "dist"
-  buildResources: "buildResources"
