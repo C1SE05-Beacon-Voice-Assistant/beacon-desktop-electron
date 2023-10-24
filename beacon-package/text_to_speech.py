@@ -38,4 +38,4 @@ if __name__ == "__main__":
         print("Tổng hợp giọng nói thất bại.")
 
 if __name__ == "__main__":
-    speech_key = "cd1e1747056d4ccfadbbd4
+    speech_key = "cd1e1747056d4ccfadbbd4"

@@ -140,18 +140,18 @@ class BeaconSpeech:
             self.done = True
 
         # Connect callbacks to the events fired by the keyword recognizer.
-        keyword_recognizer.recognized.connect(recognized_cb)
-        keyword_recognizer.canceled.connect(canceled_cb)
+        # keyword_recognizer.recognized.connect(recognized_cb)
+        # keyword_recognizer.canceled.connect(canceled_cb)
 
-        result_future = keyword_recognizer.recognize_once_async(model)
-        result_keyword_verify = result_future.get()
+        # result_future = keyword_recognizer.recognize_once_async(model)
+        # result_keyword_verify = result_future.get()
 
-        if result_keyword_verify.reason == speechsdk.ResultReason.RecognizedKeyword:
+        if True:
             stop_future = keyword_recognizer.stop_recognition_async()
             print("Stopping...")
             stopped = stop_future.get()
 
-            while self.done:
+            while True:
                 self.speech_from_text(random.choice(talk.hello))
                 user_input = self.recognize_from_microphone()
                 if user_input is not None:
@@ -160,6 +160,7 @@ class BeaconSpeech:
                     print("Processing...")
                     response = generate_gpt_response(self.history)
                     self.history.append({"role": "assistant", "content": response})
+                    print(user_input)
                     self.speech_from_text(response)
                 else:
                     self.speech_from_text(
@@ -176,7 +177,6 @@ class BeaconSpeech:
 
 if __name__ == "__main__":
     beacon = BeaconSpeech("Beacon", "Việt Nam")
-
     beacon.speech_from_text(talk.wake_up)
     while True:
         try:

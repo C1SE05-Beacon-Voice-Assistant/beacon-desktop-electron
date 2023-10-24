@@ -24,7 +24,6 @@ class VolumeController:
         # action_name = cmd_name.group(0)
         action_number = int(cmd_number.group())
         cmd_number = int(action_number / 2)
-        print(cmd_number)
         for _ in range(cmd_number):
             pyautogui.press("volumeup")
         if(action_number % 2   == 0):

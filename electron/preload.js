@@ -1,6 +1,23 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { PythonShell } = require("python-shell");
 const { contextBridge } = require("electron");
+const winston = require('winston');
+const tempLog = winston.createLogger({
+  level: 'info',
+  format: winston.format.json(),
+  transports: [
+    new winston.transports.File({ filename: 'temp-log.log' })
+  ]
+});
+const mainLog = winston.createLogger({
+  level: 'info',
+  format: winston.format.json(),
+  transports: [
+    new winston.transports.File({ filename: 'main-log.log' })
+  ]
+});
+
+const conversions = [];
 
 function wakeUp() {
   const options = {

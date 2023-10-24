@@ -4,6 +4,7 @@
   "description": "Beacon Desktop Electron App",
   "license": "MIT",
   "main": ".vite/build/main.js",
+  "author": "Beacon Team",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
@@ -18,7 +19,9 @@
     "@mui/material": "^5.14.11",
     "@tanstack/react-query": "^4.35.7",
     "axios": "^1.4.0",
+    "electron-router-dom": "^1.0.5",
     "electron-squirrel-startup": "^1.0.0",
+    "loglevel": "^1.8.1",
     "python-shell": "^5.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -27,7 +30,8 @@
     "react-type-animation": "^3.1.0",
     "rollup-plugin-polyfill-node": "^0.12.0",
     "styled-components": "^5.3.0",
-    "utils": "^0.2.2"
+    "utils": "^0.2.2",
+    "winston": "^3.11.0"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.4.2",
