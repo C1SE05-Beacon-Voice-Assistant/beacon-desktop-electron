@@ -2,7 +2,9 @@
 const { PythonShell } = require("python-shell");
 const { contextBridge, ipcRenderer } = require("electron");
 const sdk = require("microsoft-cognitiveservices-speech-sdk");
+// const dotenv = require("dotenv");
 
+// dotenv.config();
 class BeaconSpeech {
   constructor(name, location) {
     this.name = name;
