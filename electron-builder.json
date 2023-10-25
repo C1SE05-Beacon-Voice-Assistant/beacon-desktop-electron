@@ -1,0 +1,16 @@
+{
+  "appId": "com.beaconteam.autoupdater",
+  "productName": "AutoUpdater",
+  "directories": {
+    "output": "release/${version}"
+  },
+  "win": {
+    "target": [
+      {
+        "target": "nsis",
+        "arch": ["x64"]
+      }
+    ],
+    "artifactName": "${productName}-Windows-${version}-Setup.${ext}"
+  }
+}
