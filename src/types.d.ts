@@ -3,7 +3,13 @@ export declare const MAIN_WINDOW_VITE_NAME: string;
 
 export interface IElectron {
   recognizeFromMicrophone: () => Promise<string>;
-  start: (url: string) => void;
+  backgroundListen: (callback: (text: string) => void) => void;
+  stopBackgroundListen: () => void;
+  loudness: {
+    getVolume: () => Promise<number>;
+    setVolume: (volume: number) => Promise<void>;
+  };
+  controlVolume: (volume: number) => Promise<void>;
 }
 
 declare global {

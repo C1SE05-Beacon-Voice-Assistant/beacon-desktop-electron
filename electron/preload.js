@@ -2,6 +2,7 @@
 const { Builder, By, until } = require("selenium-webdriver");
 const { contextBridge } = require("electron");
 const sdk = require("microsoft-cognitiveservices-speech-sdk");
+const loudness = require("loudness");
 
 class BeaconSpeech {
   constructor(name, location) {
@@ -12,8 +13,11 @@ class BeaconSpeech {
       "southeastasia"
     );
     this.speechConfig.speechRecognitionLanguage = "vi-VN";
-    this.autoDetectSourceLanguageConfig =
-      sdk.AutoDetectSourceLanguageConfig.fromLanguages(["vi-VN", "en-US"]);
+    this.speechRecognizer = new sdk.SpeechRecognizer(
+      this.speechConfig,
+      sdk.AudioConfig.fromDefaultMicrophoneInput(),
+      sdk.AutoDetectSourceLanguageConfig.fromLanguages(["vi-VN", "en-US"])
+    );
   }
 
   recognize(audioConfig) {
@@ -48,35 +52,20 @@ class BeaconSpeech {
     return this.recognize(audioConfig);
   }
 
-  backgroundListen() {
-    const audioConfig = sdk.AudioConfig.fromDefaultMicrophoneInput();
-    const speechRecognizer = new sdk.SpeechRecognizer(
-      this.speechConfig,
-      audioConfig,
-      this.autoDetectSourceLanguageConfig
-    );
-
-    speechRecognizer.recognizing = (s, e) => {
+  backgroundListen(callback) {
+    this.speechRecognizer.recognizing = (s, e) => {
       console.log(`RECOGNIZING: Text=${e.result.text}`);
     };
 
-    speechRecognizer.recognized = (s, e) => {
+    this.speechRecognizer.recognized = (s, e) => {
       if (e.result.reason == sdk.ResultReason.RecognizedSpeech) {
-        console.log(`RECOGNIZED: Text=${e.result.text}`);
-        // if result include "dừng" => stop
-        let text = e.result.text.toLowerCase();
-        if (text.includes("dừng")) {
-          speechRecognizer.stopContinuousRecognitionAsync();
-        } else if (text.includes("bài nhạc")) {
-          const songName = text.split("bài nhạc")[1].trim();
-          start(songName);
-        }
+        callback(e.result.text);
       } else if (e.result.reason == sdk.ResultReason.NoMatch) {
         console.log("NOMATCH: Speech could not be recognized.");
       }
     };
 
-    speechRecognizer.canceled = (s, e) => {
+    this.speechRecognizer.canceled = (s, e) => {
       console.log(`CANCELED: Reason=${e.reason}`);
 
       if (e.reason == sdk.CancellationReason.Error) {
@@ -87,20 +76,24 @@ class BeaconSpeech {
         );
       }
 
-      speechRecognizer.stopContinuousRecognitionAsync();
+      this.speechRecognizer.stopContinuousRecognitionAsync();
     };
 
-    speechRecognizer.sessionStopped = (s, e) => {
+    this.speechRecognizer.sessionStopped = (s, e) => {
       console.log("\nSession stopped event.");
-      speechRecognizer.stopContinuousRecognitionAsync();
+      this.speechRecognizer.stopContinuousRecognitionAsync();
     };
 
-    speechRecognizer.startContinuousRecognitionAsync();
+    this.speechRecognizer.startContinuousRecognitionAsync();
+  }
+
+  stopBackgroundListen() {
+    this.speechRecognizer.stopContinuousRecognitionAsync();
   }
 }
 
 const beacon = new BeaconSpeech("Beacon", "Hanoi");
-beacon.backgroundListen();
+// beacon.backgroundListen();
 
 function start(songName) {
   const url = `https://www.youtube.com/results?search_query=${songName}`;
@@ -122,7 +115,18 @@ function start(songName) {
     });
 }
 
+function controlVolume(volume) {
+  console.log(typeof volume);
+  loudness
+    .setVolume(volume)
+    .then(() => console.log("Volume set to " + volume))
+    .catch((err) => console.error(err));
+}
+
 contextBridge.exposeInMainWorld("electron", {
   recognizeFromMicrophone: beacon.recognizeFromMicrophone.bind(beacon),
-  start,
+  backgroundListen: beacon.backgroundListen.bind(beacon),
+  stopBackgroundListen: beacon.stopBackgroundListen.bind(beacon),
+  loudness,
+  controlVolume,
 });

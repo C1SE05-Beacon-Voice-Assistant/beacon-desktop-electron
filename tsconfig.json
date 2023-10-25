@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
+    "target": "ES6",
     "module": "commonjs",
     "allowJs": true,
     "skipLibCheck": true,
@@ -14,7 +14,9 @@
     "baseUrl": ".",
     "paths": {
       "~/*": ["src/*"]
-    }
+    },
+    "lib": ["es6", "dom"],
+    "types": ["node"]
   },
   "include": ["src"]
 }

@@ -8,6 +8,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "~": resolve(projectRootDir, "src"),
+      loudness$: "mwl-loudness/index.js",
     },
   },
   plugins: [alias()],
