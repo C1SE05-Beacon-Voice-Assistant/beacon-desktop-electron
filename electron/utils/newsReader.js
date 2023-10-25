@@ -40,7 +40,6 @@ class NewsReader {
                 if (index % 2 == 0) return element;
             });
         desc_cation.find("p").each((index, element) => {
-            console.log(element.children);
             content.push(element.children[0].data);
         });
 
@@ -114,8 +113,9 @@ const photoUrl =
     "https://vnexpress.net/can-ho-ap-mai-2-tang-co-quay-bar-san-vuon-4660398.html";
 const urlLive = "https://vnexpress.net/asiad-ngay-4-10-4660546.html";
 const urlFail = "https://vnexpress.net/asiad-ngay-4--46606.html";
+const photoMidu = "https://vnexpress.net/sac-voc-midu-o-tuoi-34-4661302.html";
 
-new NewsReader().getNewsContent(urlFail).then((res) => {
+new NewsReader().getNewsContent(photoMidu).then((res) => {
     console.log(res);
 });
 
