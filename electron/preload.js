@@ -66,25 +66,38 @@ class BeaconSpeech {
 const beacon = new BeaconSpeech("Beacon", "Hanoi");
 // beacon.backgroundListen();
 
-function wakeUp() {
-  const options = {
-    mode: "text",
-    pythonPath: "./beacon-package/venv39/Scripts/python.exe",
-    pythonOptions: ["-u"], // get print results in real-time
-    encoding: "utf8",
-    scriptPath: "./beacon-package",
-  };
+const defaultOptions = {
+  mode: "text",
+  pythonPath: "./beacon_package/venv39/Scripts/python.exe",
+  pythonOptions: ["-u"], // get print results in real-time
+  scriptPath: "./beacon_package",
+};
+const shell = new PythonShell("main.py", {
+  ...defaultOptions,
+  args: ["start"],
+});
 
-  PythonShell.run("beacon_speech.py", options)
-    .then((messages) => {
-      console.log("messages: %j", messages);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-}
+const outputFromUser = (message) => {
+  console.log(message);
+  shell.send(message);
+
+  shell.on("message", (message) => {
+    console.log(message);
+  });
+
+  shell.end((err, code, signal) => {
+    if (err) throw err;
+    console.log(`The exit code was: ${code}`);
+    console.log(`The exit signal was: ${signal}`);
+    console.log("finished");
+  });
+
+  shell.on("error", (err) => {
+    console.log(err);
+  });
+};
 
 contextBridge.exposeInMainWorld("electron", {
-  wakeUp: wakeUp,
   recognizeFromMicrophone: beacon.recognizeFromMicrophone.bind(beacon),
+  outputFromUser,
 });
