@@ -2,20 +2,12 @@
 import path from "path";
 import { app, BrowserWindow, shell, ipcMain } from "electron";
 import type { BrowserWindowConstructorOptions } from "electron";
-import { autoUpdater } from "electron-updater";
+import { AppUpdater } from "electron-updater";
 import log from "electron-log";
 import MenuBuilder from "./menu";
 
 declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string;
 declare const MAIN_WINDOW_VITE_NAME: string;
-
-class AppUpdater {
-  constructor() {
-    log.transports.file.level = "info";
-    autoUpdater.logger = log;
-    autoUpdater.checkForUpdatesAndNotify();
-  }
-}
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -70,7 +62,7 @@ const createWindow = async () => {
     icon: getAssetPath("icon.png"),
     webPreferences: {
       nodeIntegration: true,
-      // contextIsolation: false,
+      contextIsolation: true,
       preload: path.join(__dirname, "preload.js"),
     },
     resizable: false,
@@ -123,7 +115,6 @@ const createWindow = async () => {
 
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
-  new AppUpdater();
 };
 
 /**
