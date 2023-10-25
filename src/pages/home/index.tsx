@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { InputHTMLAttributes, useState } from "react";
 import bot from "~/assets/bot.png";
 import vector from "~/assets/vector.svg";
 import styles from "./HomePage.module.css";
@@ -6,7 +6,13 @@ import microphone from "~/assets/microphone.png";
 
 export default function HomePage() {
   const [isStart, setIsStart] = useState<boolean | null>(false);
-  
+
+  const handleChange = (e: any) => {
+    const value = (document.getElementById("zone") as any)?.value;
+
+    window.electron.start(value);
+  };
+
   return (
     <section className={styles.home__container}>
       <div className={styles.bot__vector}>
@@ -27,9 +33,13 @@ export default function HomePage() {
             </p>
           )}
         </div>
-        {!isStart && <button onClick={() =>{
-           window.electron.wakeUp()
-        }}>Bắt đầu!</button>}
+        <input id="zone" />
+        <textarea name="result" id="result"></textarea>
+        <button id="echo" onClick={handleChange}>
+          click !
+        </button>
+        {/* <button onClick={handleStart}>Bắt đầu!</button> */}
+        {/* {!isStart && <button onClick={handleStart}>Bắt đầu!</button>} */}
       </div>
       {isStart && (
         <div className={styles.container}>
