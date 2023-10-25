@@ -17,5 +17,12 @@
     "oneClick": false,
     "perMachine": true,
     "allowToChangeInstallationDirectory": true
+  },
+  "publish": {
+    "provider": "github",
+    "releaseType": "release",
+    "owner": "yensubldg",
+    "repo": "C1SE05-Beacon-Voice-Assistant/beacon-desktop-electron",
+    "private": true
   }
 }
