@@ -2,20 +2,18 @@
 const { Builder, By, until } = require("selenium-webdriver");
 const { contextBridge } = require("electron");
 const sdk = require("microsoft-cognitiveservices-speech-sdk");
-const winston = require('winston');
+const winston = require("winston");
+
 const tempLog = winston.createLogger({
-  level: 'info',
+  level: "info",
   format: winston.format.json(),
-  transports: [
-    new winston.transports.File({ filename: 'temp-log.log' })
-  ]
+  transports: [new winston.transports.File({ filename: "temp-log.log" })],
 });
+
 const mainLog = winston.createLogger({
-  level: 'info',
+  level: "info",
   format: winston.format.json(),
-  transports: [
-    new winston.transports.File({ filename: 'main-log.log' })
-  ]
+  transports: [new winston.transports.File({ filename: "main-log.log" })],
 });
 
 class BeaconSpeech {
