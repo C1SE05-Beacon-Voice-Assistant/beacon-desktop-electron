@@ -1,6 +1,6 @@
 {
   "appId": "com.beaconteam.autoupdater",
-  "productName": "AutoUpdater",
+  "productName": "Beacon",
   "directories": {
     "output": "release/${version}"
   },
@@ -12,5 +12,10 @@
       }
     ],
     "artifactName": "${productName}-Windows-${version}-Setup.${ext}"
+  },
+  "nsis": {
+    "oneClick": false,
+    "perMachine": true,
+    "allowToChangeInstallationDirectory": true
   }
 }

@@ -11,7 +11,7 @@
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
-    "dist": "electron-builder build --win --dir"
+    "dist": "electron-builder build --win"
   },
   "repository": "https://github.com/C1SE05-Beacon-Voice-Assistant/beacon-desktop-electron",
   "publish": {
