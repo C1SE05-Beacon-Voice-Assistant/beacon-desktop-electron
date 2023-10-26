@@ -61,11 +61,11 @@ class NewsReader:
 
     def get_news_content(self, url: str, title: str = None, description: str = None):
         result = {
-          "title": "",
-          "description": "",
-          "details": "",
-          "category": "",
-          "type": ""
+            "title": "",
+            "description": "",
+            "details": "",
+            "category": "",
+            "type": "",
         }
 
         try:
@@ -76,12 +76,24 @@ class NewsReader:
                 soup = BeautifulSoup(response.text, "html.parser")
                 print(type(soup))
 
-                result["title"] = (title if title is not None
-                                   else soup.find("meta", attrs={"property": "og:title"})["content"])
-                result["description"] = (description if description is not None
-                                         else soup.find("meta", attrs={"property": "og:description"})["content"])
-                result["type"] = soup.find("meta", attrs={"name": "its_type"})["content"]
-                result["category"] = soup.find("meta", attrs={"name": "tt_site_id_detail"})["catename"]
+                result["title"] = (
+                    title
+                    if title is not None
+                    else soup.find("meta", attrs={"property": "og:title"})["content"]
+                )
+                result["description"] = (
+                    description
+                    if description is not None
+                    else soup.find("meta", attrs={"property": "og:description"})[
+                        "content"
+                    ]
+                )
+                result["type"] = soup.find("meta", attrs={"name": "its_type"})[
+                    "content"
+                ]
+                result["category"] = soup.find(
+                    "meta", attrs={"name": "tt_site_id_detail"}
+                )["catename"]
 
                 live_url = ""
 

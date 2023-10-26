@@ -1,12 +1,14 @@
 import re
 import time
+from constants import Platforms
 
-from selenium.common import ElementNotInteractableException
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-
-from constants.platforms import Platforms
+try:
+    from selenium.common import ElementNotInteractableException
+    from selenium.webdriver.common.by import By
+    from selenium.webdriver.support.ui import WebDriverWait
+    from selenium.webdriver.support import expected_conditions as EC
+except ImportError:
+    print("Error when import selenium")
 
 
 class ListenMusicController:
@@ -30,17 +32,17 @@ class ListenMusicController:
         self.is_check = is_check
         self.is_running_on_youtube = False
 
-    def __del__(self):
-        """
-        Destructor method that quits the driver.
-        """
-        self.driver.quit()
+    # def __del__(self):
+    #     """
+    #     Destructor method that quits the driver.
+    #     """
+    #     self.driver.quit()
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        """
-        Exit method that quits the driver.
-        """
-        self.driver.quit()
+    # def __exit__(self, exc_type, exc_val, exc_tb):
+    #     """
+    #     Exit method that quits the driver.
+    #     """
+    #     self.driver.quit()
 
     def __enter__(self):
         """

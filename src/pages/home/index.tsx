@@ -1,17 +1,24 @@
-import { InputHTMLAttributes, useState } from "react";
+import { useEffect, useState } from "react";
 import bot from "~/assets/bot.png";
-import vector from "~/assets/vector.svg";
-import styles from "./HomePage.module.css";
 import microphone from "~/assets/microphone.png";
+import vector from "~/assets/vector.svg";
+import { handleInput } from "~/lib/handleSpeech";
+import styles from "./HomePage.module.css";
 
 export default function HomePage() {
   const [isStart, setIsStart] = useState<boolean | null>(false);
+  const [result, setResult] = useState<string>("");
 
-  const handleInput = (e: any) => {
-    const text = (document.getElementById("input") as any)?.value;
+  useEffect(() => {
+    window.electron.backgroundListen((result: string) => {
+      setResult(result);
+      handleInput(result);
+    });
 
-    window.electron.outputFromUser(text);
-  };
+    return () => {
+      window.electron.stopBackgroundListen();
+    };
+  }, []);
 
   return (
     <section className={styles.home__container}>
@@ -33,10 +40,6 @@ export default function HomePage() {
             </p>
           )}
         </div>
-        <input type="text" id="input" />
-        <button type="button" onClick={handleInput}>
-          Nhập
-        </button>
         {/* <button onClick={handleStart}>Bắt đầu!</button> */}
         {/* {!isStart && <button onClick={handleStart}>Bắt đầu!</button>} */}
       </div>

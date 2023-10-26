@@ -6,17 +6,25 @@ const { NewsTypes } = require("../constants/newsTypes");
 class NewsReader {
     constructor() {}
 
-    async textNews(mainContent) {
+    async textNews(mainContent, $) {
         const content = [];
 
-        const p = mainContent.find("p").each((index, element) => {
-            if (element.children.length > 1) {
-                console.log(element);
-            } else content.push(element.children[0].data);
+        // const p = mainContent.find("p").each((index, element) => {
+        //     if (element.children.length > 1) {
+        //         console.log(element);
+        //     } else content.push(element.children[0].data);
+        // });
+        const p = mainContent.find("p.Normal").filter((index, element) => {
+            const e = $(element);
+            if (!e.attr("style") && !e.attr("align")) {
+                content.push(e.text());
+                return element;
+            }
         });
-        fs.writeFile("electron/utils/news.txt", content.join("\n"), (err) =>
-            console.log(err)
-        );
+        // .each((index, element) => content.push($(element).text()));
+        fs.writeFile("electron/utils/news.txt", content.join("\n"), (err) => {
+            if (err) console.log(err);
+        });
         return content.join("");
     }
 
@@ -42,10 +50,10 @@ class NewsReader {
         const html = await axios.default.get(url);
         const $ = await cheerio.load(html.data);
         const mainContent = $(`article.fck_detail`);
-        return this.textNews(mainContent);
+        return this.textNews(mainContent, $);
     }
 
-    async getNewsContent(url) {
+    async getNewsContent(url, tit, des) {
         const result = {
             title: "",
             description: "",
@@ -53,13 +61,16 @@ class NewsReader {
             type: "",
             content: "",
         };
+        console.log(des);
         try {
             const html = await axios.default.get(url);
             const $ = cheerio.load(html.data);
-            result.title = $(`meta[property="og:title"]`).attr("content");
-            result.description = $(`meta[property="og:description"]`).attr(
-                "content"
-            );
+            result.title = tit
+                ? tit
+                : $(`meta[property="og:title"]`).attr("content");
+            result.description = des
+                ? des
+                : $(`meta[property="og:description"]`).attr("content");
             result.type = $(`meta[name="its_type"]`).attr("content");
             result.category = $(`meta[name="tt_site_id_detail"]`).attr(
                 "catename"
@@ -70,7 +81,7 @@ class NewsReader {
                     result.content = await this.photoNews(mainContent);
                     break;
                 case NewsTypes.TEXT:
-                    result.content = await this.textNews(mainContent);
+                    result.content = await this.textNews(mainContent, $);
                     break;
                 case NewsTypes.LIVE:
                     const tongThuatUrl = $(`a[title="Tổng thuật"]`).attr(
@@ -87,8 +98,8 @@ class NewsReader {
                     result.content = "Đây là bản tin video";
                     break;
             }
-            // console.log(mainContent);
         } catch (err) {
+            if (!err.response) console.log(err);
             if (err.response.status === 404)
                 throw new Error("Lỗi không tìm thấy trang");
             else if (err.code === "ECONNREFUSED")
@@ -101,16 +112,19 @@ class NewsReader {
     }
 }
 
-const url =
-    "https://vnexpress.net/suat-an-32-000-dong-cua-truong-yen-nghia-day-dan-hon-4668689.html";
-const photoUrl =
-    "https://vnexpress.net/can-ho-ap-mai-2-tang-co-quay-bar-san-vuon-4660398.html";
+// const url =
+//     "https://vnexpress.net/suat-an-32-000-dong-cua-truong-yen-nghia-day-dan-hon-4668689.html";
+// const photoUrl =
+//     "https://vnexpress.net/can-ho-ap-mai-2-tang-co-quay-bar-san-vuon-4660398.html";
 const urlLive = "https://vnexpress.net/asiad-ngay-4-10-4660546.html";
-const urlFail = "https://vnexpress.net/asiad-ngay-4--46606.html";
-const photoMidu = "https://vnexpress.net/sac-voc-midu-o-tuoi-34-4661302.html";
+// const urlFail = "https://vnexpress.net/asiad-ngay-4--46606.html";
+// const photoMidu = "https://vnexpress.net/sac-voc-midu-o-tuoi-34-4661302.html";
+const urlText = "https://vnexpress.net/muon-hoc-sinh-hanh-phuc-4669055.html";
+const urlText2 =
+    "https://vnexpress.net/van-mai-huong-toi-khong-may-man-chuyen-tinh-cam-4668697.html";
 
-new NewsReader().getNewsContent(urlFail).then((res) => {
-    console.log(res);
-});
+// new NewsReader().getNewsContent(urlText2).then((res) => {
+//     console.log(res);
+// });
 
 module.exports = NewsReader;
