@@ -100,3 +100,5 @@ beacon-package/*/__pycache__
 *.wav
 /.vscode
 dist/
+
+release/

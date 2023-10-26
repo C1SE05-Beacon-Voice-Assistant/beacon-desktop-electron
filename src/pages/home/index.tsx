@@ -14,9 +14,10 @@ export default function HomePage() {
     window.electron.backgroundListen((result: string) => {
       handleInput(result, currentCommand, resultNews).then((res) => {
         console.log(res);
-
-        setCurrentCommand(res.command);
-        setResultNews(res.result);
+        if (res.command && res.result) {
+          setCurrentCommand(res.command);
+          setResultNews(res.result);
+        }
       });
     });
 

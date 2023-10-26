@@ -75,14 +75,6 @@ const handleInput = async (
     }
   }
   let result: any[] = resultNews;
-  if (newsMatch && currentCommand !== "news") {
-    result = await read.search(SearchNewsBy.LATEST);
-    for (let i = 0; i < result.length; i++) {
-      console.log(`${i}. ${result[i].title}`);
-    }
-    currentCommand = "news";
-  }
-  console.log(currentCommand, result);
 
   if (currentCommand === "news" && result.length > 0) {
     // found number in text
@@ -103,6 +95,15 @@ const handleInput = async (
   }
   console.log("Result: ", result);
   console.log("Current command: ", currentCommand);
+  if (newsMatch && currentCommand !== "news") {
+    const regex = /(tin tức|bản tin|thời sự)/;
+    const keyword = text.split(regex);
+    result = await read.searchByKeyword(keyword[1]);
+    for (let i = 0; i < result.length; i++) {
+      console.log(`${i}. ${result[i].title}`);
+    }
+    currentCommand = "news";
+  }
 
   return {
     command: currentCommand,
