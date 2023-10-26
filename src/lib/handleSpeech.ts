@@ -101,10 +101,12 @@ const handleInput = async (
       }
     }
   }
+  console.log("Result: ", result);
+  console.log("Current command: ", currentCommand);
 
   return {
-    currentCommand,
-    result,
+    command: currentCommand,
+    result: result,
   };
 };
 

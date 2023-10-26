@@ -15,7 +15,7 @@ export default function HomePage() {
       handleInput(result, currentCommand, resultNews).then((res) => {
         console.log(res);
 
-        setCurrentCommand(res.currentCommand);
+        setCurrentCommand(res.command);
         setResultNews(res.result);
       });
     });
