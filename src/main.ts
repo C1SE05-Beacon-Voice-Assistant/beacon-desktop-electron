@@ -113,6 +113,7 @@ autoUpdater.autoDownload = false;
 // tự động cài khi thoát ứng dụng
 autoUpdater.autoInstallOnAppQuit = true;
 
+
 app.on("ready", () => {
   createWindow("main")
     .then((mainWindow) => {
