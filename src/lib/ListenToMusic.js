@@ -1,12 +1,25 @@
-const { Builder, By, until } = require("selenium-webdriver");
-class Listen_to_music {
-  constructor(songName) {
-    this.songName = songName;
-    this.driver = new Builder().forBrowser("chrome").build();
-    this.flatformName = null;
+const By = window.electron.By;
+
+class ListenToMusic {
+  driver;
+  platformName = null;
+  songName = null;
+
+  constructor() {
+    this.driver = window.electron.initDriver();
   }
-  async playOnYoutube() {
-    this.flatformName = "youtube";
+
+  // exit
+  async exit() {
+    await this.driver.quit();
+  }
+
+  async searchSong(songName) {
+    this.songName = songName;
+  }
+
+  playOnYoutube() {
+    this.platformName = "youtube";
     const url = `https://yewtu.be/search?q=${this.songName}`;
     this.driver.get(url).then(async () => {
       const songList = await this.driver.findElements(
@@ -18,9 +31,10 @@ class Listen_to_music {
       }
     });
   }
-  async playOnMp3() {
-    this.flatformName = "mp3";
-    return new Promise(async (resolve, reject) => {
+
+  playOnMp3() {
+    this.platformName = "mp3";
+    return new Promise((resolve, reject) => {
       const url = `https://zingmp3.vn/tim-kiem/tat-ca?q=${this.songName}`;
       this.driver
         .get(url)
@@ -37,20 +51,21 @@ class Listen_to_music {
             if (play_button.length > 0) {
               await this.driver.sleep(1000);
               await play_button[0].click();
-              resolve();
+              resolve("Done");
             } else {
               reject("No play button found");
             }
           }
         })
         .catch((err) => {
-          console.log("error: " +err);
+          console.log("error: " + err);
           // this.playOnYoutube();
         });
     });
   }
-  async onPause(isPlay) {
-    if (this.flatformName === "mp3") {
+
+  async toggle(isPlay = false) {
+    if (this.platformName === "mp3") {
       const mp3_pause_button = await this.driver.findElement(
         By.css(`i.ic-${isPlay ? "play" : "pause"}-circle-outline`)
       );
@@ -64,35 +79,29 @@ class Listen_to_music {
       await youtube_pause_button.click();
     }
   }
-  onContinue() {
-    this.onPause(true);
+
+  async pause() {
+    await this.toggle(false);
+  }
+  async resume() {
+    await this.toggle(true);
+  }
+
+  async next() {
+    if (this.platformName === "mp3") {
+      const next_button = await this.driver.findElement(
+        By.css("i.ic-skip-next")
+      );
+      await this.driver.sleep(1000);
+      await next_button.click();
+    } else {
+      const next_button = await this.driver.findElement(
+        By.css("a.ytp-next-button")
+      );
+      await this.driver.sleep(1000);
+      await next_button.click();
+    }
   }
 }
 
-const listen_to_music = new Listen_to_music("Em của ngày hôm qua");
-try {
-  listen_to_music
-    .playOnMp3()
-    .then(() => {
-      const selected = 1;
-      console.log("Choose 1 if u want play on YOUTUBE and else play on MP3");
-      if (selected === 1) {
-        listen_to_music.playOnYoutube();
-      } else {
-        listen_to_music.playOnMp3();
-      }
-      // When user say stop playing
-      setTimeout(() => {
-        listen_to_music.onPause();
-        setTimeout(() => {
-          listen_to_music.onContinue();
-        }, 3000);
-      }, 15000);
-    })
-    .catch(() => {
-      // If not found that song on MP3, play it on YouTube
-      listen_to_music.playOnYoutube();
-    });
-} catch (error) {
-  console.log(error);
-}
+export default ListenToMusic;
