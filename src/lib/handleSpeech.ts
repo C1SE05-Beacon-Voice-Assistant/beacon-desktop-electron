@@ -1,21 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 // import { Browser } from "../lib";
-const loudness = window.electron.loudness;
-
-// const startDriver = async () => {
-//   const driver = await new Browser("chrome");
-//   return driver;
-// };
-
-// fake listen to music function
-const listenToMusic = () => {
-  console.log("Listening to music...");
-};
-
-// fake read news function
-const readNews = () => {
-  console.log("Reading news...");
-};
 
 /**
  * Control volume on the computer
@@ -35,18 +19,53 @@ const controlVolume = async (
   return amount;
 };
 
-const handleInput = (input: string) => {
+const handleInput = async (input: string) => {
   const text = input.toLowerCase();
-  if (
-    (text.includes("lượng") || text.includes("thanh")) &&
-    (text.includes("tăng") || text.includes("giảm"))
-  ) {
-    console.log("Handling volume control");
-    // find number in string (only one number)
-    const match = text.match(/\b(?:10|[1-9][0-9]|100)\b/i);
-    const amount = parseInt(match[0], 10);
-    controlVolume(amount);
+  console.log("Handling input: ", text);
+
+  const listen = await window.electron.listenToMusic();
+
+  const musicCommands = {
+    search: /(bài hát|nhạc|bài nhạc)/,
+    play: /(phát|chạy|play)/,
+    resume: /(tiếp tục|resume)/,
+    pause: /(dừng|pause)/,
+    next: /(next|tiếp theo)/,
+  };
+
+  const newsMatch = /(tin tức|bản tin|thời sự)/.test(text);
+
+  if (text.includes("lượng") || text.includes("thanh")) {
+    if (text.includes("tăng") || text.includes("giảm")) {
+      console.log("Handling volume control");
+      const match = text.match(/\b(?:10|[1-9][0-9]|100)\b/i);
+      const amount = parseInt(match[0], 10);
+      controlVolume(amount);
+    }
+  } else {
+    for (const command in musicCommands) {
+      if (musicCommands[command as keyof typeof musicCommands].test(text)) {
+        const songName = text
+          .replace(musicCommands[command as keyof typeof musicCommands], "")
+          .trim();
+        if (command === "search") {
+          await listen.searchSong(songName);
+          await listen.playOnYoutube();
+        } else if (command === "pause") {
+          await listen.pause();
+        } else if (command === "resume") {
+          await listen.resume();
+        } else if (command === "next") {
+          await listen.next();
+        }
+        break; // Exit the loop once a music command is matched
+      }
+    }
+  }
+
+  if (newsMatch) {
+    // Handle news-related action here
   }
 };
 
-export { listenToMusic, readNews, controlVolume, handleInput };
+export { controlVolume, handleInput };
