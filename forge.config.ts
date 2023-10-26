@@ -9,7 +9,10 @@ const config: ForgeConfig = {
   packagerConfig: {},
   rebuildConfig: {},
   makers: [
-    new MakerSquirrel({}),
+    new MakerSquirrel({
+      authors: "Beacon Team",
+      description: "Voice Assistant for Visually Impaired People on Windows",
+    }),
     new MakerZIP({}, ["darwin"]),
     new MakerRpm({}),
     new MakerDeb({}),
@@ -33,6 +36,18 @@ const config: ForgeConfig = {
         },
       ],
     }),
+  ],
+  publishers: [
+    {
+      name: "@electron-forge/publisher-github",
+      config: {
+        repository: {
+          owner: "yensubldg",
+          name: "beacon",
+        },
+        prerelease: true,
+      },
+    },
   ],
 };
 

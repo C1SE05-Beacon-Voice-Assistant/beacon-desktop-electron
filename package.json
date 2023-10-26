@@ -19,6 +19,7 @@
     "url": "git+https://github.com/C1SE05-Beacon-Voice-Assistant/beacon-desktop-electron.git"
   },
   "dependencies": {
+    "@electron-forge/publisher-github": "^6.4.2",
     "@electron/asar": "^3.2.7",
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",

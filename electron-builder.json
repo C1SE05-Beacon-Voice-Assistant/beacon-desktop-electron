@@ -16,6 +16,9 @@
     "artifactName": "${productName}-Windows-${version}-Setup.${ext}",
     "publish": ["github"]
   },
+  "portable": {
+    "artifactName": "${productName}-Windows-${version}-Portable.${ext}"
+  },
   "nsis": {
     "oneClick": false,
     "perMachine": true,
@@ -23,9 +26,8 @@
   },
   "publish": {
     "provider": "github",
-    "releaseType": "draft",
-    "owner": "yensubldg",
-    "private": true,
+    "releaseType": "release",
+    "private": false,
     "channel": "alpha"
   },
   "generateUpdatesFilesForAllChannels": true
