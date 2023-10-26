@@ -211,5 +211,4 @@ contextBridge.exposeInMainWorld("electron", {
   loudness,
   controlVolume,
   listenToMusic,
-  By,
 });
