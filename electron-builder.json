@@ -1,6 +1,8 @@
 {
-  "appId": "com.beaconteam.autoupdater",
   "productName": "Beacon",
+  "appId": "com.beaconteam.autoupdater",
+  "asar": true,
+  "copyright": "Copyright @2023 Beacon Team",
   "directories": {
     "output": "release/${version}"
   },
@@ -11,7 +13,8 @@
         "arch": ["x64"]
       }
     ],
-    "artifactName": "${productName}-Windows-${version}-Setup.${ext}"
+    "artifactName": "${productName}-Windows-${version}-Setup.${ext}",
+    "publish": ["github"]
   },
   "nsis": {
     "oneClick": false,
@@ -20,9 +23,10 @@
   },
   "publish": {
     "provider": "github",
-    "releaseType": "release",
+    "releaseType": "draft",
     "owner": "yensubldg",
-    "repo": "C1SE05-Beacon-Voice-Assistant/beacon-desktop-electron",
-    "private": true
-  }
+    "private": true,
+    "channel": "alpha"
+  },
+  "generateUpdatesFilesForAllChannels": true
 }
