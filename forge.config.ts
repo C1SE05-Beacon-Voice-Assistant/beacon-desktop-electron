@@ -37,18 +37,6 @@ const config: ForgeConfig = {
       ],
     }),
   ],
-  publishers: [
-    {
-      name: "@electron-forge/publisher-github",
-      config: {
-        repository: {
-          owner: "yensubldg",
-          name: "beacon",
-        },
-        prerelease: true,
-      },
-    },
-  ],
 };
 
 export default config;
