@@ -1,5 +1,9 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-// import { Browser } from "../lib";
+const SearchNewsBy = {
+  KEYWORD: "keyword",
+  HOTTEST: "hottest",
+  MOST_READ: "mostRead",
+  LATEST: "latest",
+};
 
 /**
  * Control volume on the computer
@@ -19,11 +23,17 @@ const controlVolume = async (
   return amount;
 };
 
-const handleInput = async (input: string) => {
+const handleInput = async (
+  input: string,
+  currCommand: "news" | "music" | "volume" | null,
+  resultNews: any[] = []
+) => {
+  let currentCommand = currCommand;
   const text = input.toLowerCase();
   console.log("Handling input: ", text);
 
   const listen = await window.electron.listenToMusic();
+  const read = await window.electron.readNews();
 
   const musicCommands = {
     search: /(bài hát|nhạc|bài nhạc)/,
@@ -37,6 +47,7 @@ const handleInput = async (input: string) => {
 
   if (text.includes("lượng") || text.includes("thanh")) {
     if (text.includes("tăng") || text.includes("giảm")) {
+      currentCommand = "volume";
       console.log("Handling volume control");
       const match = text.match(/\b(?:10|[1-9][0-9]|100)\b/i);
       const amount = parseInt(match[0], 10);
@@ -45,6 +56,7 @@ const handleInput = async (input: string) => {
   } else {
     for (const command in musicCommands) {
       if (musicCommands[command as keyof typeof musicCommands].test(text)) {
+        currentCommand = "music";
         const songName = text
           .replace(musicCommands[command as keyof typeof musicCommands], "")
           .trim();
@@ -62,10 +74,38 @@ const handleInput = async (input: string) => {
       }
     }
   }
-
-  if (newsMatch) {
-    // Handle news-related action here
+  let result: any[] = resultNews;
+  if (newsMatch && currentCommand !== "news") {
+    result = await read.search(SearchNewsBy.LATEST);
+    for (let i = 0; i < result.length; i++) {
+      console.log(`${i}. ${result[i].title}`);
+    }
+    currentCommand = "news";
   }
+  console.log(currentCommand, result);
+
+  if (currentCommand === "news" && result.length > 0) {
+    // found number in text
+    const match = text.match(/\b(?:10|[1-9][0-9]|100)\b/i);
+
+    if (match) {
+      const index = parseInt(match[0], 10);
+      if (index < result.length && index >= 0) {
+        await read.getNewsContent(
+          result[index].url,
+          result[index].title,
+          result[index].description
+        );
+      } else {
+        console.log("Không tìm thấy tin tức");
+      }
+    }
+  }
+
+  return {
+    currentCommand,
+    result,
+  };
 };
 
 export { controlVolume, handleInput };

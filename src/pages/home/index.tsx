@@ -7,12 +7,17 @@ import styles from "./HomePage.module.css";
 
 export default function HomePage() {
   const [isStart, setIsStart] = useState<boolean | null>(false);
-  const [result, setResult] = useState<string>("");
+  const [resultNews, setResultNews] = useState<any[]>([]);
+  const [currentCommand, setCurrentCommand] = useState<any>();
 
   useEffect(() => {
     window.electron.backgroundListen((result: string) => {
-      setResult(result);
-      handleInput(result);
+      handleInput(result, currentCommand, resultNews).then((res) => {
+        console.log(res);
+
+        setCurrentCommand(res.currentCommand);
+        setResultNews(res.result);
+      });
     });
 
     return () => {
