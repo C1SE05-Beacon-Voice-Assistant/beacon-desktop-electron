@@ -1,6 +1,6 @@
-from sys import argv
+import re
 import sys
-import pprint
+from browser import document
 from controllers import (
     ListenMusicController,
     ReadNewsController,
@@ -8,39 +8,73 @@ from controllers import (
     TextToSpeechController,
 )
 
-
-def calc(text):
-    """based on the input text, return the operation result"""
-    try:
-        return text
-    except Exception as e:
-        print(e)
-        return 0.0
+from utils.driver import ChromeDriverCustom
 
 
-if __name__ == "__main__":
-    pprint.pprint(sys.path)
-    # cmd = ListenMusicController("Bạn đời", "MP3", True)
-    # cmd.listen_to_music()
-    # while True:
-    #     query = input("Enter your query: ")
-    #     if query == "exit":
-    #         break
-    #     if query == "pause":
-    #         cmd.toggle_play()
-    #         continue
-    #     if query == "play":
-    #         cmd.toggle_play()
-    #         continue
+def main(query_input: str):
+    print("Bắt đầu chạy chương trình")
+    driver = ChromeDriverCustom().start()
+    print("Chạy xong driver")
 
-    # read_news = ReadNewsController()
-    # read_news.read_by_type()
+    input_str = query_input
+    while True:
+        try:
+            if re.search(r"nghe nhạc", input_str):
+                print("Nghe nhạc")
+                cmd = ListenMusicController(
+                    speech=input_str, search_type="MP3", is_check=True, driver=driver
+                )
+                cmd.listen_to_music()
+            elif re.search(r"đọc báo", input_str):
+                print("Đọc báo")
+                read_news = ReadNewsController(driver=driver)
+                read_news.read_by_type()
 
-    # speech = 'Tôi muốn đặt âm lượng ở mức 31'
-    # volume_control = VolumeController()
-    # volume_control.control_volume(speech)
+            # elif re.search(r"tăng âm lượng", query):
+            #     VolumeController().run(driver)
+            # elif re.search(r"đọc văn bản", query):
+            #     TextToSpeechController().run(driver)
+            else:
+                print("Không có chức năng này")
 
-    text_to_speech = TextToSpeechController()
-    text_to_speech.synthesize_speech_to_file("Hôm nay đẹp quá ta ơi", "output.wav")
+            input_str = input("Nhập câu lệnh: ")
+            # wait for user input
+            if input_str == "dừng":
+                break
 
-    # print(calc(argv[1]))
+        except EOFError as e:
+            print("Lỗi: ", e)
+            break
+        except ValueError as e:
+            print("Lỗi giá trị: ", e)
+            break
+        except TypeError as e:
+            print("Lỗi kiểu dữ liệu: ", e)
+            break
+
+    driver.quit()
+
+
+def click(ev):
+    query = document["zone"].value
+    if query:
+        main(query)
+
+
+# bind event 'click' on button to callback function
+document["echo"].bind("click", click)
+
+
+# if __name__ == "__main__":
+#     # set utf-8 encoding
+#     sys.stdout.reconfigure(encoding="utf-8")
+#     sys.stdin.reconfigure(encoding="utf-8")
+#     sys.stdout.flush()
+#     print(len(argv))
+#     if len(argv) > 1:
+#         query = argv[1]
+#         print("Câu lệnh: ", query)
+#         main(query)
+#     else:
+#         print("Vui lòng nhập câu lệnh")
+#         exit(1)

@@ -1,25 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import bot from "~/assets/bot.png";
-import vector from "~/assets/vector.svg";
-import styles from "./HomePage.module.css";
 import microphone from "~/assets/microphone.png";
+import vector from "~/assets/vector.svg";
+import { handleInput } from "~/lib/handleSpeech";
+import styles from "./HomePage.module.css";
 
 export default function HomePage() {
   const [isStart, setIsStart] = useState<boolean | null>(false);
-  console.log(window.electron.recognizeFromMicrophone);
+  const [result, setResult] = useState<string>("");
 
-  const handleStart = () => {
-    setIsStart(true);
-    window.electron
-      .recognizeFromMicrophone()
-      .then((text: string) => {
-        // Process the recognized text
-        console.log(text);
-      })
-      .catch((error: any) => {
-        console.error("Error: " + error);
-      });
-  };
+  useEffect(() => {
+    window.electron.backgroundListen((result: string) => {
+      setResult(result);
+      handleInput(result);
+    });
+
+    return () => {
+      window.electron.stopBackgroundListen();
+    };
+  }, []);
 
   return (
     <section className={styles.home__container}>
@@ -41,7 +40,7 @@ export default function HomePage() {
             </p>
           )}
         </div>
-        <button onClick={handleStart}>Bắt đầu!</button>
+        {/* <button onClick={handleStart}>Bắt đầu!</button> */}
         {/* {!isStart && <button onClick={handleStart}>Bắt đầu!</button>} */}
       </div>
       {isStart && (
