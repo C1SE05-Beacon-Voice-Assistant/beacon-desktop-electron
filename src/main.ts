@@ -14,6 +14,7 @@ class AppUpdater {
   constructor() {
     log.transports.file.level = "info";
     autoUpdater.logger = log;
+    autoUpdater.channel = "alpha";
     autoUpdater.checkForUpdatesAndNotify();
   }
 }
@@ -124,7 +125,10 @@ app.on("ready", () => {
       console.log(mainWindow.webContents);
 
       mainWindow.webContents.on("did-finish-load", () => {
-        mainWindow.webContents.send("updateMessage", `Current version ${app.getVersion()}`);
+        mainWindow.webContents.send(
+          "updateMessage",
+          `Current version ${app.getVersion()}`
+        );
       });
       console.log(12345);
     })
@@ -135,20 +139,29 @@ app.on("ready", () => {
 // if (require("electron-squirrel-startup")) app.quit();
 /*New Update Available*/
 autoUpdater.on("update-available", (info) => {
-  mainWindow.webContents.send("updateMessage",`Update available. Current version ${app.getVersion()}`);
+  mainWindow.webContents.send(
+    "updateMessage",
+    `Update available. Current version ${app.getVersion()}`
+  );
   let pth = autoUpdater.downloadUpdate();
-  mainWindow.webContents.send("updateMessage",pth);
+  mainWindow.webContents.send("updateMessage", pth);
 });
 
 autoUpdater.on("update-not-available", (info) => {
-  mainWindow.webContents.send("updateMessage",`No update available. Current version ${app.getVersion()}`);
+  mainWindow.webContents.send(
+    "updateMessage",
+    `No update available. Current version ${app.getVersion()}`
+  );
 });
 
 /*Download Completion Message*/
 autoUpdater.on("update-downloaded", (info) => {
-  mainWindow.webContents.send("updateMessage",`Update downloaded. Current version ${app.getVersion()}`);
+  mainWindow.webContents.send(
+    "updateMessage",
+    `Update downloaded. Current version ${app.getVersion()}`
+  );
 });
 
 autoUpdater.on("error", (info) => {
-  mainWindow.webContents.send("updateMessage",info);
+  mainWindow.webContents.send("updateMessage", info);
 });

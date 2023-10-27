@@ -1,6 +1,8 @@
 {
-  "appId": "com.beaconteam.autoupdater",
   "productName": "Beacon",
+  "appId": "com.beaconteam.autoupdater",
+  "asar": true,
+  "copyright": "Copyright @2023 Beacon Team",
   "directories": {
     "output": "release/${version}"
   },
@@ -11,11 +13,22 @@
         "arch": ["x64"]
       }
     ],
-    "artifactName": "${productName}-Windows-${version}-Setup.${ext}"
+    "artifactName": "${productName}-Windows-${version}-Setup.${ext}",
+    "publish": ["github"]
+  },
+  "portable": {
+    "artifactName": "${productName}-Windows-${version}-Portable.${ext}"
   },
   "nsis": {
     "oneClick": false,
     "perMachine": true,
     "allowToChangeInstallationDirectory": true
-  }
+  },
+  "publish": {
+    "provider": "github",
+    "releaseType": "release",
+    "private": false,
+    "channel": "alpha"
+  },
+  "generateUpdatesFilesForAllChannels": true
 }
