@@ -16,9 +16,6 @@
     "artifactName": "${productName}-Windows-${version}-Setup.${ext}",
     "publish": ["github"]
   },
-  "portable": {
-    "artifactName": "${productName}-Windows-${version}-Portable.${ext}"
-  },
   "nsis": {
     "oneClick": false,
     "perMachine": true,
@@ -27,7 +24,7 @@
   "publish": {
     "provider": "github",
     "releaseType": "release",
-    "private": false,
+    "private": true,
     "channel": "alpha"
   },
   "generateUpdatesFilesForAllChannels": true
