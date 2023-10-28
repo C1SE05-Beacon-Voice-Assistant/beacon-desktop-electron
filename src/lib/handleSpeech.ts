@@ -15,22 +15,21 @@ const controlVolume = async (
   amount: number,
   direction: "up" | "down" | "increase" | "decrease" = "up"
 ) => {
-  await window.electron.controlVolume(amount);
+  const volume = await window.electron.beaconVolume;
+  await volume.setVolume(amount);
   return amount;
 };
 
 const handleInput = async (input: string) => {
   const text = input.toLowerCase();
   console.log("Handling input: ", text);
-
-  const listen = await window.electron.listenToMusic();
+  const listen = await window.electron.listenToMusic;
 
   const musicCommands = {
     search: /(bài hát|nhạc|bài nhạc)/,
     play: /(phát|chạy|play)/,
     resume: /(tiếp tục|resume)/,
     pause: /(dừng|pause)/,
-    next: /(next|tiếp theo)/,
   };
 
   const newsMatch = /(tin tức|bản tin|thời sự)/.test(text);
@@ -55,8 +54,6 @@ const handleInput = async (input: string) => {
           await listen.pause();
         } else if (command === "resume") {
           await listen.resume();
-        } else if (command === "next") {
-          await listen.next();
         }
         break; // Exit the loop once a music command is matched
       }

@@ -5,8 +5,8 @@ export interface IElectron {
   recognizeFromMicrophone: () => Promise<string>;
   backgroundListen: (callback: (text: string) => void) => void;
   stopBackgroundListen: () => void;
-  controlVolume: (volume: number) => Promise<void>;
-  listenToMusic: () => any;
+  listenToMusic: any;
+  beaconVolume: any;
 }
 
 declare global {
