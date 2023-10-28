@@ -125,14 +125,10 @@ app.on("ready", () => {
       console.log(mainWindow.webContents);
 
       mainWindow.webContents.on("did-finish-load", () => {
-<<<<<<< HEAD
         mainWindow.webContents.send(
           "updateMessage",
           `Current version ${app.getVersion()}`
         );
-=======
-        mainWindow.webContents.send("updateMessage", `Current version ${app.getVersion()}`);
->>>>>>> automatic_update
       });
       console.log(12345);
     })
@@ -140,7 +136,6 @@ app.on("ready", () => {
       console.log("162", err);
     });
 });
-<<<<<<< HEAD
 // if (require("electron-squirrel-startup")) app.quit();
 /*New Update Available*/
 autoUpdater.on("update-available", (info) => {
@@ -148,37 +143,23 @@ autoUpdater.on("update-available", (info) => {
     "updateMessage",
     `Update available. Current version ${app.getVersion()}`
   );
-=======
-if (require("electron-squirrel-startup")) app.quit();
-/*New Update Available*/
-autoUpdater.on("update-available", (info) => {
-  mainWindow.webContents.send("updateMessage", `Update available. Current version ${app.getVersion()}`);
->>>>>>> automatic_update
   let pth = autoUpdater.downloadUpdate();
   mainWindow.webContents.send("updateMessage", pth);
 });
 
 autoUpdater.on("update-not-available", (info) => {
-<<<<<<< HEAD
   mainWindow.webContents.send(
     "updateMessage",
     `No update available. Current version ${app.getVersion()}`
   );
-=======
-  mainWindow.webContents.send("updateMessage", `No update available. Current version ${app.getVersion()}`);
->>>>>>> automatic_update
 });
 
 /*Download Completion Message*/
 autoUpdater.on("update-downloaded", (info) => {
-<<<<<<< HEAD
   mainWindow.webContents.send(
     "updateMessage",
     `Update downloaded. Current version ${app.getVersion()}`
   );
-=======
-  mainWindow.webContents.send("updateMessage", `Update downloaded. Current version ${app.getVersion()}`);
->>>>>>> automatic_update
 });
 
 autoUpdater.on("error", (info) => {
