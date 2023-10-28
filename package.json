@@ -1,6 +1,6 @@
 {
   "name": "beacon-desktop-electron",
-  "version": "1.0.0",
+  "version": "1.0.0-alpha",
   "description": "Beacon Desktop Electron App",
   "license": "MIT",
   "main": ".vite/build/main.js",
@@ -11,30 +11,11 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "eslint --ext .ts,.tsx ."
-  },
-  "repository": "https://github.com/C1SE05-Beacon-Voice-Assistant/beacon-desktop-electron",
-  "publish": {
-    "provider": "github",
-    "releaseType": "release"
-  },
-  "build": {
-    "appId": "electron-blog-example",
-    "dmg": {
-      "title": "${productName} ${version}"
-    },
-    "linux": {
-      "target": [
-        "AppImage",
-        "deb"
-      ]
-    },
-    "win": {
-      "target": "NSIS",
-      "icon": "build/icon.ico"
-    }
+    "lint": "eslint --ext .ts,.tsx .",
+    "dist": "electron-builder build --win --dir"
   },
   "dependencies": {
+    "@electron-forge/publisher-github": "^6.4.2",
     "@electron/asar": "^3.2.7",
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
@@ -42,6 +23,7 @@
     "@mui/material": "^5.14.11",
     "@tanstack/react-query": "^4.35.7",
     "axios": "^1.4.0",
+    "electron-router-dom": "^1.0.5",
     "electron-squirrel-startup": "^1.0.0",
     "microsoft-cognitiveservices-speech-sdk": "^1.32.0",
     "node-record-lpcm16": "^1.0.1",

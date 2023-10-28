@@ -1,11 +1,9 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import path from "path";
-import { app, BrowserWindow, shell, ipcMain } from "electron";
-import type { BrowserWindowConstructorOptions } from "electron";
-import {
-  autoUpdater,
-  AppUpdater as ExternalAppUpdater,
-} from "electron-updater";
+import type { BrowserWindowConstructorOptions as WindowOptions } from "electron";
+import { BrowserWindow, app, ipcMain, shell } from "electron";
+import { autoUpdater } from "electron-updater";
+import path, { join } from "path";
+
 import log from "electron-log";
 import MenuBuilder from "./menu";
 
@@ -16,6 +14,7 @@ class AppUpdater {
   constructor() {
     log.transports.file.level = "info";
     autoUpdater.logger = log;
+    autoUpdater.channel = "alpha";
     autoUpdater.checkForUpdatesAndNotify();
   }
 }
@@ -33,31 +32,7 @@ if (process.env.NODE_ENV === "production") {
   sourceMapSupport.install();
 }
 
-const isDebug =
-  process.env.NODE_ENV === "development" || process.env.DEBUG_PROD === "true";
-
-if (isDebug) {
-  require("electron-debug")();
-}
-
-const installExtensions = async () => {
-  const installer = require("electron-devtools-installer");
-  const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
-  const extensions = ["REACT_DEVELOPER_TOOLS"];
-
-  return installer
-    .default(
-      extensions.map((name) => installer[name]),
-      forceDownload
-    )
-    .catch(console.log);
-};
-
-const createWindow = async () => {
-  if (isDebug) {
-    await installExtensions();
-  }
-
+const createWindow = async (id: string, options: WindowOptions = {}) => {
   const RESOURCES_PATH = app.isPackaged
     ? path.join(process.resourcesPath, "assets")
     : path.join(__dirname, "./assets");
@@ -66,7 +41,7 @@ const createWindow = async () => {
     return path.join(RESOURCES_PATH, ...paths);
   };
 
-  let config: BrowserWindowConstructorOptions = {
+  const config: WindowOptions = {
     show: false,
     width: parseInt(process.env.ELECTRON_WIDTH) || 833,
     height: parseInt(process.env.ELECTRON_HEIGHT) || 562,
@@ -77,21 +52,11 @@ const createWindow = async () => {
       preload: path.join(__dirname, "preload.js"),
     },
     resizable: false,
+    ...options,
   };
 
-  if (process.env.NODE_ENV === "production") {
-    config = {
-      ...config,
-      autoHideMenuBar: false,
-      webPreferences: {
-        ...config.webPreferences,
-        devTools: true,
-      },
-    };
-  }
-
   mainWindow = new BrowserWindow(config);
-  mainWindow.webContents.openDevTools();
+
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
     mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
   } else {
@@ -126,8 +91,9 @@ const createWindow = async () => {
 
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
-  new AppUpdater();
-
+  // new AppUpdater();
+  // open dev tools
+  mainWindow.webContents.openDevTools();
   return mainWindow;
 };
 
@@ -148,8 +114,9 @@ autoUpdater.autoDownload = false;
 // tự động cài khi thoát ứng dụng
 autoUpdater.autoInstallOnAppQuit = true;
 
+
 app.on("ready", () => {
-  createWindow()
+  createWindow("main")
     .then((mainWindow) => {
       // clear the console
       console.clear();
@@ -158,7 +125,14 @@ app.on("ready", () => {
       console.log(mainWindow.webContents);
 
       mainWindow.webContents.on("did-finish-load", () => {
+<<<<<<< HEAD
+        mainWindow.webContents.send(
+          "updateMessage",
+          `Current version ${app.getVersion()}`
+        );
+=======
         mainWindow.webContents.send("updateMessage", `Current version ${app.getVersion()}`);
+>>>>>>> automatic_update
       });
       console.log(12345);
     })
@@ -166,21 +140,45 @@ app.on("ready", () => {
       console.log("162", err);
     });
 });
+<<<<<<< HEAD
+// if (require("electron-squirrel-startup")) app.quit();
+/*New Update Available*/
+autoUpdater.on("update-available", (info) => {
+  mainWindow.webContents.send(
+    "updateMessage",
+    `Update available. Current version ${app.getVersion()}`
+  );
+=======
 if (require("electron-squirrel-startup")) app.quit();
 /*New Update Available*/
 autoUpdater.on("update-available", (info) => {
   mainWindow.webContents.send("updateMessage", `Update available. Current version ${app.getVersion()}`);
+>>>>>>> automatic_update
   let pth = autoUpdater.downloadUpdate();
   mainWindow.webContents.send("updateMessage", pth);
 });
 
 autoUpdater.on("update-not-available", (info) => {
+<<<<<<< HEAD
+  mainWindow.webContents.send(
+    "updateMessage",
+    `No update available. Current version ${app.getVersion()}`
+  );
+=======
   mainWindow.webContents.send("updateMessage", `No update available. Current version ${app.getVersion()}`);
+>>>>>>> automatic_update
 });
 
 /*Download Completion Message*/
 autoUpdater.on("update-downloaded", (info) => {
+<<<<<<< HEAD
+  mainWindow.webContents.send(
+    "updateMessage",
+    `Update downloaded. Current version ${app.getVersion()}`
+  );
+=======
   mainWindow.webContents.send("updateMessage", `Update downloaded. Current version ${app.getVersion()}`);
+>>>>>>> automatic_update
 });
 
 autoUpdater.on("error", (info) => {
