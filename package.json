@@ -6,17 +6,13 @@
   "main": ".vite/build/main.js",
   "author": "Beacon Team",
   "scripts": {
-    "start": "electron-forge start",
+    "start": "electron .",
+    "dist": "electron-builder",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
-    "dist": "electron-builder build --win",
-    "release": "electron-builder"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/C1SE05-Beacon-Voice-Assistant/beacon-desktop-electron.git"
+    "dist": "electron-builder build --win --dir"
   },
   "dependencies": {
     "@electron-forge/publisher-github": "^6.4.2",
