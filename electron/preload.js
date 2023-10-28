@@ -6,6 +6,7 @@ const loudness = require("loudness");
 const axios = require("axios");
 const cheerio = require("cheerio");
 const fs = require("fs");
+require("dotenv").config();
 
 const NewsTypes = {
   TEXT: "text",
@@ -28,7 +29,7 @@ class BeaconSpeech {
     this.name = name;
     this.location = location;
     this.speechConfig = sdk.SpeechConfig.fromSubscription(
-      "3d1916eed11c4c2d9be246152c2e5cd1",
+      process.env.SPEECH_KEY,
       "southeastasia"
     );
     this.speechConfig.speechRecognitionLanguage = "vi-VN";
@@ -143,7 +144,7 @@ async function photoNews(mainContent) {
 }
 
 async function liveNews(url) {
-  const html = await axios.get(url);
+  const html = await axios.default.get(url);
   const $ = cheerio.load(html.data);
   const mainContent = $(`article.fck_detail`);
   return textNews(mainContent, $);
@@ -220,7 +221,7 @@ async function readNews() {
     };
 
     try {
-      const html = await axios.get(url);
+      const html = await axios.default.get(url);
       const $ = cheerio.load(html.data);
       result.title = tit ? tit : $(`meta[property="og:title"]`).attr("content");
       result.description = des
@@ -250,8 +251,8 @@ async function readNews() {
           break;
       }
     } catch (err) {
-      if (!err.response) console.log(err);
-      if (err.response.status === 404)
+      if (!err.response && !err.response.status) console.log(err);
+      else if (err.response.status === 404)
         throw new Error("Lỗi không tìm thấy trang");
       else if (err.code === "ECONNREFUSED")
         throw new Error("Không có kết nối mạng");

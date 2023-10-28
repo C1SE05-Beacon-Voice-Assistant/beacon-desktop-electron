@@ -78,16 +78,21 @@ const handleInput = async (
 
   if (currentCommand === "news" && result.length > 0) {
     // found number in text
-    const match = text.match(/\b(?:10|[1-9][0-9]|100)\b/i);
+    // const match = text.match(/\b(?:10|[1-9][0-9]|100)\b/i);
+    const match = text.match(/[0-2]/);
 
     if (match) {
-      const index = parseInt(match[0], 10);
+      // const index = parseInt(match[0], 10);
+      const index = parseInt(match.join(""));
       if (index < result.length && index >= 0) {
-        await read.getNewsContent(
+        console.log(index);
+
+        const article = await read.getNewsContent(
           result[index].url,
           result[index].title,
           result[index].description
         );
+        console.log(article);
       } else {
         console.log("Không tìm thấy tin tức");
       }
@@ -98,7 +103,10 @@ const handleInput = async (
   if (newsMatch && currentCommand !== "news") {
     const regex = /(tin tức|bản tin|thời sự)/;
     const keyword = text.split(regex);
-    result = await read.searchByKeyword(keyword[1]);
+    console.log(keyword);
+
+    // result = await read.searchByKeyword(keyword[1]);
+    result = await read.search(SearchNewsBy.HOTTEST);
     for (let i = 0; i < result.length; i++) {
       console.log(`${i}. ${result[i].title}`);
     }

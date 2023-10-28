@@ -13,7 +13,8 @@ export default function HomePage() {
   useEffect(() => {
     window.electron.backgroundListen((result: string) => {
       handleInput(result, currentCommand, resultNews).then((res) => {
-        console.log(res);
+        console.log(`New result: ${res.result}`);
+        console.log(`Old result: ${resultNews}`);
         if (res.command && res.result) {
           setCurrentCommand(res.command);
           setResultNews(res.result);
@@ -24,7 +25,7 @@ export default function HomePage() {
     return () => {
       window.electron.stopBackgroundListen();
     };
-  }, []);
+  }, [resultNews, currentCommand]);
 
   return (
     <section className={styles.home__container}>
