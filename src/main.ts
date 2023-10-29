@@ -117,51 +117,89 @@ autoUpdater.autoInstallOnAppQuit = true;
 
 app.on("ready", () => {
   createWindow("main")
-    .then((mainWindow) => {
-      // clear the console
-      console.clear();
+  autoUpdater.checkForUpdatesAndNotify();
+    // .then((mainWindow) => {
+    //   // clear the console
+    //   // console.clear();
+    //   // autoUpdater.checkForUpdates();
+    //   // console.log(mainWindow.webContents);
 
-      autoUpdater.checkForUpdates();
-      console.log(mainWindow.webContents);
-
-      mainWindow.webContents.on("did-finish-load", () => {
-        mainWindow.webContents.send(
-          "updateMessage",
-          `Current version ${app.getVersion()}`
-        );
-      });
-      console.log(12345);
-    })
-    .catch((err) => {
-      console.log("162", err);
-    });
+    //   mainWindow.webContents.on("did-finish-load", () => {
+    //     mainWindow.webContents.send(
+    //       "updateMessage",
+    //       `Current version ${app.getVersion()}`
+    //     );
+    //   });
+    //   console.log(12345);
+    // })
+    // .catch((err) => {
+    //   console.log("162", err);
+    // });
 });
 // if (require("electron-squirrel-startup")) app.quit();
 /*New Update Available*/
-autoUpdater.on("update-available", (info) => {
-  mainWindow.webContents.send(
-    "updateMessage",
-    `Update available. Current version ${app.getVersion()}`
-  );
-  let pth = autoUpdater.downloadUpdate();
-  mainWindow.webContents.send("updateMessage", pth);
+// autoUpdater.on("update-available", (info) => {
+//   mainWindow.webContents.send(
+//     "updateMessage",
+//     `Update available. Current version ${app.getVersion()}`
+//   );
+//   let pth = autoUpdater.downloadUpdate();
+//   mainWindow.webContents.send("updateMessage", pth);
+// });
+
+// autoUpdater.on("update-not-available", (info) => {
+//   mainWindow.webContents.send(
+//     "updateMessage",
+//     `No update available. Current version ${app.getVersion()}`
+//   );
+// });
+
+// /*Download Completion Message*/
+// autoUpdater.on("update-downloaded", (info) => {
+//   mainWindow.webContents.send(
+//     "updateMessage",
+//     `Update downloaded. Current version ${app.getVersion()}`
+//   );
+// });
+
+// autoUpdater.on("error", (info) => {
+//   mainWindow.webContents.send("updateMessage", info);
+// });
+
+
+log.transports.file.resolvePath = () => path.join('G:/Electron','/logs/main.log');
+// log.transports.file.resolvePath = () => 'G:/Electron/logs/main.log';
+
+
+// SEtup logger 
+// autoUpdater.logger = require('electron-log');
+log.log("Application version =" + app.getVersion());
+
+// SEtup updater events
+autoUpdater.on('checking-for-update', () => {
+  log.info('Checking for updates...');
 });
 
-autoUpdater.on("update-not-available", (info) => {
-  mainWindow.webContents.send(
-    "updateMessage",
-    `No update available. Current version ${app.getVersion()}`
-  );
+autoUpdater.on('update-available', (info) => {
+  log.info('update available');
+  log.info('Version', info.version);
+  log.info("release date",info.releaseDate);
 });
 
-/*Download Completion Message*/
-autoUpdater.on("update-downloaded", (info) => {
-  mainWindow.webContents.send(
-    "updateMessage",
-    `Update downloaded. Current version ${app.getVersion()}`
-  );
+autoUpdater.on('update-not-available', (info) => {
+  log.info('update not available');
 });
 
-autoUpdater.on("error", (info) => {
-  mainWindow.webContents.send("updateMessage", info);
+autoUpdater.on('update-downloaded', (info) => {
+  log.info('update downloaded');
+  autoUpdater.quitAndInstall();
+});
+
+autoUpdater.on('error', (error) => {
+  log.info('Error',error);
+});
+
+autoUpdater.on('download-progress', (progress) => {
+  log.info('download-progress');
+  log.log(progress);
 });
