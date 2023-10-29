@@ -1,22 +1,23 @@
 {
-    "compilerOptions": {
-        "target": "ESNext",
-        "module": "commonjs",
-        "allowJs": true,
-        "skipLibCheck": true,
-        "esModuleInterop": true,
-        "noImplicitAny": true,
-        "sourceMap": true,
-        "outDir": "dist",
-        "moduleResolution": "node",
-        "resolveJsonModule": true,
-        "jsx": "react-jsx",
-        "baseUrl": ".",
-        "paths": {
-            "~/*": ["src/*"]
-        },
-        "lib": ["es6", "dom"],
-        "types": ["node"]
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "commonjs",
+    "allowJs": true,
+    "checkJs": false,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "noImplicitAny": true,
+    "sourceMap": true,
+    "outDir": "dist",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["src/*"]
     },
-    "include": ["src"]
+    "lib": ["es6", "dom"],
+    "types": ["node"]
+  },
+  "include": ["src"]
 }

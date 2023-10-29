@@ -8,6 +8,9 @@ export default defineConfig({
         beacon_speech: "electron/beacon_speech.js",
         control_volume: "electron/control_volume.js",
         listen_to_music: "electron/listen_to_music.js",
+        readNews: "electron/readNews.js",
+        // enum: "electron/helpers/enum.js",
+        // newsReader: "electron/helpers/newsReader.js",
       },
       output: {
         entryFileNames: "[name].js",

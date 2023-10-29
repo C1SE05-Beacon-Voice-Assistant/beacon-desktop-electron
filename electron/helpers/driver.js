@@ -22,3 +22,4 @@ class ChromeDriver {
 }
 
 module.exports = ChromeDriver;
+// export default ChromeDriver;

@@ -1,8 +1,8 @@
 // const { SearchNewsBy } = require("./helpers/enum.js");
-const readline = require("readline");
-const { promisify } = require("util");
-const NewsReader = require("./helpers/newsReader.js");
-const { By } = require("selenium-webdriver");
+import readline from "readline";
+import { promisify } from "util";
+import NewsReader from "./newsReader.js";
+import { By } from "selenium-webdriver";
 // const ChromeDriver = require("./helpers/driver.js");
 
 const SearchNewsBy = {
@@ -159,5 +159,4 @@ class ReadNewsController {
 
 // new ReadNewsController().start();
 
-module.exports = ReadNewsController;
-// export default ReadNewsController;
+export default ReadNewsController;

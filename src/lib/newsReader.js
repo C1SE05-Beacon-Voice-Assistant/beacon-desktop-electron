@@ -1,7 +1,15 @@
-const axios = require("axios");
-const cheerio = require("cheerio");
-const fs = require("fs");
-const { NewsTypes } = require("./enum.js");
+import axios from "axios";
+import cheerio from "cheerio";
+import fs from "fs";
+// import { NewsTypes } from "./enum.js";
+const NewsTypes = {
+  TEXT: "text",
+  VIDEO: "video",
+  PHOTO: "photo",
+  INFOGRAPHIC: "infographic",
+  LIVE: "live",
+  PODCAST: "podcast",
+};
 
 class NewsReader {
   constructor() {}
@@ -115,4 +123,4 @@ const urlText2 =
 //   console.log(res);
 // });
 
-module.exports = NewsReader;
+export default NewsReader;

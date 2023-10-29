@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 // import { Browser } from "../lib";
-// const { SearchNewsBy } = require("../../electron/helpers/enum.js");
+// const { SearchNewsBy } = require("../../electron/helpers/enum");
+
 const SearchNewsBy = {
   KEYWORD: "keyword",
   HOTTEST: "hottest",
@@ -82,11 +83,7 @@ const handleInput = async (
       if (match) {
         const index = parseInt(match.join(""));
         if (index < result.length && index >= 0) {
-          const article = await read.getNewsContent(
-            result[index].url,
-            result[index].title,
-            result[index].description
-          );
+          const article = await read.selectOneToRead(result);
           console.log(article);
         } else {
           console.log("Không tìm thấy tin tức");

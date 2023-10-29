@@ -9,9 +9,11 @@ const ReadNewsController = require(path.join(
   __dirname,
   "readNewsController.js"
 ));
+const NewsReader = require("./helpers/newsReader.js");
 
 const beacon = new BeaconSpeech("Beacon", "Hanoi");
 const driver = new Builder().forBrowser("chrome").build();
+// const newsReader = new NewsReader();
 const readNews = new ReadNewsController(driver);
 
 const beaconVolume = createBeaconVolume().then((result) => result);
@@ -21,5 +23,5 @@ contextBridge.exposeInMainWorld("electron", {
   stopBackgroundListen: beacon.stopBackgroundListen.bind(beacon),
   beaconVolume,
   listenToMusic: listenToMusicWithDriver,
-  readNews,
+  readNews: readNews,
 });
