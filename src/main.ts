@@ -129,6 +129,6 @@ app.on("window-all-closed", () => {
   }
 });
 
-app.on("ready", () => {
+app.whenReady().then(() => {
   createWindow();
 });

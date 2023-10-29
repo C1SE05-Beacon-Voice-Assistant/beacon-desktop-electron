@@ -4,9 +4,9 @@ export declare const MAIN_WINDOW_VITE_NAME: string;
 export interface IElectron {
   backgroundListen: (callback: (text: string) => void) => void;
   stopBackgroundListen: () => void;
-  controlVolume: (volume: number) => Promise<void>;
-  listenToMusic: () => any;
-  readNews: () => any;
+  listenToMusic: any;
+  beaconVolume: any;
+  readNews: any;
 }
 
 declare global {
