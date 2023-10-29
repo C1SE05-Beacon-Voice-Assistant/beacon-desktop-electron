@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 // const { SearchNewsBy } = require("./helpers/enum.js");
 const readline = require("readline");
 const { promisify } = require("util");
@@ -120,10 +121,11 @@ class ReadNewsController {
         case "3":
           result = await this.search(SearchNewsBy.MOST_READ);
           break;
-        case "4":
+        case "4": {
           let keyword = await questionAsync("Nhập keyword bạn muốn tìm:\n");
           result = await this.searchByKeyword(keyword);
           break;
+        }
         case "5":
           return;
         default:
@@ -160,4 +162,3 @@ class ReadNewsController {
 // new ReadNewsController().start();
 
 module.exports = ReadNewsController;
-// export default ReadNewsController;
