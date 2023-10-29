@@ -1,18 +1,22 @@
 {
   "name": "beacon-desktop-electron",
-  "version": "1.0.0-alpha",
+  "version": "2.0.0-alpha",
   "description": "Beacon Desktop Electron App",
   "license": "MIT",
   "main": ".vite/build/main.js",
   "author": "Beacon Team",
   "scripts": {
-    "start": "electron .",
-    "dist": "electron-builder",
+    "start": "electron-forge start",
+    "release": "electron-builder",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
-    "dist": "electron-builder build --win --dir"
+    "dist": "electron-builder build --win"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/C1SE05-Beacon-Voice-Assistant/beacon-desktop-electron.git"
   },
   "dependencies": {
     "@electron-forge/publisher-github": "^6.4.2",

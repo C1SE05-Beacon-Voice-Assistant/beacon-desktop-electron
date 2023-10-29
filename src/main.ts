@@ -10,6 +10,10 @@ import MenuBuilder from "./menu";
 declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string;
 declare const MAIN_WINDOW_VITE_NAME: string;
 
+// set path for logs root project
+log.transports.file.resolvePath = () =>
+  join(__dirname + "/../../logs", "main.log");
+
 class AppUpdater {
   constructor() {
     log.transports.file.level = "info";
@@ -114,73 +118,86 @@ autoUpdater.autoDownload = false;
 // tự động cài khi thoát ứng dụng
 autoUpdater.autoInstallOnAppQuit = true;
 
-
 app.on("ready", () => {
-  createWindow("main")
-    .then((mainWindow) => {
-      // clear the console
-      console.clear();
+  createWindow("main");
+  autoUpdater.checkForUpdatesAndNotify();
+  // .then((mainWindow) => {
+  //   // clear the console
+  //   // console.clear();
+  //   // autoUpdater.checkForUpdates();
+  //   // console.log(mainWindow.webContents);
 
-      autoUpdater.checkForUpdates();
-      console.log(mainWindow.webContents);
-
-      mainWindow.webContents.on("did-finish-load", () => {
-<<<<<<< HEAD
-        mainWindow.webContents.send(
-          "updateMessage",
-          `Current version ${app.getVersion()}`
-        );
-=======
-        mainWindow.webContents.send("updateMessage", `Current version ${app.getVersion()}`);
->>>>>>> automatic_update
-      });
-      console.log(12345);
-    })
-    .catch((err) => {
-      console.log("162", err);
-    });
+  //   mainWindow.webContents.on("did-finish-load", () => {
+  //     mainWindow.webContents.send(
+  //       "updateMessage",
+  //       `Current version ${app.getVersion()}`
+  //     );
+  //   });
+  //   console.log(12345);
+  // })
+  // .catch((err) => {
+  //   console.log("162", err);
+  // });
 });
-<<<<<<< HEAD
 // if (require("electron-squirrel-startup")) app.quit();
 /*New Update Available*/
+// autoUpdater.on("update-available", (info) => {
+//   mainWindow.webContents.send(
+//     "updateMessage",
+//     `Update available. Current version ${app.getVersion()}`
+//   );
+//   let pth = autoUpdater.downloadUpdate();
+//   mainWindow.webContents.send("updateMessage", pth);
+// });
+
+// autoUpdater.on("update-not-available", (info) => {
+//   mainWindow.webContents.send(
+//     "updateMessage",
+//     `No update available. Current version ${app.getVersion()}`
+//   );
+// });
+
+// /*Download Completion Message*/
+// autoUpdater.on("update-downloaded", (info) => {
+//   mainWindow.webContents.send(
+//     "updateMessage",
+//     `Update downloaded. Current version ${app.getVersion()}`
+//   );
+// });
+
+// autoUpdater.on("error", (info) => {
+//   mainWindow.webContents.send("updateMessage", info);
+// });
+
+// SEtup logger
+// autoUpdater.logger = require('electron-log');
+log.log("Application version =" + app.getVersion());
+
+// SEtup updater events
+autoUpdater.on("checking-for-update", () => {
+  log.info("Checking for updates...");
+});
+
 autoUpdater.on("update-available", (info) => {
-  mainWindow.webContents.send(
-    "updateMessage",
-    `Update available. Current version ${app.getVersion()}`
-  );
-=======
-if (require("electron-squirrel-startup")) app.quit();
-/*New Update Available*/
-autoUpdater.on("update-available", (info) => {
-  mainWindow.webContents.send("updateMessage", `Update available. Current version ${app.getVersion()}`);
->>>>>>> automatic_update
-  let pth = autoUpdater.downloadUpdate();
-  mainWindow.webContents.send("updateMessage", pth);
+  log.info("update available");
+  log.info("Version", info.version);
+  log.info("release date", info.releaseDate);
 });
 
 autoUpdater.on("update-not-available", (info) => {
-<<<<<<< HEAD
-  mainWindow.webContents.send(
-    "updateMessage",
-    `No update available. Current version ${app.getVersion()}`
-  );
-=======
-  mainWindow.webContents.send("updateMessage", `No update available. Current version ${app.getVersion()}`);
->>>>>>> automatic_update
+  log.info("update not available");
 });
 
-/*Download Completion Message*/
 autoUpdater.on("update-downloaded", (info) => {
-<<<<<<< HEAD
-  mainWindow.webContents.send(
-    "updateMessage",
-    `Update downloaded. Current version ${app.getVersion()}`
-  );
-=======
-  mainWindow.webContents.send("updateMessage", `Update downloaded. Current version ${app.getVersion()}`);
->>>>>>> automatic_update
+  log.info("update downloaded");
+  autoUpdater.quitAndInstall();
 });
 
-autoUpdater.on("error", (info) => {
-  mainWindow.webContents.send("updateMessage", info);
+autoUpdater.on("error", (error) => {
+  log.info("Error", error);
+});
+
+autoUpdater.on("download-progress", (progress) => {
+  log.info("download-progress");
+  log.log(progress);
 });
