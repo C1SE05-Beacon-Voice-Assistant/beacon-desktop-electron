@@ -10,9 +10,14 @@ import MenuBuilder from "./menu";
 declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string;
 declare const MAIN_WINDOW_VITE_NAME: string;
 
-// set path for logs root project
-log.transports.file.resolvePath = () =>
-  join(__dirname + "/../../logs", "main.log");
+// set path for logs root project in dev mode
+if (process.env.NODE_ENV === "development") {
+  log.transports.file.resolvePath = () =>
+    join(__dirname + "/../../logs", "main.log");
+} else {
+  log.transports.file.resolvePath = () =>
+    join(__dirname + "/../logs", "main.log");
+}
 
 class AppUpdater {
   constructor() {
