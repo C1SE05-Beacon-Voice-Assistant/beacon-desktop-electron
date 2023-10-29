@@ -6,7 +6,7 @@
   "main": ".vite/build/main.js",
   "author": "Beacon Team",
   "scripts": {
-    "start": "electron .",
+    "start": "electron-forge start",
     "release": "electron-builder",
     "package": "electron-forge package",
     "make": "electron-forge make",

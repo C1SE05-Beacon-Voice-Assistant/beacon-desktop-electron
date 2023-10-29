@@ -10,6 +10,10 @@ import MenuBuilder from "./menu";
 declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string;
 declare const MAIN_WINDOW_VITE_NAME: string;
 
+// set path for logs root project
+log.transports.file.resolvePath = () =>
+  join(__dirname + "/../../logs", "main.log");
+
 class AppUpdater {
   constructor() {
     log.transports.file.level = "info";
@@ -114,27 +118,26 @@ autoUpdater.autoDownload = false;
 // tự động cài khi thoát ứng dụng
 autoUpdater.autoInstallOnAppQuit = true;
 
-
 app.on("ready", () => {
-  createWindow("main")
+  createWindow("main");
   autoUpdater.checkForUpdatesAndNotify();
-    // .then((mainWindow) => {
-    //   // clear the console
-    //   // console.clear();
-    //   // autoUpdater.checkForUpdates();
-    //   // console.log(mainWindow.webContents);
+  // .then((mainWindow) => {
+  //   // clear the console
+  //   // console.clear();
+  //   // autoUpdater.checkForUpdates();
+  //   // console.log(mainWindow.webContents);
 
-    //   mainWindow.webContents.on("did-finish-load", () => {
-    //     mainWindow.webContents.send(
-    //       "updateMessage",
-    //       `Current version ${app.getVersion()}`
-    //     );
-    //   });
-    //   console.log(12345);
-    // })
-    // .catch((err) => {
-    //   console.log("162", err);
-    // });
+  //   mainWindow.webContents.on("did-finish-load", () => {
+  //     mainWindow.webContents.send(
+  //       "updateMessage",
+  //       `Current version ${app.getVersion()}`
+  //     );
+  //   });
+  //   console.log(12345);
+  // })
+  // .catch((err) => {
+  //   console.log("162", err);
+  // });
 });
 // if (require("electron-squirrel-startup")) app.quit();
 /*New Update Available*/
@@ -166,40 +169,35 @@ app.on("ready", () => {
 //   mainWindow.webContents.send("updateMessage", info);
 // });
 
-
-log.transports.file.resolvePath = () => path.join('G:/Electron','/logs/main.log');
-// log.transports.file.resolvePath = () => 'G:/Electron/logs/main.log';
-
-
-// SEtup logger 
+// SEtup logger
 // autoUpdater.logger = require('electron-log');
 log.log("Application version =" + app.getVersion());
 
 // SEtup updater events
-autoUpdater.on('checking-for-update', () => {
-  log.info('Checking for updates...');
+autoUpdater.on("checking-for-update", () => {
+  log.info("Checking for updates...");
 });
 
-autoUpdater.on('update-available', (info) => {
-  log.info('update available');
-  log.info('Version', info.version);
-  log.info("release date",info.releaseDate);
+autoUpdater.on("update-available", (info) => {
+  log.info("update available");
+  log.info("Version", info.version);
+  log.info("release date", info.releaseDate);
 });
 
-autoUpdater.on('update-not-available', (info) => {
-  log.info('update not available');
+autoUpdater.on("update-not-available", (info) => {
+  log.info("update not available");
 });
 
-autoUpdater.on('update-downloaded', (info) => {
-  log.info('update downloaded');
+autoUpdater.on("update-downloaded", (info) => {
+  log.info("update downloaded");
   autoUpdater.quitAndInstall();
 });
 
-autoUpdater.on('error', (error) => {
-  log.info('Error',error);
+autoUpdater.on("error", (error) => {
+  log.info("Error", error);
 });
 
-autoUpdater.on('download-progress', (progress) => {
-  log.info('download-progress');
+autoUpdater.on("download-progress", (progress) => {
+  log.info("download-progress");
   log.log(progress);
 });
