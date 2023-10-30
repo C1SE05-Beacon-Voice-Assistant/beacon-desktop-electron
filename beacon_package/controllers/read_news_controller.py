@@ -1,10 +1,12 @@
-from selenium.webdriver.common.by import By
-from selenium.webdriver.remote.webelement import WebElement
-from selenium.common.exceptions import NoSuchElementException
+try:
+    from selenium.webdriver.common.by import By
+    from selenium.webdriver.remote.webelement import WebElement
+    from selenium.common.exceptions import NoSuchElementException
+except ImportError:
+    print("Error when import selenium")
 
-from constants.news_enum import NewsSearchType
-from utils.driver import ChromeDriver
-from utils.read_news import NewsReader
+from constants import NewsSearchType
+from utils import NewsReader
 
 
 class ReadNewsController:
@@ -12,11 +14,11 @@ class ReadNewsController:
     This class provides methods to search and read news articles from vnexpress.net.
     """
 
-    def __init__(self):
+    def __init__(self, driver=None):
         """
         Initializes the ReadNewsController class by creating a ChromeDriver instance and a NewsReader instance.
         """
-        self.driver = ChromeDriver().get_driver()
+        self.driver = driver
         self.news_reader = NewsReader()
 
     def _search_news(self, article: str):
@@ -159,6 +161,7 @@ class ReadNewsController:
                           4. Tìm kiếm tin tức theo từ khóa
                           5. Thoát"""
             )
+
             news_type = input("Lựa chọn: ")
 
             if news_type not in ["1", "2", "3", "4"]:

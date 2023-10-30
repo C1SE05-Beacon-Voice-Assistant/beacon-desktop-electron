@@ -1,13 +1,14 @@
 import re
 import time
+from constants import Platforms
 
-from selenium.common import ElementNotInteractableException
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-
-from constants.platforms import Platforms
-from utils.driver import ChromeDriver
+try:
+    from selenium.common import ElementNotInteractableException
+    from selenium.webdriver.common.by import By
+    from selenium.webdriver.support.ui import WebDriverWait
+    from selenium.webdriver.support import expected_conditions as EC
+except ImportError:
+    print("Error when import selenium")
 
 
 class ListenMusicController:
@@ -15,7 +16,7 @@ class ListenMusicController:
     This class is responsible for controlling the music player. It can search for and play music from either mp3.zing.vn or YouTube.
     """
 
-    def __init__(self, speech, search_type, is_check):
+    def __init__(self, speech, search_type, is_check, driver=None):
         """
         Initializes the ListenMusicController class.
 
@@ -25,23 +26,23 @@ class ListenMusicController:
         is_check (bool): A flag indicating whether the music should be played or just searched for.
         """
         self.speech = speech
-        self.driver = ChromeDriver().get_driver()
+        self.driver = driver
         self.constants = Platforms()
         self.search_type = search_type
         self.is_check = is_check
         self.is_running_on_youtube = False
 
-    def __del__(self):
-        """
-        Destructor method that quits the driver.
-        """
-        self.driver.quit()
+    # def __del__(self):
+    #     """
+    #     Destructor method that quits the driver.
+    #     """
+    #     self.driver.quit()
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        """
-        Exit method that quits the driver.
-        """
-        self.driver.quit()
+    # def __exit__(self, exc_type, exc_val, exc_tb):
+    #     """
+    #     Exit method that quits the driver.
+    #     """
+    #     self.driver.quit()
 
     def __enter__(self):
         """

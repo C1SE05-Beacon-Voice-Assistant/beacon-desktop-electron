@@ -104,3 +104,4 @@ beacon-package/*/__pycache__
 /.vscode
 release/
 package-lock.json
+dist/
