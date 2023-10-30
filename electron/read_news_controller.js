@@ -78,7 +78,7 @@ class ReadNewsController {
     const articlesList = await this.driver.findElements(
       By.xpath(`//div[@id='automation_TV0']//article[position()<4]`)
     );
-    const result = this.getNewsInList(articlesList);
+    const result = await this.getNewsInList(articlesList);
     return result;
   }
 

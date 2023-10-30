@@ -38,6 +38,9 @@ const handleInput = async (
   const listen = await window.electron.listenToMusic;
   const read = await window.electron.readNews;
 
+  let command = currentCommand;
+  let err;
+
   const musicCommands = {
     search: /(bài hát|nhạc|bài nhạc)/,
     play: /(phát|chạy|play)/,
@@ -54,6 +57,7 @@ const handleInput = async (
       const amount = parseInt(match[0], 10);
       controlVolume(amount);
     }
+    command = "volume";
   } else {
     for (const command in musicCommands) {
       if (musicCommands[command as keyof typeof musicCommands].test(text)) {
@@ -71,11 +75,14 @@ const handleInput = async (
         break; // Exit the loop once a music command is matched
       }
     }
+    currentCommand = "music";
   }
 
   let result: any[] = resultNews;
   if (newsMatch) {
     // Handle news-related action here
+    console.log(read);
+
     if (result.length > 0) {
       // found number in text
       const match = text.match(/[0-2]/);
@@ -83,9 +90,10 @@ const handleInput = async (
       if (match) {
         const index = parseInt(match.join(""));
         if (index < result.length && index >= 0) {
-          const article = await read.selectOneToRead(result);
+          const article = await read.selectOneToRead(result, index);
           console.log(article);
         } else {
+          err = "Không tìm thấy tin tức";
           console.log("Không tìm thấy tin tức");
         }
       }
@@ -93,17 +101,19 @@ const handleInput = async (
       const regex = /(tin tức|bản tin|thời sự)/;
       // const keyword = text.split(regex);
       // result = await read.searchByKeyword(keyword[1]);
-      result = await read.search(SearchNewsBy.HOTTEST);
+
+      result = await read.searchNewsBy(SearchNewsBy.HOTTEST);
       for (let i = 0; i < result.length; i++) {
         console.log(`${i}. ${result[i].title}`);
       }
-      currentCommand = "news";
     }
+    command = "news";
   }
 
   return {
-    command: currentCommand,
-    result: resultNews,
+    command: command,
+    result: result,
+    err,
   };
 };
 

@@ -133,6 +133,48 @@ const HomePage = () => {
 }
 ```
 
+## Give Command
+
+### Read News
+
+To give command about finding and reading the news, please give speech like this
+
+```
+  Tôi muốn đọc tin tức/bản tin/thời sự
+  Tìm kiếm tin tức/bản tin/thời sự
+```
+
+Alternatively, for a shorter and equally effective command, you can say:
+
+```
+  bản tin/tin tức/thời sự
+```
+
+Beacon will give you a list with a limit of 3 articles for you to choose from.  
+And to choose a specific article to read, please give a VERBAL speech like the following:
+
+> [!Important]
+> When it come to choose an article, please remember to be VERBAL
+
+```
+  Chọn tin tức/bản tin số 0/1/2
+```
+
+Don't say like this:
+
+> [!Warning]
+> Beacon will not understand what you want to do!
+
+```
+  Chọn 1
+```
+
+or
+
+```
+  1
+```
+
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
