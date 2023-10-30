@@ -122,87 +122,52 @@ app.on("window-all-closed", () => {
 autoUpdater.autoDownload = false;
 // tự động cài khi thoát ứng dụng
 autoUpdater.autoInstallOnAppQuit = true;
+autoUpdater.allowPrerelease = true;
 
-app.on("ready", () => {
+app.on("ready", async () => {
   createWindow("main");
-  autoUpdater.checkForUpdatesAndNotify();
-  // .then((mainWindow) => {
-  //   // clear the console
-  //   // console.clear();
-  //   // autoUpdater.checkForUpdates();
-  //   // console.log(mainWindow.webContents);
+  // autoUpdater.checkForUpdatesAndNotify();
+  const app = require('electron').app;
 
-  //   mainWindow.webContents.on("did-finish-load", () => {
-  //     mainWindow.webContents.send(
-  //       "updateMessage",
-  //       `Current version ${app.getVersion()}`
-  //     );
-  //   });
-  //   console.log(12345);
-  // })
-  // .catch((err) => {
-  //   console.log("162", err);
-  // });
+  Object.defineProperty(app, 'isPackaged', {
+    get() {
+      return true;
+    }
+  });
 });
-// if (require("electron-squirrel-startup")) app.quit();
-/*New Update Available*/
-// autoUpdater.on("update-available", (info) => {
-//   mainWindow.webContents.send(
-//     "updateMessage",
-//     `Update available. Current version ${app.getVersion()}`
-//   );
-//   let pth = autoUpdater.downloadUpdate();
-//   mainWindow.webContents.send("updateMessage", pth);
-// });
-
-// autoUpdater.on("update-not-available", (info) => {
-//   mainWindow.webContents.send(
-//     "updateMessage",
-//     `No update available. Current version ${app.getVersion()}`
-//   );
-// });
-
-// /*Download Completion Message*/
-// autoUpdater.on("update-downloaded", (info) => {
-//   mainWindow.webContents.send(
-//     "updateMessage",
-//     `Update downloaded. Current version ${app.getVersion()}`
-//   );
-// });
-
-// autoUpdater.on("error", (info) => {
-//   mainWindow.webContents.send("updateMessage", info);
-// });
-
-// SEtup logger
-// autoUpdater.logger = require('electron-log');
+log.info('App Starting');
 log.log("Application version =" + app.getVersion());
+try {
+  // SEtup updater events
+  autoUpdater.on("checking-for-update", () => {
+    log.info("Checking for updates...");
+    console.log("check");
+  });
 
-// SEtup updater events
-autoUpdater.on("checking-for-update", () => {
-  log.info("Checking for updates...");
-});
+  autoUpdater.on("update-available", (info) => {
+    log.info("update available");
+    log.info("Version", info.version);
+    log.info("release date", info.releaseDate);
+  });
 
-autoUpdater.on("update-available", (info) => {
-  log.info("update available");
-  log.info("Version", info.version);
-  log.info("release date", info.releaseDate);
-});
+  autoUpdater.on("update-not-available", (info) => {
+    log.info("update not available");
+  });
 
-autoUpdater.on("update-not-available", (info) => {
-  log.info("update not available");
-});
+  autoUpdater.on("update-downloaded", (info) => {
+    log.info("update downloaded");
+    autoUpdater.quitAndInstall();
+  });
 
-autoUpdater.on("update-downloaded", (info) => {
-  log.info("update downloaded");
-  autoUpdater.quitAndInstall();
-});
+  autoUpdater.on("error", (error) => {
+    log.info("Error", error);
+  });
 
-autoUpdater.on("error", (error) => {
-  log.info("Error", error);
-});
-
-autoUpdater.on("download-progress", (progress) => {
-  log.info("download-progress");
-  log.log(progress);
-});
+  autoUpdater.on("download-progress", (progressTrack) => {
+    log.info("download-progress");
+    log.log(progressTrack);
+  });
+}
+catch (error) {
+  log.info('autoupdate failed');
+}

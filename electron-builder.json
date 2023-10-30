@@ -19,7 +19,10 @@
   "nsis": {
     "oneClick": false,
     "perMachine": true,
-    "allowToChangeInstallationDirectory": true
+    "allowToChangeInstallationDirectory": true,
+    "createDesktopShortcut": true,
+    "allowElevation": true,
+    "deleteAppDataOnUninstall": true
   },
   "publish": {
     "provider": "github",
