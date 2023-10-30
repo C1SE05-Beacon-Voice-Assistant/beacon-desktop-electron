@@ -114,6 +114,10 @@ app.on("window-all-closed", () => {
   }
 });
 
+autoUpdater.autoDownload = false;
+autoUpdater.allowDowngrade = true;
+autoUpdater.allowPrerelease = true;
+
 app.on("ready", async () => {
   createWindow("main");
 });
