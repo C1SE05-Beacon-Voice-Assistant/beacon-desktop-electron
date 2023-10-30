@@ -139,14 +139,14 @@ const HomePage = () => {
 
 To give command about finding and reading the news, please give speech like this
 
-```
+```text
   Tôi muốn đọc tin tức/bản tin/thời sự
   Tìm kiếm tin tức/bản tin/thời sự
 ```
 
 Alternatively, for a shorter and equally effective command, you can say:
 
-```
+```text
   bản tin/tin tức/thời sự
 ```
 
@@ -156,7 +156,7 @@ And to choose a specific article to read, please give a VERBAL speech like the f
 > [!Important]
 > When it come to choose an article, please remember to be VERBAL
 
-```
+```text
   Chọn tin tức/bản tin số 0/1/2
 ```
 
@@ -165,13 +165,13 @@ Don't say like this:
 > [!Warning]
 > Beacon will not understand what you want to do!
 
-```
+```text
   Chọn 1
 ```
 
 or
 
-```
+```text
   1
 ```
 
