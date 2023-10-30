@@ -13,7 +13,7 @@ const config: ForgeConfig = {
       authors: "Beacon Team",
       description: "Voice Assistant for Visually Impaired People on Windows",
     }),
-    new MakerZIP({}, ["darwin"]),
+    new MakerZIP({}, ["win64"]),
     new MakerRpm({}),
     new MakerDeb({}),
   ],
@@ -36,6 +36,18 @@ const config: ForgeConfig = {
         },
       ],
     }),
+  ],
+  publishers: [
+    {
+      name: "@electron-forge/publisher-github",
+      config: {
+        repository: {
+          owner: "C1SE05-Beacon-Voice-Assistant",
+          name: "beacon-desktop-electron",
+        },
+        prerelease: true,
+      },
+    },
   ],
 };
 

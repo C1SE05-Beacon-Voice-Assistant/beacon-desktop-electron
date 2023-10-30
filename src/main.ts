@@ -1,15 +1,20 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import type { BrowserWindowConstructorOptions as WindowOptions } from "electron";
-import { BrowserWindow, app, ipcMain, shell } from "electron";
+import { app, BrowserWindow, ipcMain, shell } from "electron";
+import log from "electron-log";
 import { autoUpdater } from "electron-updater";
 import path, { join } from "path";
-
-import log from "electron-log";
 import MenuBuilder from "./menu";
 
 declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string;
 declare const MAIN_WINDOW_VITE_NAME: string;
 
+if (require("electron-squirrel-startup")) app.quit();
+Object.defineProperty(app, "isPackaged", {
+  get() {
+    return true;
+  },
+});
 // set path for logs root project in dev mode
 if (process.env.NODE_ENV === "development") {
   log.transports.file.resolvePath = () =>
@@ -17,15 +22,6 @@ if (process.env.NODE_ENV === "development") {
 } else {
   log.transports.file.resolvePath = () =>
     join(__dirname + "/../logs", "main.log");
-}
-
-class AppUpdater {
-  constructor() {
-    log.transports.file.level = "info";
-    autoUpdater.logger = log;
-    autoUpdater.channel = "alpha";
-    autoUpdater.checkForUpdatesAndNotify();
-  }
 }
 
 let mainWindow: BrowserWindow | null = null;
@@ -118,56 +114,64 @@ app.on("window-all-closed", () => {
   }
 });
 
-// Basic flags
-autoUpdater.autoDownload = false;
-// tự động cài khi thoát ứng dụng
-autoUpdater.autoInstallOnAppQuit = true;
-autoUpdater.allowPrerelease = true;
-
 app.on("ready", async () => {
   createWindow("main");
-  // autoUpdater.checkForUpdatesAndNotify();
-  const app = require('electron').app;
-
-  Object.defineProperty(app, 'isPackaged', {
-    get() {
-      return true;
-    }
-  });
 });
-log.info('App Starting');
+
+log.info("App Starting");
 log.log("Application version =" + app.getVersion());
-try {
-  // SEtup updater events
-  autoUpdater.on("checking-for-update", () => {
-    log.info("Checking for updates...");
-    console.log("check");
+
+autoUpdater.setFeedURL({
+  provider: "github",
+  owner: "C1SE05-Beacon-Voice-Assistant",
+  repo: "beacon-desktop-electron",
+  private: true,
+});
+
+autoUpdater
+  .checkForUpdatesAndNotify({
+    title: "Beacon",
+    body: "New version available",
+  })
+  .then((result) => {
+    console.log("result", result);
+  })
+  .catch((error) => {
+    console.log("133", error);
   });
 
-  autoUpdater.on("update-available", (info) => {
-    log.info("update available");
-    log.info("Version", info.version);
-    log.info("release date", info.releaseDate);
-  });
+// try {
+//   // SEtup updater events
+//   autoUpdater.on("checking-for-update", () => {
+//     log.info("Checking for updates...");
+//     console.log("check");
+//   });
 
-  autoUpdater.on("update-not-available", (info) => {
-    log.info("update not available");
-  });
+//   autoUpdater.on("update-available", (info: any) => {
+//     log.info("update available");
+//     log.info("Version", info.version);
+//     log.info("release date", info.releaseDate);
+//   });
 
-  autoUpdater.on("update-downloaded", (info) => {
-    log.info("update downloaded");
-    autoUpdater.quitAndInstall();
-  });
+//   autoUpdater.on("update-not-available", (info: any) => {
+//     log.info("update not available");
+//   });
 
-  autoUpdater.on("error", (error) => {
-    log.info("Error", error);
-  });
+//   autoUpdater.on("update-downloaded", (info: any) => {
+//     log.info("update downloaded");
+//     autoUpdater.quitAndInstall();
+//   });
 
-  autoUpdater.on("download-progress", (progressTrack) => {
-    log.info("download-progress");
-    log.log(progressTrack);
-  });
-}
-catch (error) {
-  log.info('autoupdate failed');
-}
+//   autoUpdater.on("error", (error) => {
+//     log.info("Error", error);
+//   });
+
+//   autoUpdater.on("download-progress", (progressTrack) => {
+//     log.info("download-progress");
+//     log.log(progressTrack);
+//   });
+// } catch (error) {
+//   console.log(error);
+
+//   log.info("autoupdate failed");
+// }

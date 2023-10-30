@@ -103,3 +103,4 @@ beacon-package/*/__pycache__
 *.wav
 /.vscode
 release/
+package-lock.json
