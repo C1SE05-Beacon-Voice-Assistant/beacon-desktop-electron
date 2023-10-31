@@ -28,3 +28,9 @@ contextBridge.exposeInMainWorld("electron", {
   listenToMusic: listenToMusicWithDriver,
   readNews: { searchNewsBy, selectOneToRead },
 });
+
+let bridge = {
+  updateMessage: (callback) => ipcRenderer.on("updateMessage", callback),
+};
+
+contextBridge.exposeInMainWorld("bridge", bridge);

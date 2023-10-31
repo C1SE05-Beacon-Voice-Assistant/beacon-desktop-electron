@@ -9,8 +9,11 @@ const config: ForgeConfig = {
   packagerConfig: {},
   rebuildConfig: {},
   makers: [
-    new MakerSquirrel({}),
-    new MakerZIP({}, ["darwin"]),
+    new MakerSquirrel({
+      authors: "Beacon Team",
+      description: "Voice Assistant for Visually Impaired People on Windows",
+    }),
+    new MakerZIP({}, ["win64"]),
     new MakerRpm({}),
     new MakerDeb({}),
   ],
@@ -33,6 +36,18 @@ const config: ForgeConfig = {
         },
       ],
     }),
+  ],
+  publishers: [
+    {
+      name: "@electron-forge/publisher-github",
+      config: {
+        repository: {
+          owner: "C1SE05-Beacon-Voice-Assistant",
+          name: "beacon-desktop-electron",
+        },
+        prerelease: true,
+      },
+    },
   ],
 };
 

@@ -60,8 +60,6 @@ export default function HomePage() {
             </p>
           )}
         </div>
-        {/* <button onClick={handleStart}>Bắt đầu!</button> */}
-        {/* {!isStart && <button onClick={handleStart}>Bắt đầu!</button>} */}
         <input type="text" name="in" />
         <button onClick={handleTest}>Test</button>
       </div>

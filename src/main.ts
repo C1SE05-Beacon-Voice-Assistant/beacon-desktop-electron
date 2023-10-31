@@ -1,13 +1,31 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import path from "path";
-import { app, BrowserWindow, shell, ipcMain } from "electron";
-import type { BrowserWindowConstructorOptions } from "electron";
+import type { BrowserWindowConstructorOptions as WindowOptions } from "electron";
+import { app, BrowserWindow, ipcMain, shell } from "electron";
 import { AppUpdater } from "electron-updater";
 import log from "electron-log";
+// import { autoUpdater } from "electron-updater";
+const { autoUpdater } = require("electron-updater")
+
+import path, { join } from "path";
 import MenuBuilder from "./menu";
 
 declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string;
 declare const MAIN_WINDOW_VITE_NAME: string;
+
+if (require("electron-squirrel-startup")) app.quit();
+Object.defineProperty(app, "isPackaged", {
+  get() {
+    return true;
+  },
+});
+// set path for logs root project in dev mode
+if (process.env.NODE_ENV === "development") {
+  log.transports.file.resolvePath = () =>
+    join(__dirname + "/../../logs", "main.log");
+} else {
+  log.transports.file.resolvePath = () =>
+    join(__dirname + "/../logs", "main.log");
+}
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -22,31 +40,7 @@ if (process.env.NODE_ENV === "production") {
   sourceMapSupport.install();
 }
 
-const isDebug =
-  process.env.NODE_ENV === "development" || process.env.DEBUG_PROD === "true";
-
-if (isDebug) {
-  require("electron-debug")();
-}
-
-const installExtensions = async () => {
-  const installer = require("electron-devtools-installer");
-  const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
-  const extensions = ["REACT_DEVELOPER_TOOLS"];
-
-  return installer
-    .default(
-      extensions.map((name) => installer[name]),
-      forceDownload
-    )
-    .catch(console.log);
-};
-
-const createWindow = async () => {
-  if (isDebug) {
-    await installExtensions();
-  }
-
+const createWindow = async (id: string, options: WindowOptions = {}) => {
   const RESOURCES_PATH = app.isPackaged
     ? path.join(process.resourcesPath, "assets")
     : path.join(__dirname, "./assets");
@@ -55,7 +49,7 @@ const createWindow = async () => {
     return path.join(RESOURCES_PATH, ...paths);
   };
 
-  let config: BrowserWindowConstructorOptions = {
+  const config: WindowOptions = {
     show: false,
     width: parseInt(process.env.ELECTRON_WIDTH) || 833,
     height: parseInt(process.env.ELECTRON_HEIGHT) || 562,
@@ -66,18 +60,8 @@ const createWindow = async () => {
       preload: path.join(__dirname, "preload.js"),
     },
     resizable: false,
+    ...options,
   };
-
-  if (process.env.NODE_ENV === "production") {
-    config = {
-      ...config,
-      autoHideMenuBar: true,
-      webPreferences: {
-        ...config.webPreferences,
-        devTools: false,
-      },
-    };
-  }
 
   mainWindow = new BrowserWindow(config);
 
@@ -115,6 +99,10 @@ const createWindow = async () => {
 
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
+  // new AppUpdater();
+  // open dev tools
+  mainWindow.webContents.openDevTools();
+  return mainWindow;
 };
 
 /**
@@ -129,6 +117,67 @@ app.on("window-all-closed", () => {
   }
 });
 
-app.whenReady().then(() => {
-  createWindow();
+autoUpdater.autoDownload = false;
+autoUpdater.allowDowngrade = true;
+autoUpdater.allowPrerelease = true;
+
+app.on("ready", async () => {
+  createWindow("main");
 });
+
+log.info("App Starting");
+log.log("Application version =" + app.getVersion());
+
+autoUpdater.setFeedURL({
+  provider: "github",
+  owner: "C1SE05-Beacon-Voice-Assistant",
+  repo: "beacon-desktop-electron",
+  private: true,
+});
+
+autoUpdater
+  .checkForUpdatesAndNotify({
+    title: "Beacon",
+    body: "New version available",
+  })
+  .then((result: any) => {
+    console.log("result", result);
+  })
+  .catch((error: any) => {
+    console.log("133", error);
+  });
+// try {
+//   // SEtup updater events
+//   autoUpdater.on("checking-for-update", () => {
+//     log.info("Checking for updates...");
+//     console.log("check");
+//   });
+
+//   autoUpdater.on("update-available", (info: any) => {
+//     log.info("update available");
+//     log.info("Version", info.version);
+//     log.info("release date", info.releaseDate);
+//   });
+
+//   autoUpdater.on("update-not-available", (info: any) => {
+//     log.info("update not available");
+//   });
+
+//   autoUpdater.on("update-downloaded", (info: any) => {
+//     log.info("update downloaded");
+//     autoUpdater.quitAndInstall();
+//   });
+
+//   autoUpdater.on("error", (error) => {
+//     log.info("Error", error);
+//   });
+
+//   autoUpdater.on("download-progress", (progressTrack) => {
+//     log.info("download-progress");
+//     log.log(progressTrack);
+//   });
+// } catch (error) {
+//   console.log(error);
+
+//   log.info("autoupdate failed");
+// }

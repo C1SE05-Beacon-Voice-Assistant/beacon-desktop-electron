@@ -9,8 +9,13 @@ export interface IElectron {
   readNews: any;
 }
 
+export interface IBridge{
+  
+}
+
 declare global {
   interface Window extends Window {
     electron: IElectron;
+    bridge: IBridge;
   }
 }
