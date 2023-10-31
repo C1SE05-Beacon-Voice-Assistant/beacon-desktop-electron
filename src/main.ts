@@ -1,22 +1,17 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-<<<<<<< HEAD
 import type { BrowserWindowConstructorOptions as WindowOptions } from "electron";
 import { app, BrowserWindow, ipcMain, shell } from "electron";
-=======
-import path from "path";
-import { app, BrowserWindow, shell, ipcMain } from "electron";
-import type { BrowserWindowConstructorOptions } from "electron";
 import { AppUpdater } from "electron-updater";
->>>>>>> dev
 import log from "electron-log";
-import { autoUpdater } from "electron-updater";
+// import { autoUpdater } from "electron-updater";
+const { autoUpdater } = require("electron-updater")
+
 import path, { join } from "path";
 import MenuBuilder from "./menu";
 
 declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string;
 declare const MAIN_WINDOW_VITE_NAME: string;
 
-<<<<<<< HEAD
 if (require("electron-squirrel-startup")) app.quit();
 Object.defineProperty(app, "isPackaged", {
   get() {
@@ -32,8 +27,6 @@ if (process.env.NODE_ENV === "development") {
     join(__dirname + "/../logs", "main.log");
 }
 
-=======
->>>>>>> dev
 let mainWindow: BrowserWindow | null = null;
 
 ipcMain.on("ipc-example", async (event, arg) => {
@@ -106,13 +99,10 @@ const createWindow = async (id: string, options: WindowOptions = {}) => {
 
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
-<<<<<<< HEAD
   // new AppUpdater();
   // open dev tools
   mainWindow.webContents.openDevTools();
   return mainWindow;
-=======
->>>>>>> dev
 };
 
 /**
@@ -150,13 +140,12 @@ autoUpdater
     title: "Beacon",
     body: "New version available",
   })
-  .then((result) => {
+  .then((result: any) => {
     console.log("result", result);
   })
-  .catch((error) => {
+  .catch((error: any) => {
     console.log("133", error);
   });
-
 // try {
 //   // SEtup updater events
 //   autoUpdater.on("checking-for-update", () => {
