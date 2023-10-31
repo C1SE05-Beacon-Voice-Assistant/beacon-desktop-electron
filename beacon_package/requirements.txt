@@ -17,3 +17,5 @@ beautifulsoup4~=4.12.2
 
 browser~=66.0.2
 flask~=3.0.0
+
+transformers
