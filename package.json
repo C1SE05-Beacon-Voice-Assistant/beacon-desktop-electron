@@ -20,7 +20,6 @@
   },
   "dependencies": {
     "@electron-forge/publisher-github": "^6.4.2",
-    "@electron/asar": "^3.2.7",
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
     "@google-cloud/speech": "^6.0.2",
@@ -29,9 +28,9 @@
     "@tanstack/react-query": "^4.35.7",
     "@types/selenium-webdriver": "^4.1.19",
     "axios": "^1.4.0",
-    "cross-env": "^7.0.3",
     "cheerio": "^1.0.0-rc.12",
     "chromedriver": "^118.0.1",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.3.1",
     "electron-router-dom": "^1.0.5",
     "electron-squirrel-startup": "^1.0.0",
