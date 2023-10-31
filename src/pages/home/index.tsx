@@ -7,36 +7,39 @@ import styles from "./HomePage.module.css";
 
 export default function HomePage() {
   const [isStart, setIsStart] = useState<boolean | null>(false);
-<<<<<<< HEAD
-  // console.log(window.electron.recognizeFromMicrophone);
-
-  // const handleStart = () => {
-  //   setIsStart(true);
-  //   window.electron
-  //     .recognizeFromMicrophone()
-  //     .then((text: string) => {
-  //       // Process the recognized text
-  //       console.log(text);
-  //     })
-  //     .catch((error: any) => {
-  //       console.error("Error: " + error);
-  //     });
-  // };
-=======
-  const [result, setResult] = useState<string>("");
+  const [resultNews, setResultNews] = useState<any[]>([]);
+  const [currentCommand, setCurrentCommand] = useState<any>();
 
   useEffect(() => {
     window.electron.backgroundListen((result: string) => {
-      setResult(result);
-      handleInput(result);
+      handleInput(result, currentCommand, resultNews).then((res) => {
+        console.log(`New result: ${res.result}`);
+        console.log(`Old result: ${resultNews}`);
+        if (res.command && res.result) {
+          setCurrentCommand(res.command);
+          setResultNews(res.result);
+        }
+      });
     });
 
     return () => {
       window.electron.stopBackgroundListen();
     };
-  }, []);
->>>>>>> dev
+  }, [resultNews, currentCommand]);
+  const handleTest = () => {
+    const { value } = document.querySelector(
+      'input[name="in"]'
+    ) as HTMLInputElement;
 
+    handleInput(value, currentCommand, resultNews).then((res) => {
+      console.log(`New result: `, res.result);
+      console.log(`Old result: `, resultNews);
+      if (res.command && res.result) {
+        setCurrentCommand(res.command);
+        setResultNews(res.result);
+      }
+    });
+  };
   return (
     <section className={styles.home__container}>
       <div className={styles.bot__vector}>
@@ -57,17 +60,8 @@ export default function HomePage() {
             </p>
           )}
         </div>
-<<<<<<< HEAD
-        {/*<<<<<<< HEAD*/}
-        {/* {!isStart && <button onClick={window.electron.wakeUp}>Bắt đầu!</button>} */}
-        {!isStart && <button onClick={() => setIsStart(true)}>Bắt đầu!</button>}
-        {/*=======*/}
-        {/*        <button onClick={handleStart}>Bắt đầu!</button>*/}
-=======
-        {/* <button onClick={handleStart}>Bắt đầu!</button> */}
->>>>>>> dev
-        {/* {!isStart && <button onClick={handleStart}>Bắt đầu!</button>} */}
-        {/*>>>>>>> 075329761dec9b9f76822d85d90c09c3bf4356dc*/}
+        <input type="text" name="in" />
+        <button onClick={handleTest}>Test</button>
       </div>
       {isStart && (
         <div className={styles.container}>

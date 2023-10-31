@@ -105,3 +105,5 @@ beacon-package/*/__pycache__
 release/
 package-lock.json
 dist/
+
+release/

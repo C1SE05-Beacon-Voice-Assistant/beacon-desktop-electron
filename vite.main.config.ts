@@ -13,16 +13,13 @@ export default defineConfig({
             "node_modules/selenium-webdriver/**/**/**/*.js",
             "node_modules/selenium-webdriver/**/**/**/**/*.js",
           ],
-          // ignoreDynamicRequires: true,
+          ignoreDynamicRequires: true,
         }),
       ],
     },
   },
-  resolve: {
-    browserField: false,
-    mainFields: ["module", "jsnext:main", "jsnext"],
-  },
-  server: {
-    port: 3000,
-  },
+  // resolve: {
+  //   browserField: false,
+  //   mainFields: ["module", "jsnext:main", "jsnext"],
+  // },
 });
