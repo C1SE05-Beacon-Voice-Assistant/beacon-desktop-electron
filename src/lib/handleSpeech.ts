@@ -79,8 +79,6 @@ const handleInput = async (
   }
 
   let result: any[] = resultNews;
-  console.log(result);
-
   if (newsMatch) {
     // Handle news-related action here
     console.log(result);
