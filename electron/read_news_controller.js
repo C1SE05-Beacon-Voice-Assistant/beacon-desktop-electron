@@ -32,34 +32,34 @@ class ReadNewsController {
   // }
 
   async getNewsInList(list) {
-    try {
-      const result = [];
-      for (let item of list) {
+    const result = [];
+
+    for (let item of list) {
+      try {
         const title = await item
           .findElement(By.className("title-news"))
-          .then((e) => e.getText());
-
+          .getText();
         let description = await item
           .findElement(By.className("description"))
-          .then((e) => e.getText());
+          .getText();
         const url = await item
           .findElement(By.tagName("a"))
-          .then((e) => e.getAttribute("href"));
+          .getAttribute("href");
+
         const spanText = await item.findElements(
           By.className("location-stamp")
         );
-        console.log(spanText);
-        description =
-          spanText.length == 0
-            ? description
-            : description.replace(await spanText[0].getText(), "");
+        if (spanText.length > 0) {
+          description = description.replace(await spanText[0].getText(), "");
+        }
+
         result.push({ title, description, url });
+      } catch (error) {
+        console.error("An error occurred while processing an item:", error);
       }
-      console.log(result);
-      return result;
-    } catch (error) {
-      console.log(error);
     }
+
+    return result;
   }
 
   async search(by) {
@@ -143,16 +143,15 @@ class ReadNewsController {
         throw Error("Vui lòng chọn số thứ tự tin tức hợp lệ");
       await this.driver.get(result[i].url);
       const htmlSource = await this.driver.getPageSource();
-      console.log(
-        await this.newsReader.getNewsContent(
-          htmlSource,
-          result[i].title,
-          result[i].description,
-          result[i].url
-        )
+      const tmp = await this.newsReader.getNewsContent(
+        htmlSource,
+        result[i].title,
+        result[i].description,
+        result[i].url
       );
+      console.log(tmp);
     } catch (error) {
-      console.log(error);
+      console.log("152", error);
     } finally {
       rl.close();
     }
