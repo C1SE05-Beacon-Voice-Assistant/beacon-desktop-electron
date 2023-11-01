@@ -78,7 +78,8 @@ Step 4: Build and Package Your Electron Application
 "scripts": {
     "start": "electron-forge start",
     "release": "electron-builder",
-    "dist": "electron-builder build --win"
+    "dist": "electron-builder build --win",
+    "make": "electron-forge make",
 },
 "repository": {
     "type": "git",
@@ -129,6 +130,12 @@ npm install electron-log
   },
   "generateUpdatesFilesForAllChannels": true
 }
+```
+
+- Set up a GitHub token for your Electron auto-updater in environment variables
+
+```text
+GH_TOKEN = ""
 ```
 
 - Run the build command to generate the packaged application
