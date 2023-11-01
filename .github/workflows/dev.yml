@@ -1,9 +1,9 @@
-name: Build/release
+name: Build/dev
 
 on:
   push:
     branches:
-      - master
+      - dev
     tags:
       - v*
 

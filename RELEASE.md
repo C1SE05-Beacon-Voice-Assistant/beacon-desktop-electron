@@ -1,8 +1,9 @@
-##Step by step from build to release
+# Step by step from build to release
 
 ## Description
 
 Step 1: Set Up Your Development Environment
+
 - Install Node.js: Visit the official Node.js website
 - Install Electron
 
@@ -11,12 +12,14 @@ npm install -g electron
 ```
 
 Step 2: Create Your Electron Application
+
 - Create a new directory for your Electron application.
 - Initialize a new npm package by running the following command inside the directory:
 
 ```bash
 npm init -y
 ```
+
 - Install Electron as a dependency by running the following command:
 
 ```bash
@@ -61,7 +64,7 @@ if (process.env.NODE_ENV === "development") {
     join(__dirname + "/../logs", "main.log");
 }
 
-// call checkForUpdatesAndNotify 
+// call checkForUpdatesAndNotify
 if (require("electron-squirrel-startup")) app.quit();
 Object.defineProperty(app, "isPackaged", {
   get() {
@@ -71,9 +74,10 @@ Object.defineProperty(app, "isPackaged", {
 ```
 
 Step 4: Build and Package Your Electron Application
+
 - Add build and package scripts to your package.json file:
 
-```
+```json
 "version": "1.0.0-alpha",
 "scripts": {
     "start": "electron-forge start",
@@ -86,6 +90,7 @@ Step 4: Build and Package Your Electron Application
     "url": "git+https://github.com/C1SE05-Beacon-Voice-Assistant/beacon-desktop-electron.git"
 }
 ```
+
 - Install the electron-builder, electron-log package by running the following command
 
 ```bash
@@ -95,7 +100,7 @@ npm install electron-log
 
 - Configure the build options in electron-builder.json:
 
-```text
+```json
 {
   "productName": "Beacon",
   "appId": "com.beaconteam.autoupdater",
@@ -139,6 +144,7 @@ GH_TOKEN = ""
 ```
 
 - Run the build command to generate the packaged application
+
 ```bash
 npm run make
 ```
