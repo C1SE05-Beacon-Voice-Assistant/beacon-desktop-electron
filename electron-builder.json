@@ -1,11 +1,12 @@
 {
-  "productName": "Beacon",
-  "appId": "com.beaconteam.autoupdater",
+  "appId": "com.beacon.voice.assistant",
   "asar": true,
-  "copyright": "Copyright @2023 Beacon Team",
+  "productName": "Beacon Voice Assistant",
+  "copyright": "Copyright © 2023 ${author}",
   "directories": {
     "output": "release/${version}"
   },
+  "files": ["dist", "dist-electron"],
   "win": {
     "target": [
       {

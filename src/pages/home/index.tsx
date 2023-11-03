@@ -10,36 +10,23 @@ export default function HomePage() {
   const [resultNews, setResultNews] = useState<any[]>([]);
   const [currentCommand, setCurrentCommand] = useState<any>();
 
-  useEffect(() => {
-    window.electron.backgroundListen((result: string) => {
-      handleInput(result, currentCommand, resultNews).then((res) => {
-        console.log(`New result: ${res.result}`);
-        console.log(`Old result: ${resultNews}`);
-        if (res.command && res.result) {
-          setCurrentCommand(res.command);
-          setResultNews(res.result);
-        }
-      });
-    });
+  // useEffect(() => {
+  //   window.electron.backgroundListen((result: string) => {
+  //     handleInput(result, currentCommand, resultNews).then((res) => {
+  //       console.log(`New result: ${res.result}`);
+  //       console.log(`Old result: ${resultNews}`);
+  //       if (res.command && res.result) {
+  //         setCurrentCommand(res.command);
+  //         setResultNews(res.result);
+  //       }
+  //     });
+  //   });
 
-    return () => {
-      window.electron.stopBackgroundListen();
-    };
-  }, [resultNews, currentCommand]);
-  const handleTest = () => {
-    const { value } = document.querySelector(
-      'input[name="in"]'
-    ) as HTMLInputElement;
+  //   return () => {
+  //     window.electron.stopBackgroundListen();
+  //   };
+  // }, [resultNews, currentCommand]);
 
-    handleInput(value, currentCommand, resultNews).then((res) => {
-      console.log(`New result: `, res.result);
-      console.log(`Old result: `, resultNews);
-      if (res.command && res.result) {
-        setCurrentCommand(res.command);
-        setResultNews(res.result);
-      }
-    });
-  };
   return (
     <section className={styles.home__container}>
       <div className={styles.bot__vector}>
@@ -60,8 +47,6 @@ export default function HomePage() {
             </p>
           )}
         </div>
-        <input type="text" name="in" />
-        <button onClick={handleTest}>Test</button>
       </div>
       {isStart && (
         <div className={styles.container}>
