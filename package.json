@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && electron-builder build --win",
-    "release": "vite build && electron-builder",
+    "release": "vite build && electron-builder --publish always",
     "lint": "eslint --ext .ts,.tsx ."
   },
   "repository": {
