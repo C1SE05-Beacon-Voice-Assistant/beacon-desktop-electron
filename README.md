@@ -35,7 +35,7 @@ cd beacon-package
 cp .env.example .env
 ```
 
-- Create virtual environment name `venv39` in the `beacon-package` directory
+- Create virtual environment name `venv39` in the `beacon_package` directory
 
 ```bash
 python -m venv venv39
@@ -61,10 +61,30 @@ pip install -r requirements.txt
 cd ..
 ```
 
-- Run `npm run start` to start the application
+- Copy `.env.example` to `.env`
 
 ```bash
-  npm run start
+cp .env.example .env
+```
+
+- Install the required packages
+
+```bash
+npm install
+```
+
+## Usage
+
+- Run the application in development mode
+
+```bash
+npm start
+```
+
+- Package the application (read [here](https://www.electronjs.org/docs/tutorial/application-distribution) for more information)
+
+```bash
+npm run package
 ```
 
 ## How it works
@@ -72,6 +92,7 @@ cd ..
 - See [preload.js](./electron/preload.js) for the code that handles the communication between the Electron app and the Python script.
 
 ```js
+// Example
 function wakeUp() {
   ...
 }
@@ -84,6 +105,7 @@ contextBridge.exposeInMainWorld("electron", {
 - See [Type](./src/types.d.ts) for the type definitions of the functions in [preload.js](./electron/preload.js)
 
 ```ts
+// Example
 export interface IElectron {
   wakeUp: () => void;
   // declare other functions here
@@ -99,6 +121,7 @@ declare global {
 - See [HomePage](./src/pages/home/index.tsx) for the code that calls the functions in [preload.js](./electron/preload.js)
 
 ```jsx
+// Example
 const HomePage = () => {
   ...
   return (
@@ -110,6 +133,60 @@ const HomePage = () => {
 }
 ```
 
+## Give Command
+
+### Read News
+
+To give command about finding and reading the news, please give speech like this
+
+```text
+  Tôi muốn đọc tin tức/bản tin/thời sự
+  Tìm kiếm tin tức/bản tin/thời sự
+```
+
+Alternatively, for a shorter and equally effective command, you can say:
+
+```text
+  bản tin/tin tức/thời sự
+```
+
+Beacon will give you a list with a limit of 3 articles for you to choose from.  
+And to choose a specific article to read, please give a VERBAL speech like the following:
+
+> [!Important]
+> When it come to choose an article, please remember to be VERBAL
+
+```text
+  Chọn tin tức/bản tin số 0/1/2
+```
+
+Don't say like this:
+
+> [!Warning]
+> Beacon will not understand what you want to do!
+
+```text
+  Chọn 1
+```
+
+or
+
+```text
+  1
+```
+
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
+
+## Security
+
+See [SECURITY.md](./SECURITY.md) for more information.
+
+## Authors (C1SE05)
+
+- [Truong Thang](https://github.com/yensubldg)
+- [Pham Quoc Bao](https://github.com/bd500)
+- [Nguyen Van Vi](https://github.com/vdev0812)
+- [Nguyen Trieu Tien](https://github.com/nguyentrieutien1)
+- [Than Thi Thao](https://github.com/than11thao)

@@ -1,0 +1,36 @@
+{
+  "appId": "com.beacon.voice.assistant",
+  "asar": true,
+  "productName": "Beacon Voice Assistant",
+  "copyright": "Copyright © 2023 ${author}",
+  "directories": {
+    "output": "release"
+  },
+  "files": ["dist", "dist-electron"],
+  "win": {
+    "icon": "public/icon.png",
+    "target": [
+      {
+        "target": "nsis",
+        "arch": ["x64", "ia32"]
+      }
+    ],
+    "artifactName": "${productName}-Windows-${version}-Setup.${ext}",
+    "publish": ["github"]
+  },
+  "nsis": {
+    "oneClick": false,
+    "perMachine": true,
+    "allowToChangeInstallationDirectory": true,
+    "createDesktopShortcut": true,
+    "allowElevation": true,
+    "deleteAppDataOnUninstall": true
+  },
+  "publish": {
+    "provider": "github",
+    "releaseType": "release",
+    "private": true,
+    "channel": "latest"
+  },
+  "generateUpdatesFilesForAllChannels": true
+}

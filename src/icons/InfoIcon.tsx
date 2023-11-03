@@ -1,9 +1,3 @@
-// import React from 'react'
-
-// export default function InforIcon() {
-//   return (
-//     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="34" viewBox="0 0 32 34" fill="none">
-import React from "react";
 import styled from "styled-components";
 
 const StyledSVG = styled.svg`
@@ -37,9 +31,9 @@ export default function InfoIcon() {
           width="36"
           height="36"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feColorMatrix
             in="SourceAlpha"
             type="matrix"

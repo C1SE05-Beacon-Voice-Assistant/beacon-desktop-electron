@@ -92,10 +92,17 @@ typings/
 # Electron-Forge
 out/
 
+# Electron Builder
+dist/
+release/
+
 # Beacon packages
 beacon-package/venv*
 beacon-package/__pycache__
 beacon-package/*/__pycache__
 .idea
+*.wav
+/.vscode
+package-lock.json
 
-.vscode/
+dist-electron/

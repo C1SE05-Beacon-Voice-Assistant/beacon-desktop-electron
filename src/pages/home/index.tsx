@@ -1,11 +1,31 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import bot from "~/assets/bot.png";
-import vector from "~/assets/vector.svg";
-import styles from "./HomePage.module.css";
 import microphone from "~/assets/microphone.png";
+import vector from "~/assets/vector.svg";
+import { handleInput } from "~/lib/handleSpeech";
+import styles from "./HomePage.module.css";
 
 export default function HomePage() {
   const [isStart, setIsStart] = useState<boolean | null>(false);
+  const [resultNews, setResultNews] = useState<any[]>([]);
+  const [currentCommand, setCurrentCommand] = useState<any>();
+
+  // useEffect(() => {
+  //   window.electron.backgroundListen((result: string) => {
+  //     handleInput(result, currentCommand, resultNews).then((res) => {
+  //       console.log(`New result: ${res.result}`);
+  //       console.log(`Old result: ${resultNews}`);
+  //       if (res.command && res.result) {
+  //         setCurrentCommand(res.command);
+  //         setResultNews(res.result);
+  //       }
+  //     });
+  //   });
+
+  //   return () => {
+  //     window.electron.stopBackgroundListen();
+  //   };
+  // }, [resultNews, currentCommand]);
 
   return (
     <section className={styles.home__container}>
@@ -27,7 +47,6 @@ export default function HomePage() {
             </p>
           )}
         </div>
-        {!isStart && <button onClick={() => setIsStart(true)}>Bắt đầu!</button>}
       </div>
       {isStart && (
         <div className={styles.container}>

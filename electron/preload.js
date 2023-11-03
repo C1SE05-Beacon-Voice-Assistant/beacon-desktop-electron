@@ -1,25 +1,29 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { PythonShell } = require("python-shell");
-const { contextBridge } = require("electron");
+// const { Builder } = require("selenium-webdriver");
+const { contextBridge, ipcRenderer } = require("electron");
+const path = require("path");
+const BeaconSpeech = require(path.join(__dirname, "beacon_speech.js"));
+const createBeaconVolume = require(path.join(__dirname, "control_volume.js"));
+// const listenToMusic = require(path.join(__dirname, "listen_to_music.js"));
+// const ReadNewsController = require(path.join(
+//   __dirname,
+//   "read_news_controller.js"
+// ));
+// const NewsReader = require("./helpers/newsReader.js"); // remember join path
 
-function wakeUp() {
-  const options = {
-    mode: "text",
-    pythonPath: "./beacon-package/venv39/Scripts/python.exe",
-    pythonOptions: ["-u"], // get print results in real-time
-    encoding: "utf8",
-    scriptPath: "./beacon-package",
-  };
+const beacon = new BeaconSpeech("Beacon", "Hanoi");
+// const driver = new Builder().forBrowser("chrome").build();
 
-  PythonShell.run("beacon_speech.py", options)
-    .then((messages) => {
-      console.log("messages: %j", messages);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-}
+const beaconVolume = createBeaconVolume().then((result) => result);
+// const listenToMusicWithDriver = listenToMusic(driver);
+// const readNews = new ReadNewsController(driver);
+// const searchNewsBy = readNews.search.bind(readNews);
+// const selectOneToRead = readNews.selectOneToRead.bind(readNews);
 
 contextBridge.exposeInMainWorld("electron", {
-  wakeUp: wakeUp,
+  backgroundListen: beacon.backgroundListen.bind(beacon),
+  stopBackgroundListen: beacon.stopBackgroundListen.bind(beacon),
+  beaconVolume,
+  // listenToMusic: listenToMusicWithDriver,
+  // readNews: { searchNewsBy, selectOneToRead },
 });
