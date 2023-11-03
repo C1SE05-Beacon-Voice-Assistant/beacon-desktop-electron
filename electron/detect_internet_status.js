@@ -9,7 +9,6 @@ const checkInternetConnection = (callback) => {
       callback(false);
     });
 };
-
 checkInternetConnection((isConnected) => {
   if (isConnected) {
     console.log("Máy tính đang kết nối internet.");
@@ -19,3 +18,5 @@ checkInternetConnection((isConnected) => {
 
   return isConnected;
 });
+
+module.exports = { checkInternetConnection };
