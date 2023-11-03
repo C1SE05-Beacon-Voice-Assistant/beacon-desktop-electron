@@ -1,6 +1,6 @@
 {
   "name": "beacon-desktop-electron",
-  "version": "1.0.0-beta.3",
+  "version": "1.0.0",
   "description": "Beacon Desktop Electron App",
   "license": "MIT",
   "main": "dist-electron/main.js",
