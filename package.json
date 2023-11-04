@@ -7,6 +7,7 @@
   "author": "Beacon Team",
   "scripts": {
     "dev": "vite",
+    "make": "npm run build && electron-builder build --win",
     "build": "vite build",
     "release": "vite build && electron-builder --publish always",
     "lint": "eslint --ext .ts,.tsx ."
