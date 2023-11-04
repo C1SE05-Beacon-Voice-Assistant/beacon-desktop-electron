@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-// const { Builder } = require("selenium-webdriver");
+const { Builder } = require("selenium-webdriver");
 const { contextBridge, ipcRenderer } = require("electron");
 const path = require("path");
 const BeaconSpeech = require(path.join(__dirname, "beacon_speech.js"));
@@ -9,7 +9,7 @@ const createBeaconVolume = require(path.join(__dirname, "control_volume.js"));
 //   __dirname,
 //   "read_news_controller.js"
 // ));
-// const NewsReader = require("./helpers/newsReader.js"); // remember join path
+const getAudioDevices = require(path.join(__dirname, "detect_device.js"));
 
 const beacon = new BeaconSpeech("Beacon", "Hanoi");
 // const driver = new Builder().forBrowser("chrome").build();
@@ -26,4 +26,5 @@ contextBridge.exposeInMainWorld("electron", {
   beaconVolume,
   // listenToMusic: listenToMusicWithDriver,
   // readNews: { searchNewsBy, selectOneToRead },
+  getAudioDevices,
 });
