@@ -4,6 +4,7 @@ export interface IElectron {
   listenToMusic: any;
   beaconVolume: any;
   readNews: any;
+  getAudioDevices: () => any;
 }
 
 declare global {

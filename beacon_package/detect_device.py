@@ -23,9 +23,14 @@ def get_audio_output():
 
     return result
 
-if "__name__" == "__main__":
-    print(get_audio_input())
-    print(get_audio_output())
+if __name__ == "__main__":
+    input_devices = get_audio_input()
+    output_devices = get_audio_output()
+    
+    for ide in input_devices:
+        print(ide)
+    for ode in output_devices:
+        print(ode)
 
 
 
