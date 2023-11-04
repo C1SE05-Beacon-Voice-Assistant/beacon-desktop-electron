@@ -1,16 +1,18 @@
 {
-  "productName": "Beacon",
-  "appId": "com.beaconteam.autoupdater",
+  "appId": "com.beacon.voice.assistant",
   "asar": true,
-  "copyright": "Copyright @2023 Beacon Team",
+  "productName": "Beacon Voice Assistant",
+  "copyright": "Copyright © 2023 ${author}",
   "directories": {
-    "output": "release/${version}"
+    "output": "release"
   },
+  "files": ["dist", "dist-electron"],
   "win": {
+    "icon": "public/icon.png",
     "target": [
       {
         "target": "nsis",
-        "arch": ["x64"]
+        "arch": ["x64", "ia32"]
       }
     ],
     "artifactName": "${productName}-Windows-${version}-Setup.${ext}",
@@ -28,7 +30,7 @@
     "provider": "github",
     "releaseType": "release",
     "private": true,
-    "channel": "alpha"
+    "channel": "latest"
   },
   "generateUpdatesFilesForAllChannels": true
 }
