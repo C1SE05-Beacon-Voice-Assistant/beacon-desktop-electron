@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { Builder } = require("selenium-webdriver");
-const { contextBridge } = require("electron");
+const { contextBridge, ipcRenderer } = require("electron");
 const path = require("path");
 const BeaconSpeech = require(path.join(__dirname, "beacon_speech.js"));
 const createBeaconVolume = require(path.join(__dirname, "control_volume.js"));
