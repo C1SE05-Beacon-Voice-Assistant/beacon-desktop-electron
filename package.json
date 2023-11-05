@@ -26,7 +26,6 @@
     "cheerio": "^1.0.0-rc.12",
     "dotenv": "^16.3.1",
     "electron-router-dom": "^1.0.5",
-    "electron-squirrel-startup": "^1.0.0",
     "electron-updater": "^6.1.4",
     "loudness": "^0.4.2",
     "microsoft-cognitiveservices-speech-sdk": "^1.32.0",

@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 "use strict";
 
-import type { BrowserWindowConstructorOptions as WindowOptions } from "electron";
+import {
+  BrowserWindowConstructorOptions as WindowOptions,
+  ipcMain,
+} from "electron";
 import { app, BrowserWindow, dialog } from "electron";
 import log from "electron-log";
 import path, { join } from "path";
@@ -19,8 +22,6 @@ if (!app.requestSingleInstanceLock()) {
   app.quit();
   process.exit(0);
 }
-
-if (require("electron-squirrel-startup")) app.quit();
 
 Object.defineProperty(app, "isPackaged", {
   get() {
@@ -70,6 +71,8 @@ const createWindow = (options: WindowOptions = {}) => {
 };
 
 app.on("window-all-closed", () => {
+  // send quit message to renderer
+  mainWindow?.webContents.send("before-quit");
   app.quit();
   mainWindow = null;
 });
@@ -84,12 +87,12 @@ app.whenReady().then(() => {
     private: true,
   });
 
-  autoUpdater.checkForUpdates();
-});
+  autoUpdater.autoDownload = false;
+  autoUpdater.allowDowngrade = true;
+  autoUpdater.allowPrerelease = true;
 
-autoUpdater.autoDownload = false;
-autoUpdater.allowDowngrade = true;
-autoUpdater.allowPrerelease = true;
+  // autoUpdater.checkForUpdates();
+});
 
 autoUpdater.on("update-available", (updateInfo) => {
   // show update available notification for user
@@ -106,4 +109,8 @@ autoUpdater.on("update-available", (updateInfo) => {
         autoUpdater.downloadUpdate();
       }
     });
+});
+
+ipcMain.on("on-quit", (_event, value) => {
+  console.log(value); // will print value to Node console
 });
