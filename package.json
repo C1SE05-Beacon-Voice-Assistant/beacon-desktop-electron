@@ -22,6 +22,7 @@
     "@mui/material": "^5.14.11",
     "@rollup/plugin-commonjs": "^25.0.7",
     "@types/selenium-webdriver": "^4.1.19",
+    "aplay": "^1.2.0",
     "axios": "^1.4.0",
     "cheerio": "^1.0.0-rc.12",
     "dotenv": "^16.3.1",
