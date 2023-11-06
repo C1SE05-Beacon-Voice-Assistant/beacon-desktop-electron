@@ -4,7 +4,10 @@ const readline = require("readline");
 const { promisify } = require("util");
 const NewsReader = require("./helpers/newsReader.js");
 const { By } = require("selenium-webdriver");
-// const ChromeDriver = require("./helpers/driver.js");
+const ChromeDriver = require("./helpers/driver.js");
+
+const { exec } = require('child_process');
+const player = require('play-sound')();
 
 const SearchNewsBy = {
   KEYWORD: "keyword",
@@ -21,15 +24,15 @@ const rl = readline.createInterface({
 const questionAsync = promisify(rl.question).bind(rl);
 
 class ReadNewsController {
-  constructor(chromeDriver) {
-    this.driver = chromeDriver;
-    this.newsReader = new NewsReader();
-  }
-
-  // constructor() {
-  //   this.driver = new ChromeDriver().getInstance();
+  // constructor(chromeDriver) {
+  //   this.driver = chromeDriver;
   //   this.newsReader = new NewsReader();
   // }
+
+  constructor() {
+    this.driver = new ChromeDriver().getInstance();
+    this.newsReader = new NewsReader();
+  }
 
   async getNewsInList(list) {
     const result = [];
@@ -83,12 +86,33 @@ class ReadNewsController {
   }
 
   async searchByKeyword(keyword) {
-    const url = `https://timkiem.vnexpress.net/?q=${keyword}`;
-    await this.driver.get(url);
-    const articlesList = await this.driver.findElements(
-      By.xpath(`//div[@id='result_search']/article[position()<4]`)
-    );
-    return this.getNewsInList(articlesList);
+    try{ 
+      const url = `https://timkiem.vnexpress.net/?q=${keyword}`;
+      await this.driver.get(url);
+      const articlesList = await this.driver.findElements(
+        By.xpath(`//div[@id='result_search']/article[position()<4]`)
+      );
+      // return this.getNewsInList(articlesList);
+      const newsList = await this.getNewsInList(articlesList);
+
+      if (newsList.length === 0) {
+        throw new Error(`Không tìm thấy kết quả tìm kiếm cho từ khóa "${keyword}"`);
+      }
+
+      return newsList;
+    } catch (error) {
+      console.error('An error occurred:', error);
+
+      // Phát âm thanh lỗi
+      const audioPath = ' C:\\Users\\USER\\Documents\\beacon-desktop-electron\\Youtobe.mp3'; // Đường dẫn đến file âm thanh lỗi
+      const play = player.play(audioPath, (err) => {
+        if (err) {
+          console.error('An error occurred while playing the sound:', err);
+        }
+      });
+
+      return []; // Trả về một mảng rỗng trong trường hợp không tìm thấy kết quả
+    }
   }
 
   async selectOneToRead(newsList, num) {
@@ -151,13 +175,11 @@ class ReadNewsController {
       );
       console.log(tmp);
     } catch (error) {
-      console.log("152", error);
-    } finally {
-      rl.close();
+      console.log("152", error);  
     }
   }
 }
 
-// new ReadNewsController().start();
+new ReadNewsController().start();
 
 module.exports = ReadNewsController;
