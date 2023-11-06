@@ -1,14 +1,15 @@
 {
   "name": "beacon-desktop-electron",
-  "version": "1.0.0-beta.3",
+  "version": "1.0.0",
   "description": "Beacon Desktop Electron App",
   "license": "MIT",
   "main": "dist-electron/main.js",
   "author": "Beacon Team",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && electron-builder build --win",
-    "release": "vite build && electron-builder",
+    "make": "npm run build && electron-builder build --win",
+    "build": "vite build",
+    "release": "vite build && electron-builder --publish always",
     "lint": "eslint --ext .ts,.tsx ."
   },
   "repository": {
@@ -16,7 +17,6 @@
     "url": "git+https://github.com/C1SE05-Beacon-Voice-Assistant/beacon-desktop-electron.git"
   },
   "dependencies": {
-    "@electron-forge/publisher-github": "^6.4.2",
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
     "@mui/material": "^5.14.11",
@@ -25,6 +25,7 @@
     "aplay": "^1.2.0",
     "axios": "^1.4.0",
     "cheerio": "^1.0.0-rc.12",
+    "chromedriver": "^119.0.0",
     "dotenv": "^16.3.1",
     "electron-router-dom": "^1.0.5",
     "electron-squirrel-startup": "^1.0.0",
