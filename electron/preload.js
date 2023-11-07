@@ -52,5 +52,9 @@ function playErrorSound() {
 const audioPath = "path/to/error-sound.mp3";
 // Thực hiện logic phát âm thanh lỗi tại đây
   const voiceFilePath = " C:\\Users\\USER\\Documents\\beacon-desktop-electron\\Youtobe.mp3";
-  player.play(voiceFilePath)
+  player.play(voiceFilePath, (err) => {
+    if (err) {
+      console.error("Máy tính không có internet. Vui lòng kết nối mạng:", err);
+    }
+  });
 }
