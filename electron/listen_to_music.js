@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { By, Builder } = require("selenium-webdriver");
 const driver = new Builder().forBrowser("chrome").build();
-const { exec } = require("child_process");
-const MPlayer = require("mplayer");
-// const player = require('play-sound')({player: "C:\Users\THAN THI THAO\Downloads\mplayer_10\MPlayer-1.0rc2-gui\MPlayer-1.0rc2-gui\gmplayer.exe"});
-var player = require('play-sound')(opts = {});
+// const { exec } = require("child_process");
+// const MPlayer = require("mplayer");
+// var player = require('play-sound')(opts = {});
+const executeException = require('./situation_except');
 
 async function listenToMusic(driver) {
   let platformName = null;
@@ -33,17 +33,12 @@ async function listenToMusic(driver) {
       }
     } catch (error) {
       console.error("Lỗi xảy ra khi phát nhạc trên YouTube:", error);
-        // Trả về voice file âm thanh có sẵn trong máy
-      // const voiceFilePath = `G:\\Electron\\beacon-desktop-electron\\foo.mp3`;
-      player.play('foo.mp3', (err) => {
-        if (err) {
-          console.error("Lỗi xảy ra khi phát âm thanh:", err);
-        }
-      });
+      executeException('listenToMusicYoutobe')
     }
   }
 
   async function playOnMp3() {
+    try {
       platformName = "mp3";
       const url = `https://zingmp3.vn/tim-kiem/tat-ca?q=${songName}`;
 
@@ -71,6 +66,10 @@ async function listenToMusic(driver) {
       } else {
         throw new Error("No show play buttons found");
       }
+    } catch (error) {
+      console.error("Lỗi xảy ra khi phát nhạc trên Mp3:", error);
+      executeException('listenToMusicMp3') 
+    }
   }
 
   async function toggle(isPlay = false) {
@@ -119,8 +118,8 @@ async function listenToMusic(driver) {
 }
 
 listenToMusic(driver).then((res) => {
-  res.searchSong("")
-  res.playOnYoutube()
+  res.searchSong("fnwenwenfoewnfweo")
+  res.playOnMp3()
 })
 
 module.exports = listenToMusic;
