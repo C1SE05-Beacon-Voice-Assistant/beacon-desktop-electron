@@ -10,22 +10,22 @@ export default function HomePage() {
   const [resultNews, setResultNews] = useState<any[]>([]);
   const [currentCommand, setCurrentCommand] = useState<any>();
 
-  useEffect(() => {
-    window.electron.backgroundListen((result: string) => {
-      handleInput(result, currentCommand, resultNews).then((res) => {
-        console.log(`New result: ${res.result}`);
-        console.log(`Old result: ${resultNews}`);
-        if (res.command && res.result) {
-          setCurrentCommand(res.command);
-          setResultNews(res.result);
-        }
-      });
-    });
+  // useEffect(() => {
+  //   window.electron.backgroundListen((result: string) => {
+  //     handleInput(result, currentCommand, resultNews).then((res) => {
+  //       console.log(`New result: ${res.result}`);
+  //       console.log(`Old result: ${resultNews}`);
+  //       if (res.command && res.result) {
+  //         setCurrentCommand(res.command);
+  //         setResultNews(res.result);
+  //       }
+  //     });
+  //   });
 
-    return () => {
-      window.electron.stopBackgroundListen();
-    };
-  }, [resultNews, currentCommand]);
+  //   return () => {
+  //     window.electron.stopBackgroundListen();
+  //   };
+  // }, [resultNews, currentCommand]);
 
   return (
     <section className={styles.home__container}>
