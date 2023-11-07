@@ -1,8 +1,13 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { Builder } = require("selenium-webdriver");
 const { contextBridge, ipcRenderer } = require("electron");
+const chromedriverPath = require("chromedriver").path.replace(
+  "app.asar",
+  "app.asar.unpacked"
+);
 const path = require("path");
-const BeaconSpeech = require(path.join(__dirname, "beacon_speech.js"));
+const { ServiceBuilder } = require("selenium-webdriver/chrome");
+// const BeaconSpeech = require(path.join(__dirname, "beacon_speech.js"));
 const createBeaconVolume = require(path.join(__dirname, "control_volume.js"));
 const listenToMusic = require(path.join(__dirname, "listen_to_music.js"));
 const ReadNewsController = require(path.join(
@@ -10,6 +15,17 @@ const ReadNewsController = require(path.join(
   "read_news_controller.js"
 ));
 const getAudioDevices = require(path.join(__dirname, "detect_device.js"));
+const serviceBuilder = new ServiceBuilder(chromedriverPath);
+const driver = new Builder()
+  .forBrowser("chrome")
+  .setChromeService(serviceBuilder)
+  .build();
+
+const beaconVolume = createBeaconVolume().then((result) => result);
+const listenToMusicWithDriver = listenToMusic(driver);
+const readNews = new ReadNewsController(driver);
+const searchNewsBy = readNews.search.bind(readNews);
+const selectOneToRead = readNews.selectOneToRead.bind(readNews);
 const { start } = require(path.join(__dirname, "start.js"));
 const beacon = new BeaconSpeech("Beacon", "Hanoi");
 

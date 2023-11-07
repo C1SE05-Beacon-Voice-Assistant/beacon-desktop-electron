@@ -24,6 +24,7 @@
     "@types/selenium-webdriver": "^4.1.19",
     "axios": "^1.4.0",
     "cheerio": "^1.0.0-rc.12",
+    "chromedriver": "^119.0.0",
     "dotenv": "^16.3.1",
     "electron-router-dom": "^1.0.5",
     "electron-squirrel-startup": "^1.0.0",
