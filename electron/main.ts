@@ -4,8 +4,10 @@
 import {
   BrowserWindowConstructorOptions as WindowOptions,
   ipcMain,
+  app,
+  BrowserWindow,
+  dialog,
 } from "electron";
-import { app, BrowserWindow, dialog } from "electron";
 import log from "electron-log";
 import path, { join } from "path";
 import MenuBuilder from "../src/menu";
@@ -73,8 +75,10 @@ const createWindow = (options: WindowOptions = {}) => {
 app.on("window-all-closed", () => {
   // send quit message to renderer
   mainWindow?.webContents.send("before-quit");
-  app.quit();
-  mainWindow = null;
+  if (process.platform !== "darwin") {
+    app.quit();
+  }
+  // mainWindow = null;
 });
 
 app.whenReady().then(() => {
@@ -109,8 +113,4 @@ autoUpdater.on("update-available", (updateInfo) => {
         autoUpdater.downloadUpdate();
       }
     });
-});
-
-ipcMain.on("on-quit", (_event, value) => {
-  console.log(value); // will print value to Node console
 });

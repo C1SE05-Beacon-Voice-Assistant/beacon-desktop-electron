@@ -49,6 +49,7 @@ export default defineConfig({
                 "helpers/enum": "electron/helpers/enum.js",
                 "helpers/newsReader": "electron/helpers/newsReader.js",
                 detect_device: "electron/detect_device.js",
+                start: "electron/start.js",
               },
               output: {
                 entryFileNames: "[name].js",
