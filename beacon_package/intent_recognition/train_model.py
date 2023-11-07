@@ -3,6 +3,8 @@ from vncorenlp import VnCoreNLP
 from pre_train_phobert import pre_train
 from read_csv_file import read_csv
 import numpy as np
+import seaborn as sns
+import pandas as pd
 
 
 # Khởi tạo tokenizer và mô hình PhoBERT
@@ -60,7 +62,7 @@ def flat_accuracy(preds, labels):
   labels_flat = labels.flatten()
   return np.sum(pred_flat == labels_flat) / len(labels_flat)
 
-epochs = 10
+epochs = 1
 for epoch in range(0, epochs):
     print('======== Epoch {:} / {:} ========'.format(epoch + 1, epochs))
     print('Training...')
@@ -69,6 +71,7 @@ for epoch in range(0, epochs):
     train_accuracy = 0
     nb_train_steps = 0
     train_f1 = 0
+    criterion = torch.nn.CrossEntropyLoss()
 
     for batch in train_loader:
         input_ids, attention_mask, labels = batch
@@ -82,12 +85,13 @@ for epoch in range(0, epochs):
         b_labels = batch[2].to(device)
 
         optimizer.zero_grad()
-        outputs = model.forward(input_ids, attention_mask=attention_mask)
-        loss = outputs[0]
-        logits = loss.detach().cpu().numpy()
-        label_ids = b_labels.to('cpu').numpy()
-        total_loss += loss
-        # loss.backward()
+        outputs = model(input_ids, attention_mask=attention_mask)
+        loss = criterion(outputs.last_hidden_state, labels)
+        # loss = outputs[0]
+        # logits = loss.detach().cpu().numpy()
+        # label_ids = b_labels.to('cpu').numpy()
+        loss.backward()
+        total_loss += loss.item()
         # tmp_train_accuracy, tmp_train_f1 = flat_accuracy(logits, label_ids)
         # train_accuracy += tmp_train_accuracy
         # train_f1 += tmp_train_f1
@@ -99,9 +103,22 @@ for epoch in range(0, epochs):
     print(" F1 score: {0:.4f}".format(train_f1 / nb_train_steps))
     print(" Average training loss: {}", average_loss)
 
+sentence = "Tôi muốn đọc báo mới nhất hôm nay."
+
+#
+# def predict(sent, model):
+#   with torch.no_grad():
+#
+#       input_ids = torch.tensor([[7592]])
+#       output = model(input_ids, attention_mask=attention_mask)
+#       ids = torch.max(output, dim=1)
+#       return ids
+#
+# print(f"Kết quả dự đoán: {predict(sentence, model)}")
+
 # Lưu mô hình đã huấn luyện
-model.save_pretrained('E:/PROJECT/beacon-desktop-electron/beacon_package/intent_recognition/model')
-tokenizer.save_pretrained('E:/PROJECT/beacon-desktop-electron/beacon_package/intent_recognition/tokenizer')
+# model.save_pretrained('E:/PROJECT/beacon-desktop-electron/beacon_package/intent_recognition/model')
+# tokenizer.save_pretrained('E:/PROJECT/beacon-desktop-electron/beacon_package/intent_recognition/tokenizer')
 
 # Đóng VnCoreNLP
 vncorenlp.close()

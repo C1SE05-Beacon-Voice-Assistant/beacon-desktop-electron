@@ -1,39 +1,48 @@
-
 import torch
-import TorchCRF
-import numpy as np
+from keras.src.utils import pad_sequences
 from torch import nn
-from keras.utils import pad_sequences
-from TorchCRF import CRF
+
 from pre_train_phobert import pre_train
 
-tokenizer, phoBERT = pre_train()
+# # Khởi tạo tokenizer và mô hình PhoBERT
+tokenizer, model = pre_train()
+#
+# # Định nghĩa số lớp của mô hình
+# num_labels = 4
+# model.config.num_labels = num_labels
+#
+model_path = 'E:/PROJECT/beacon-desktop-electron/beacon_package/intent_recognition/model/pytorch_model.bin'
+# model.load_state_dict(torch.load(model_path))
+#
+# # Chuẩn bị câu đầu vào
+sentence = "Tôi muốn đọc báo mới nhất hôm nay."
+#
+# # Tiền xử lý câu đầu vào
+# inputs = tokenizer.encode_plus(
+#     sentence,
+#     add_special_tokens=True,
+#     padding='max_length',
+#     truncation=True,
+#     max_length=128,
+#     return_tensors='pt'
+# )
+#
+# # Dự đoán ý định từ câu đầu vào
+# with torch.no_grad():
+#   outputs = model(**inputs)
+#   predicted_labels = torch.argmax(outputs[0], dim=1).tolist()
+#
+# # In kết quả dự đoán
+# label_mapping = {0: 'Listen to music', 1: 'GPT AI', 2: 'Read newspaper', 3: 'User manual'}
+# # predicted_label = label_mapping[predicted_labels[0]]
+# print(f"Kết quả dự đoán: {predicted_labels[0]}")
 
-#IC
 
-label = ['greetings',
- 'confirm',
- 'thank_you',
- 'confirm#thank_you',
- 'inter_time',
- 'want_apply',
- 'inter_time_type',
- 'not_suitable',
- 'inter_position',
- 'require_jd',
- 'require_jd#inter_position',
- 'job_requirement',
- 'how_to_apply',
- 'confirm_email',
- 'confirm_submit_CV',
- 'personal_experience',
- 'salary',
- 'response',
- 'if_recruit',
- 'training_plan',
- 'position_slot',
- 'apply_deadline']
-LABEL_SIZE = len(label)
+label = ['Listen to music',
+ 'GPT AI',
+ 'Read newspaper',
+ 'User manual',]
+
 class CBmodel(nn.Module):
   def __init__(self, pre_train, n_dim, num_label):
     super().__init__()
@@ -58,24 +67,22 @@ class CBmodel(nn.Module):
   def make_bert_mask(self, x, pad_id):
     bert_masks = (x != pad_id).float()  # (B, L)
     return torch.Tensor(bert_masks)
-
-
-#test phase
-
 def vectorlization(sent):
   seq = tokenizer.encode(sent)
   seq_pad = pad_sequences([seq], 50, padding='post', value=1.0)
   return torch.tensor(seq_pad)
 
 def predict(sent, model):
-    with torch.no_grad():
-      input = vectorlization(sent)
-      output = model(input)
-    ids = torch.argmax(output[0])
-    return label[ids]
-if __name__ == "__main__":
+  with torch.no_grad():
+    input = vectorlization(sent)
+    output = model(input)
+  ids = torch.argmax(output[0])
+  return ids
 
-    model_ic = CBmodel(phoBERT, 768, LABEL_SIZE)
-    model_ic = torch.load("E:\CBmodel_Ver1.pth", map_location=torch.device('cpu'))
-    model_ic.eval()
-    print(predict("chỗ mình còn tuyển tts không "))
+
+# model1 = CBmodel(model, 768, 4)
+# # model1 = torch.load(model_path, map_location=torch.device('cpu'))
+# model1.load_state_dict(torch.load(model_path))
+# model1.eval()
+
+# print(f"Kết quả dự đoán: {predict(sentence, model1)}")
