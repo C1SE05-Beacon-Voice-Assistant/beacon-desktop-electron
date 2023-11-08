@@ -1,4 +1,4 @@
-const excute_intent = async (output_type, object) => {
+const execute_intent = async (output_type, object) => {
   const features = [
     {
       name: "play_music",
@@ -6,7 +6,7 @@ const excute_intent = async (output_type, object) => {
         object.then(async (res) => {
           await res.searchSong("Anh nho em nguoi yeu cu");
           // await res.playOnYoutube();
-          await res.playOnMp3()
+          await res.playOnMp3();
         }),
     },
     {
@@ -76,7 +76,7 @@ const excute_intent = async (output_type, object) => {
       name: "next_content",
       feature_name: () =>
         object.then(async (res) => {
-          await res.next()
+          await res.next();
         }),
     },
   ];
@@ -87,7 +87,7 @@ const excute_intent = async (output_type, object) => {
   });
 };
 module.exports = {
-  excute_intent,
+  execute_intent,
 };
 // read_nnuews
 // user_maal
