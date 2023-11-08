@@ -20,7 +20,11 @@ export default defineConfig({
           ],
         }),
       ],
+      output: {
+        manualChunks: undefined,
+      },
     },
+    chunkSizeWarningLimit: 1000,
   },
   resolve: {
     alias: {
@@ -56,6 +60,7 @@ export default defineConfig({
                 chunkFileNames: "[name].js",
                 assetFileNames: "[name].[ext]",
                 inlineDynamicImports: false,
+                manualChunks: undefined,
               },
             },
           },

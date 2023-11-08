@@ -4,7 +4,6 @@ const readline = require("readline");
 const { promisify } = require("util");
 const NewsReader = require("./helpers/newsReader.js");
 const { By } = require("selenium-webdriver");
-// const ChromeDriver = require("./helpers/driver.js");
 
 const SearchNewsBy = {
   KEYWORD: "keyword",

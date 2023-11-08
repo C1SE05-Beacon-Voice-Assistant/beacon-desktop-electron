@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-require("dotenv").config();
 const { Builder } = require("selenium-webdriver");
-const { contextBridge, ipcRenderer } = require("electron");
+const { contextBridge } = require("electron");
 const chromedriverPath = require("chromedriver").path.replace(
   "app.asar",
   "app.asar.unpacked"

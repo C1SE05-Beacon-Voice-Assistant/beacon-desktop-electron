@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const http = require("http");
 
 const checkInternetConnection = (callback) => {

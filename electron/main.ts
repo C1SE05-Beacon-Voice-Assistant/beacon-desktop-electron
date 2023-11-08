@@ -20,8 +20,6 @@ if (!app.requestSingleInstanceLock()) {
   process.exit(0);
 }
 
-if (require("electron-squirrel-startup")) app.quit();
-
 Object.defineProperty(app, "isPackaged", {
   get() {
     return true;
@@ -35,11 +33,6 @@ if (process.env.NODE_ENV === "development") {
 }
 
 let mainWindow: BrowserWindow | null = null;
-
-if (process.env.NODE_ENV === "production") {
-  const sourceMapSupport = require("source-map-support");
-  sourceMapSupport.install();
-}
 
 const createWindow = (options: WindowOptions = {}) => {
   const config: WindowOptions = {
