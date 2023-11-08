@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { By } = require("selenium-webdriver");
+const executeException = require("./situation_except");
+const { By, Builder } = require("selenium-webdriver");
+const driver = new Builder().forBrowser("chrome").build();
 
 async function listenToMusic(driver) {
   let platformName = null;
@@ -14,44 +16,58 @@ async function listenToMusic(driver) {
   }
 
   async function playOnYoutube() {
-    platformName = "youtube";
-    const url = `https://yewtu.be/search?q=${songName}`;
-    await driver.get(url);
+    try {
+      platformName = "youtube";
+      const url = `https://yewtu.be/search?q=${songName}`;
+      await driver.get(url);
 
-    const songList = await driver.findElements(By.className("video-card-row"));
-    if (songList.length > 0) {
-      await driver.sleep(1000);
-      await songList[0].click();
+      const songList = await driver.findElements(
+        By.className("video-card-row")
+      );
+      if (songList.length > 0) {
+        await driver.sleep(1000);
+        await songList[0].click();
+      } else {
+        throw new Error("Không tìm thấy bài hát trên YouTube");
+      }
+    } catch (error) {
+      console.error("Lỗi xảy ra khi phát nhạc trên YouTube:", error);
+      executeException("listenToMusicYoutube");
     }
   }
 
   async function playOnMp3() {
-    platformName = "mp3";
-    const url = `https://zingmp3.vn/tim-kiem/tat-ca?q=${songName}`;
+    try {
+      platformName = "mp3";
+      const url = `https://zingmp3.vn/tim-kiem/tat-ca?q=${songName}`;
 
-    await driver.get(url);
+      await driver.get(url);
 
-    const showPlayButtons = await driver.findElements(
-      By.css("div.zm-carousel-item")
-    );
-
-    if (showPlayButtons.length > 0) {
-      await driver.sleep(1000);
-      await showPlayButtons[0].click();
-
-      const playButton = await driver.findElements(
-        By.css("button.action-play")
+      const showPlayButtons = await driver.findElements(
+        By.css("div.zm-carousel-item")
       );
 
-      if (playButton.length > 0) {
+      if (showPlayButtons.length > 0) {
         await driver.sleep(1000);
-        await playButton[0].click();
-        return "Done";
+        await showPlayButtons[0].click();
+
+        const playButton = await driver.findElements(
+          By.css("button.action-play")
+        );
+
+        if (playButton.length > 0) {
+          await driver.sleep(1000);
+          await playButton[0].click();
+          return "Done";
+        } else {
+          throw new Error("No play button found");
+        }
       } else {
-        throw new Error("No play button found");
+        throw new Error("No show play buttons found");
       }
-    } else {
-      throw new Error("No show play buttons found");
+    } catch (error) {
+      console.error("Lỗi xảy ra khi phát nhạc trên Mp3:", error);
+      executeException("listenToMusicMp3");
     }
   }
 
@@ -99,5 +115,10 @@ async function listenToMusic(driver) {
     next,
   };
 }
+
+listenToMusic(driver).then((res) => {
+  res.searchSong("fnwenwenfoewnfweo");
+  res.playOnMp3();
+});
 
 module.exports = listenToMusic;
