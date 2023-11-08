@@ -94,6 +94,8 @@ class ReadNewsController {
   async selectOneToRead(newsList, num) {
     console.log(newsList);
 
+    if (newsList.length === 0) throw new Error("Không có tin tức nào để đọc");
+
     await this.driver.get(newsList[num].url);
     const html = await this.driver.getPageSource();
     return this.newsReader.getNewsContent(
