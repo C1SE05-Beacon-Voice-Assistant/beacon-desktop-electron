@@ -11,6 +11,7 @@ const { excute_intent } = require("./excute_intent");
 // const BeaconSpeech = require(path.join(__dirname, "beacon_speech.js"));
 const createBeaconVolume = require(path.join(__dirname, "control_volume.js"));
 const listenToMusic = require(path.join(__dirname, "listen_to_music.js"));
+const controlVolume = require(path.join(__dirname, "control_volume.js"));
 const ReadNewsController = require(path.join(
   __dirname,
   "read_news_controller.js"
@@ -24,10 +25,14 @@ const driver = new Builder()
   .forBrowser("chrome")
   // .setChromeService(serviceBuilder)
   .build();
-// excute_intent("play_music", listenToMusic(driver));
-// setTimeout(() => {
-//   excute_intent("stop_content", listenToMusic(driver));
-// }, 15000);
+
+
+
+excute_intent("play_music", listenToMusic(driver));
+
+setTimeout(() => {
+  excute_intent("next_content", listenToMusic(driver));
+}, 20000);
 
 // const beaconVolume = createBeaconVolume().then((result) => result);
 // const listenToMusicWithDriver = listenToMusic(driver);

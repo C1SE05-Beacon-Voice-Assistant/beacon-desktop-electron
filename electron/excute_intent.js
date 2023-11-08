@@ -5,16 +5,80 @@ const excute_intent = async (output_type, object, newsList = [], index = 0) => {
     {
       name: "play_music",
       feature_name: () =>
-        object.then((res) => {
-          res.searchSong("Anh nho em nguoi yeu cu");
-          res.playOnYoutube();
+        object.then(async (res) => {
+          await res.searchSong("Anh nho em nguoi yeu cu");
+          // await res.playOnYoutube();
+          await res.playOnMp3()
         }),
     },
     {
       name: "stop_content",
       feature_name: () =>
-        object.then((res) => {
-          res.pause();
+        object.then(async (res) => {
+          await res.pause();
+        }),
+    },
+    {
+      name: "resume_content",
+      feature_name: () =>
+        object.then(async (res) => {
+          await res.resume();
+        }),
+    },
+    {
+      name: "increase_volume",
+      feature_name: () =>
+        object.then(async (res) => {
+          await res.increaseVolume(20);
+        }),
+    },
+    {
+      name: "decrease_volume",
+      feature_name: () =>
+        object.then(async (res) => {
+          await res.decreaseVolume(20);
+        }),
+    },
+    {
+      name: "min_volume",
+      feature_name: () =>
+        object.then(async (res) => {
+          await res.setVolumeToMin();
+        }),
+    },
+    {
+      name: "max_volume",
+      feature_name: () =>
+        object.then(async (res) => {
+          await res.setVolumeToMax();
+        }),
+    },
+    {
+      name: "mute",
+      feature_name: () =>
+        object.then(async (res) => {
+          await res.mute();
+        }),
+    },
+    {
+      name: "un_mute",
+      feature_name: () =>
+        object.then(async (res) => {
+          await res.unmute();
+        }),
+    },
+    {
+      name: "set_volume",
+      feature_name: () =>
+        object.then(async (res) => {
+          await res.setVolume(20);
+        }),
+    },
+    {
+      name: "next_content",
+      feature_name: () =>
+        object.then(async (res) => {
+          await res.next()
         }),
     },
     {
@@ -41,6 +105,7 @@ const excute_intent = async (output_type, object, newsList = [], index = 0) => {
       feature_name: () => object.selectOneToRead(newsList, index),
     },
   ];
+<<<<<<< HEAD
   // features.forEach(async (feature) => {
   //   if (feature.name === output_type) {
   //     return feature.feature_name();
@@ -49,6 +114,13 @@ const excute_intent = async (output_type, object, newsList = [], index = 0) => {
   for (let f of features) {
     if (f.name === output_type) return f.feature_name();
   }
+=======
+  features.forEach(async (feature) => {
+    if (feature.name === output_type) {
+      await feature.feature_name();
+    }
+  });
+>>>>>>> 467f893 (completed excute intent for listen to music thread)
 };
 module.exports = {
   excute_intent,
