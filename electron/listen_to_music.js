@@ -1,10 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
+const executeException = require("./situation_except");
 const { By, Builder } = require("selenium-webdriver");
 const driver = new Builder().forBrowser("chrome").build();
-// const { exec } = require("child_process");
-// const MPlayer = require("mplayer");
-// var player = require('play-sound')(opts = {});
-const executeException = require('./situation_except');
 
 async function listenToMusic(driver) {
   let platformName = null;
@@ -23,8 +20,10 @@ async function listenToMusic(driver) {
       platformName = "youtube";
       const url = `https://yewtu.be/search?q=${songName}`;
       await driver.get(url);
-  
-      const songList = await driver.findElements(By.className("video-card-row"));
+
+      const songList = await driver.findElements(
+        By.className("video-card-row")
+      );
       if (songList.length > 0) {
         await driver.sleep(1000);
         await songList[0].click();
@@ -33,7 +32,7 @@ async function listenToMusic(driver) {
       }
     } catch (error) {
       console.error("Lỗi xảy ra khi phát nhạc trên YouTube:", error);
-      executeException('listenToMusicYoutobe')
+      executeException("listenToMusicYoutube");
     }
   }
 
@@ -68,7 +67,7 @@ async function listenToMusic(driver) {
       }
     } catch (error) {
       console.error("Lỗi xảy ra khi phát nhạc trên Mp3:", error);
-      executeException('listenToMusicMp3') 
+      executeException("listenToMusicMp3");
     }
   }
 
@@ -118,8 +117,8 @@ async function listenToMusic(driver) {
 }
 
 listenToMusic(driver).then((res) => {
-  res.searchSong("fnwenwenfoewnfweo")
-  res.playOnMp3()
-})
+  res.searchSong("fnwenwenfoewnfweo");
+  res.playOnMp3();
+});
 
 module.exports = listenToMusic;
