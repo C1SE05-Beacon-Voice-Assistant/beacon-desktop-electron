@@ -73,12 +73,8 @@ const createWindow = (options: WindowOptions = {}) => {
 };
 
 app.on("window-all-closed", () => {
-  // send quit message to renderer
-  mainWindow?.webContents.send("before-quit");
-  if (process.platform !== "darwin") {
-    app.quit();
-  }
-  // mainWindow = null;
+  app.quit();
+  mainWindow = null;
 });
 
 app.whenReady().then(() => {
@@ -94,6 +90,12 @@ app.whenReady().then(() => {
   autoUpdater.autoDownload = false;
   autoUpdater.allowDowngrade = true;
   autoUpdater.allowPrerelease = true;
+
+  mainWindow.on("close", function () {
+    console.log("close");
+
+    mainWindow.webContents.send("before-quit", "close");
+  });
 
   // autoUpdater.checkForUpdates();
 });

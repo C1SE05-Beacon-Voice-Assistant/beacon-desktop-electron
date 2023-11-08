@@ -78,8 +78,7 @@ contextBridge.exposeInMainWorld("api", {
     let quitChannel = ["before-quit"];
     console.log(quitChannel.includes(channel));
     if (quitChannel.includes(channel)) {
-      console.log(driver);
-      // driver.quit();
+      driver.quit();
     }
     ipcRenderer.on(channel, (event, ...args) => func(...args));
   },
