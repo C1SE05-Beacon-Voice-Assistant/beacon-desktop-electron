@@ -108,6 +108,8 @@ class ReadNewsController {
   }
 
   async selectOneToRead(newsList, num) {
+    console.log(newsList);
+
     await this.driver.get(newsList[num].url);
     const html = await this.driver.getPageSource();
     return this.newsReader.getNewsContent(
