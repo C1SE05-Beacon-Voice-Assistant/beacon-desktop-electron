@@ -37,7 +37,7 @@ setTimeout(() => {
 // const readNews = new ReadNewsController(driver);
 // const searchNewsBy = readNews.search.bind(readNews);
 // const selectOneToRead = readNews.selectOneToRead.bind(readNews);
-
+// a
 // contextBridge.exposeInMainWorld("electron", {
 // backgroundListen: beacon.backgroundListen.bind(beacon),
 // stopBackgroundListen: beacon.stopBackgroundListen.bind(beacon),
