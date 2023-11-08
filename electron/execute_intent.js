@@ -1,6 +1,10 @@
+<<<<<<< HEAD:electron/excute_intent.js
 const { SearchNewsBy } = require("./helpers/enum");
 
 const excute_intent = async (output_type, object, newsList = [], index = 0) => {
+=======
+const execute_intent = async (output_type, object) => {
+>>>>>>> 72120e6 (update name correct):electron/execute_intent.js
   const features = [
     {
       name: "play_music",
@@ -8,7 +12,7 @@ const excute_intent = async (output_type, object, newsList = [], index = 0) => {
         object.then(async (res) => {
           await res.searchSong("Anh nho em nguoi yeu cu");
           // await res.playOnYoutube();
-          await res.playOnMp3()
+          await res.playOnMp3();
         }),
     },
     {
@@ -78,7 +82,7 @@ const excute_intent = async (output_type, object, newsList = [], index = 0) => {
       name: "next_content",
       feature_name: () =>
         object.then(async (res) => {
-          await res.next()
+          await res.next();
         }),
     },
     {
@@ -105,14 +109,25 @@ const excute_intent = async (output_type, object, newsList = [], index = 0) => {
       feature_name: () => object.selectOneToRead(newsList, index),
     },
   ];
+<<<<<<< HEAD
+  // features.forEach(async (feature) => {
+  //   if (feature.name === output_type) {
+  //     return feature.feature_name();
+  //   }
+  // });
+  for (let f of features) {
+    if (f.name === output_type) return f.feature_name();
+  }
+=======
   features.forEach(async (feature) => {
     if (feature.name === output_type) {
       await feature.feature_name();
     }
   });
+>>>>>>> 467f893 (completed excute intent for listen to music thread)
 };
 module.exports = {
-  excute_intent,
+  execute_intent,
 };
 // read_nnuews
 // user_maal
