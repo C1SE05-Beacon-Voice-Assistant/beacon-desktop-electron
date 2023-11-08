@@ -20,8 +20,6 @@ if (!app.requestSingleInstanceLock()) {
   process.exit(0);
 }
 
-if (require("electron-squirrel-startup")) app.quit();
-
 Object.defineProperty(app, "isPackaged", {
   get() {
     return true;

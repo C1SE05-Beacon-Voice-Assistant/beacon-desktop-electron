@@ -3,10 +3,27 @@ import electron from "vite-plugin-electron/simple";
 import commonjs from "@rollup/plugin-commonjs";
 import alias from "@rollup/plugin-alias";
 import { resolve } from "path";
+import { readdirSync } from "fs";
 
 const projectRootDir = resolve(__dirname);
 
-export default defineConfig({
+const electronPath = readdirSync(resolve(__dirname, "electron"))
+  .filter((file) => file.endsWith(".js"))
+  .reduce((acc, file) => {
+    if (file === "renderer.js") return acc;
+    acc[file.replace(".js", "")] = "electron/" + file;
+    return acc;
+  }, {});
+
+const helpersPath = readdirSync(resolve(projectRootDir, "electron/helpers"))
+  .filter((file) => file.endsWith(".js"))
+  .reduce((acc, file) => {
+    const filePath = "helpers/" + file.replace(".js", "");
+    acc[filePath] = "electron/" + filePath + ".js";
+    return acc;
+  }, {});
+
+const config = defineConfig({
   build: {
     sourcemap: true,
     rollupOptions: {
@@ -40,16 +57,8 @@ export default defineConfig({
           build: {
             rollupOptions: {
               input: {
-                preload: "electron/preload.js",
-                beacon_speech: "electron/beacon_speech.js",
-                control_volume: "electron/control_volume.js",
-                listen_to_music: "electron/listen_to_music.js",
-                read_news_controller: "electron/read_news_controller.js",
-                "helpers/driver": "electron/helpers/driver.js",
-                "helpers/enum": "electron/helpers/enum.js",
-                "helpers/newsReader": "electron/helpers/newsReader.js",
-                detect_device: "electron/detect_device.js",
-                start: "electron/start.js",
+                ...electronPath,
+                ...helpersPath,
               },
               output: {
                 entryFileNames: "[name].js",
@@ -64,3 +73,5 @@ export default defineConfig({
     }),
   ],
 });
+
+export default config;
