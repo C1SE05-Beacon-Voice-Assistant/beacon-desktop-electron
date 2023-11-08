@@ -1,4 +1,6 @@
-const excute_intent = async (output_type, object) => {
+const { SearchNewsBy } = require("./helpers/enum");
+
+const excute_intent = async (output_type, object, newsList = [], index = 0) => {
   const features = [
     {
       name: "play_music",
@@ -15,12 +17,38 @@ const excute_intent = async (output_type, object) => {
           res.pause();
         }),
     },
+    {
+      name: "search_news",
+      feature_name: () =>
+        object
+          .searchByKeyword("Phân xác sông hồng")
+          .then((res) => console.log(res)),
+    },
+    {
+      name: "latest_news",
+      feature_name: () => object.search(SearchNewsBy.LATEST),
+    },
+    {
+      name: "most_read_news",
+      feature_name: () => object.search(SearchNewsBy.MOST_READ),
+    },
+    {
+      name: "hottest_news",
+      feature_name: () => object.search(SearchNewsBy.MOST_READ),
+    },
+    {
+      name: "read_news",
+      feature_name: () => object.selectOneToRead(newsList, index),
+    },
   ];
-  features.forEach(async (feature) => {
-    if (feature.name === output_type) {
-      await feature.feature_name()
-    }
-  });
+  // features.forEach(async (feature) => {
+  //   if (feature.name === output_type) {
+  //     return feature.feature_name();
+  //   }
+  // });
+  for (let f of features) {
+    if (f.name === output_type) return f.feature_name();
+  }
 };
 module.exports = {
   excute_intent,

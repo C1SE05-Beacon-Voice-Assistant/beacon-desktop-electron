@@ -18,20 +18,27 @@ const ReadNewsController = require(path.join(
 const getAudioDevices = require(path.join(__dirname, "detect_device.js"));
 const serviceBuilder = new ServiceBuilder(chromedriverPath);
 // const beacon = new BeaconSpeech("Beacon", "Hanoi");
+
+console.log(chromedriverPath);
 const driver = new Builder()
   .forBrowser("chrome")
-  .setChromeService(serviceBuilder)
+  // .setChromeService(serviceBuilder)
   .build();
-excute_intent("play_music", listenToMusic(driver));
-setTimeout(() => {
-  excute_intent("stop_content", listenToMusic(driver));
-}, 15000);
+// excute_intent("play_music", listenToMusic(driver));
+// setTimeout(() => {
+//   excute_intent("stop_content", listenToMusic(driver));
+// }, 15000);
 
 // const beaconVolume = createBeaconVolume().then((result) => result);
 // const listenToMusicWithDriver = listenToMusic(driver);
-// const readNews = new ReadNewsController(driver);
+const readNews = new ReadNewsController(driver);
 // const searchNewsBy = readNews.search.bind(readNews);
 // const selectOneToRead = readNews.selectOneToRead.bind(readNews);
+
+// excute_intent("search_news", readNews);
+excute_intent("latest_news", readNews)
+  .then((res) => excute_intent("read_news", readNews, res, 0))
+  .then((res) => console.log(res));
 
 // contextBridge.exposeInMainWorld("electron", {
 // backgroundListen: beacon.backgroundListen.bind(beacon),
