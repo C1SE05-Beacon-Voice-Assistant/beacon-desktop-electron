@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const loudness = require("loudness");
-const executeException = require('./situation_except');
-
 
 async function createBeaconVolume() {
   const volume = await loudness.getVolume();
@@ -15,43 +13,24 @@ async function createBeaconVolume() {
   }
 
   async function increaseVolume(number) {
-    try {
-      const newVolume = volume + number > 100 ? 100 : volume + number;
-      await setVolume(newVolume);
-    } catch (error) {
-      console.error("An error occurred while increasing the volume:", error);
-      executeException('increaseVolume')
-    }
+    const newVolume = volume + number > 100 ? 100 : volume + number;
+    await setVolume(newVolume);
   }
 
   async function decreaseVolume(number) {
-    try {
-      const newVolume = volume - number < 0 ? 0 : volume - number;
-      await setVolume(newVolume);
-    } catch (error) {
-      console.error("An error occurred while decreasing the volume:", error);
-      executeException('decreaseVolume')
-    }
+    const newVolume = volume - number < 0 ? 0 : volume - number;
+    await setVolume(newVolume);
   }
 
   async function mute() {
-    try {
-      await loudness.setMuted(true);
-    } catch (error) {
-      console.error("An error occurred while muting the volume:", error);
-      executeException('mute')
-    }
+    await loudness.setMuted(true);
   }
 
   async function unmute() {
-    try {
-      const mute = await loudness.getMuted();
-      if (mute) await loudness.setMuted(false);
-    } catch (error) {
-      console.error("An error occurred while unmuting the volume:", error);
-      executeException('unmute')
-    }
+    const mute = await loudness.getMuted();
+    if (mute) await loudness.setMuted(false);
   }
+
   async function setVolumeToMax() {
     await setVolume(100);
   }

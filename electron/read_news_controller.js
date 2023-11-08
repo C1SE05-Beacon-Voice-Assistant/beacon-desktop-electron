@@ -4,10 +4,7 @@ const readline = require("readline");
 const { promisify } = require("util");
 const NewsReader = require("./helpers/newsReader.js");
 const { By } = require("selenium-webdriver");
-const ChromeDriver = require("./helpers/driver.js");
-
-const executeException = require('./situation_except');
-
+// const ChromeDriver = require("./helpers/driver.js");
 
 const SearchNewsBy = {
   KEYWORD: "keyword",
@@ -24,15 +21,15 @@ const rl = readline.createInterface({
 const questionAsync = promisify(rl.question).bind(rl);
 
 class ReadNewsController {
-  // constructor(chromeDriver) {
-  //   this.driver = chromeDriver;
-  //   this.newsReader = new NewsReader();
-  // }
-
-  constructor() {
-    this.driver = new ChromeDriver().getInstance();
+  constructor(chromeDriver) {
+    this.driver = chromeDriver;
     this.newsReader = new NewsReader();
   }
+
+  // constructor() {
+  //   this.driver = new ChromeDriver().getInstance();
+  //   this.newsReader = new NewsReader();
+  // }
 
   async getNewsInList(list) {
     const result = [];
@@ -86,24 +83,12 @@ class ReadNewsController {
   }
 
   async searchByKeyword(keyword) {
-    try{ 
-      const url = `https://timkiem.vnexpress.net/?q=${keyword}`;
-      await this.driver.get(url);
-      const articlesList = await this.driver.findElements(
-        By.xpath(`//div[@id='result_search']/article[position()<4]`)
-      );
-      // return this.getNewsInList(articlesList);
-      const newsList = await this.getNewsInList(articlesList);
-
-      if (newsList.length === 0) {
-        throw new Error(`Không tìm thấy kết quả tìm kiếm cho từ khóa "${keyword}"`);
-      }
-
-      return newsList;
-    } catch (error) {
-      console.error('An error occurred:', error);
-      executeException('readNews')
-    }
+    const url = `https://timkiem.vnexpress.net/?q=${keyword}`;
+    await this.driver.get(url);
+    const articlesList = await this.driver.findElements(
+      By.xpath(`//div[@id='result_search']/article[position()<4]`)
+    );
+    return this.getNewsInList(articlesList);
   }
 
   async selectOneToRead(newsList, num) {
@@ -166,11 +151,13 @@ class ReadNewsController {
       );
       console.log(tmp);
     } catch (error) {
-      console.log("152", error);  
+      console.log("152", error);
+    } finally {
+      rl.close();
     }
   }
 }
 
-new ReadNewsController().start();
+// new ReadNewsController().start();
 
 module.exports = ReadNewsController;
