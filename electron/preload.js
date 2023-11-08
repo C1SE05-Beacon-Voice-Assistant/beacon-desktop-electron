@@ -17,13 +17,11 @@ const ReadNewsController = require(path.join(
   "read_news_controller.js"
 ));
 const getAudioDevices = require(path.join(__dirname, "detect_device.js"));
+const textToSpeech = require(path.join(__dirname, "text_to_speech.js"));
 const serviceBuilder = new ServiceBuilder(chromedriverPath);
-// const beacon = new BeaconSpeech("Beacon", "Hanoi");
-
-console.log(chromedriverPath);
 const driver = new Builder()
   .forBrowser("chrome")
-  // .setChromeService(serviceBuilder)
+  .setChromeService(serviceBuilder)
   .build();
 
 execute_intent("play_music", listenToMusic(driver));
@@ -38,16 +36,47 @@ const readNews = new ReadNewsController(driver);
 // const searchNewsBy = readNews.search.bind(readNews);
 // const selectOneToRead = readNews.selectOneToRead.bind(readNews);
 
-// excute_intent("search_news", readNews);
-excute_intent("latest_news", readNews)
-  .then((res) => excute_intent("read_news", readNews, res, 0))
-  .then((res) => console.log(res));
+// const init = async () => {
+//   await textToSpeech("Xin chào, tôi là Beacon, tôi có thể giúp gì cho bạn?");
+//   start()
+//     .then(async (res) => {
+//       if (res) {
+//         console.log("exist");
+//         return true;
+//       } else {
+//         await textToSpeech("Hãy đăng ký thông tin của bạn");
+//         await textToSpeech("Nhập tên");
+//         const name = await beacon.recognizeFromMicrophone();
+//         await textToSpeech("Nhập số điện thoại");
+//         const phone = await beacon.recognizeFromMicrophone();
 
-// contextBridge.exposeInMainWorld("electron", {
-// backgroundListen: beacon.backgroundListen.bind(beacon),
-// stopBackgroundListen: beacon.stopBackgroundListen.bind(beacon),
-// beaconVolume,
-// listenToMusic: listenToMusicWithDriver,
-// readNews: { searchNewsBy, selectOneToRead },
-// getAudioDevices,
-// });
+//         const userInfo = {
+//           name,
+//           phone,
+//         };
+
+//         return register(userInfo);
+//       }
+//     })
+//     .then((res) => {
+//       const beaconVolume = createBeaconVolume().then((result) => result);
+//       const listenToMusicWithDriver = listenToMusic(driver);
+//       const readNews = new ReadNewsController(driver);
+//       const searchNewsBy = readNews.search.bind(readNews);
+//       const selectOneToRead = readNews.selectOneToRead.bind(readNews);
+
+//       contextBridge.exposeInMainWorld("electron", {
+//         backgroundListen: beacon.backgroundListen.bind(beacon),
+//         stopBackgroundListen: beacon.stopBackgroundListen.bind(beacon),
+//         beaconVolume,
+//         listenToMusic: listenToMusicWithDriver,
+//         readNews: { searchNewsBy, selectOneToRead },
+//         getAudioDevices,
+//       });
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     });
+// };
+
+// init();

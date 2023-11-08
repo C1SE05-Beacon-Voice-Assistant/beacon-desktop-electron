@@ -105,11 +105,14 @@ const excute_intent = async (output_type, object, newsList = [], index = 0) => {
       feature_name: () => object.selectOneToRead(newsList, index),
     },
   ];
-  features.forEach(async (feature) => {
-    if (feature.name === output_type) {
-      await feature.feature_name();
-    }
-  });
+  // features.forEach(async (feature) => {
+  //   if (feature.name === output_type) {
+  //     return feature.feature_name();
+  //   }
+  // });
+  for (let f of features) {
+    if (f.name === output_type) return f.feature_name();
+  }
 };
 module.exports = {
   excute_intent,
