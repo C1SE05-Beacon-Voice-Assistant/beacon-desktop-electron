@@ -19,72 +19,73 @@ const getAudioDevices = require(path.join(__dirname, "detect_device.js"));
 
 const { start, register } = require(path.join(__dirname, "start.js"));
 const beacon = new BeaconSpeech("Beacon", "Hanoi");
-const executeException = require('./situation_except.js');
-const checkInternetConnection = require('./detect_internet_status.js');
-
+const executeException = require(path.join(__dirname, "./situation_except.js"));
+const checkInternetConnection = require(path.join(
+  __dirname,
+  "./detect_internet_status.js"
+));
 
 process.env.API_URL = "http://localhost:8000/api";
 
-console.log("cuoi1")
+console.log("cuoi1");
 const init = async () => {
   checkInternetConnection((isConnected) => {
-    if (isConnected) {
+    if (!isConnected) {
       console.error("Máy tính đang kết nối internet.");
     } else {
       console.log("Máy tính không có kết nối internet.");
-      executeException('noInternet')
+      executeException("noInternet");
     }
 
-  console.log("cuoi1536346")
+    console.log("cuoi1536346");
 
-    start()
-      .then(async (res) => {
-        if (res) {
-          console.log("exist");
-          return true;
-        } else {
-          console.log("Enter name");
-          const name = await beacon.recognizeFromMicrophone();
-          console.log("Enter phone");
-          const phone = await beacon.recognizeFromMicrophone();
+    // start()
+    //   .then(async (res) => {
+    //     if (res) {
+    //       console.log("exist");
+    //       return true;
+    //     } else {
+    //       console.log("Enter name");
+    //       const name = await beacon.recognizeFromMicrophone();
+    //       console.log("Enter phone");
+    //       const phone = await beacon.recognizeFromMicrophone();
 
-          const userInfo = {
-            name,
-            phone,
-          };
+    //       const userInfo = {
+    //         name,
+    //         phone,
+    //       };
 
-          return register(userInfo);
-        }
-      })
-      .then((res) => {
-        console.log(res);
-        const serviceBuilder = new ServiceBuilder(chromedriverPath);
-        const driver = new Builder()
-          .forBrowser("chrome")
-          .setChromeService(serviceBuilder)
-          .build();
+    //       return register(userInfo);
+    //     }
+    //   })
+    //   .then((res) => {
+    //     console.log(res);
+    //     const serviceBuilder = new ServiceBuilder(chromedriverPath);
+    //     const driver = new Builder()
+    //       .forBrowser("chrome")
+    //       .setChromeService(serviceBuilder)
+    //       .build();
 
-        const beaconVolume = createBeaconVolume().then((result) => result);
-        const listenToMusicWithDriver = listenToMusic(driver);
-        const readNews = new ReadNewsController(driver);
-        const searchNewsBy = readNews.search.bind(readNews);
-        const selectOneToRead = readNews.selectOneToRead.bind(readNews);
+    //     const beaconVolume = createBeaconVolume().then((result) => result);
+    //     const listenToMusicWithDriver = listenToMusic(driver);
+    //     const readNews = new ReadNewsController(driver);
+    //     const searchNewsBy = readNews.search.bind(readNews);
+    //     const selectOneToRead = readNews.selectOneToRead.bind(readNews);
 
-        contextBridge.exposeInMainWorld("electron", {
-          backgroundListen: beacon.backgroundListen.bind(beacon),
-          stopBackgroundListen: beacon.stopBackgroundListen.bind(beacon),
-          beaconVolume,
-          listenToMusic: listenToMusicWithDriver,
-          readNews: { searchNewsBy, selectOneToRead },
-          getAudioDevices,
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    //     contextBridge.exposeInMainWorld("electron", {
+    //       backgroundListen: beacon.backgroundListen.bind(beacon),
+    //       stopBackgroundListen: beacon.stopBackgroundListen.bind(beacon),
+    //       beaconVolume,
+    //       listenToMusic: listenToMusicWithDriver,
+    //       readNews: { searchNewsBy, selectOneToRead },
+    //       getAudioDevices,
+    //     });
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   });
 };
-
 
 // const init = async () => {
 //   start()
