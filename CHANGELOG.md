@@ -27,6 +27,6 @@ All notable changes to this project will be documented in this file.
 - Add control volume feature
 - Add conversation logs feature
 
-[Unreleased]: "https://github.com/C1SE05-Beacon-Voice-Assistant/beacon-desktop-electron/tree/HEAD"
-[1.0.1]: "https://github.com/C1SE05-Beacon-Voice-Assistant/beacon-desktop-electron/tree/v1.0.1"
-[1.0.0]: "https://github.com/C1SE05-Beacon-Voice-Assistant/beacon-desktop-electron/tree/v1.0.0"
+[Unreleased]: https://github.com/C1SE05-Beacon-Voice-Assistant/beacon-desktop-electron/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/C1SE05-Beacon-Voice-Assistant/beacon-desktop-electron/compare/v1.0.0...v1.0.1
+[1.0.0]: https://github.com/C1SE05-Beacon-Voice-Assistant/beacon-desktop-electron/releases/tag/v1.0.0
