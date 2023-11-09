@@ -9,7 +9,13 @@
     "output": "release/build"
   },
   "extraResources": ["./public/**"],
-  "files": ["dist", "dist-electron", "node_modules", "package.json"],
+  "files": [
+    "dist",
+    "dist-electron",
+    "node_modules",
+    "package.json",
+    "beacon_package"
+  ],
   "nsis": {
     "oneClick": false,
     "perMachine": true,

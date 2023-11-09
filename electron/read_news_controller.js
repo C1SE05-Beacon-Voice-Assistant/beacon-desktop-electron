@@ -6,8 +6,7 @@ const NewsReader = require("./helpers/newsReader.js");
 const { By } = require("selenium-webdriver");
 const ChromeDriver = require("./helpers/driver.js");
 
-const executeException = require('./situation_except');
-
+const executeException = require("./situation_except");
 
 const SearchNewsBy = {
   KEYWORD: "keyword",
@@ -86,7 +85,7 @@ class ReadNewsController {
   }
 
   async searchByKeyword(keyword) {
-    try{ 
+    try {
       const url = `https://timkiem.vnexpress.net/?q=${keyword}`;
       await this.driver.get(url);
       const articlesList = await this.driver.findElements(
@@ -96,13 +95,15 @@ class ReadNewsController {
       const newsList = await this.getNewsInList(articlesList);
 
       if (newsList.length === 0) {
-        throw new Error(`Không tìm thấy kết quả tìm kiếm cho từ khóa "${keyword}"`);
+        throw new Error(
+          `Không tìm thấy kết quả tìm kiếm cho từ khóa "${keyword}"`
+        );
       }
 
       return newsList;
     } catch (error) {
-      console.error('An error occurred:', error);
-      executeException('readNews')
+      console.error("An error occurred:", error);
+      executeException("readNews");
     }
   }
 
@@ -166,11 +167,11 @@ class ReadNewsController {
       );
       console.log(tmp);
     } catch (error) {
-      console.log("152", error);  
+      console.log("152", error);
     }
   }
 }
 
-new ReadNewsController().start();
+// new ReadNewsController().start();
 
 module.exports = ReadNewsController;

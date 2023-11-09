@@ -22,6 +22,7 @@ const { checkInternetConnection } = require(path.join(
 const executeException = require(path.join(__dirname, "situation_except.js"));
 const textToSpeech = require(path.join(__dirname, "text_to_speech.js"));
 const { start, register } = require(path.join(__dirname, "start.js"));
+
 const beacon = new BeaconSpeech("Beacon", "Hanoi");
 
 // process.env.API_URL = "http://localhost:8000/api";
@@ -54,7 +55,6 @@ const init = () => {
         }
       })
       .then((res) => {
-        console.log(res);
         const serviceBuilder = new ServiceBuilder(chromedriverPath);
         const driver = new Builder()
           .forBrowser("chrome")
