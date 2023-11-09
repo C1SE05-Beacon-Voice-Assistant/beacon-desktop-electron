@@ -69,7 +69,6 @@ const config = defineConfig({
                 chunkFileNames: "[name].js",
                 assetFileNames: "[name].[ext]",
                 inlineDynamicImports: false,
-                manualChunks: undefined,
               },
             },
           },
