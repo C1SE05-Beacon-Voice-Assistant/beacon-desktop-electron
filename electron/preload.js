@@ -19,8 +19,8 @@ const getAudioDevices = require(path.join(__dirname, "detect_device.js"));
 
 const { start, register } = require(path.join(__dirname, "start.js"));
 const beacon = new BeaconSpeech("Beacon", "Hanoi");
-const executeException = require('./situation_except');
-const checkInternetConnection = require('./detect_internet_status');
+const executeException = require('./situation_except.js');
+const checkInternetConnection = require('./detect_internet_status.js');
 
 
 process.env.API_URL = "http://localhost:8000/api";
@@ -76,7 +76,7 @@ const init = async () => {
 init();
 
 checkInternetConnection((isConnected) => {
-  if(!isConnected) {
+  if(isConnected) {
     console.log("Máy tính không có kết nối internet.");
     executeException('Internet')
   }
