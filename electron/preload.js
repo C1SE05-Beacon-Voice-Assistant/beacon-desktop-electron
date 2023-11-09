@@ -37,6 +37,7 @@ const init = () => {
     await textToSpeech("Xin chào, tôi là Beacon, tôi có thể giúp gì cho bạn?");
     start()
       .then(async (res) => {
+        return res;
         if (res) {
           console.log("exist");
           return true;
@@ -54,26 +55,25 @@ const init = () => {
         }
       })
       .then((res) => {
-        console.log(res);
-        const serviceBuilder = new ServiceBuilder(chromedriverPath);
-        const driver = new Builder()
-          .forBrowser("chrome")
-          .setChromeService(serviceBuilder)
-          .build();
+        // const serviceBuilder = new ServiceBuilder(chromedriverPath);
+        // const driver = new Builder()
+        //   .forBrowser("chrome")
+        //   .setChromeService(serviceBuilder)
+        //   .build();
 
-        const beaconVolume = createBeaconVolume().then((result) => result);
-        const listenToMusicWithDriver = listenToMusic(driver);
-        const readNews = new ReadNewsController(driver);
-        const searchNewsBy = readNews.search.bind(readNews);
-        const selectOneToRead = readNews.selectOneToRead.bind(readNews);
+        // const beaconVolume = createBeaconVolume().then((result) => result);
+        // const listenToMusicWithDriver = listenToMusic(driver);
+        // const readNews = new ReadNewsController(driver);
+        // const searchNewsBy = readNews.search.bind(readNews);
+        // const selectOneToRead = readNews.selectOneToRead.bind(readNews);
 
         contextBridge.exposeInMainWorld("electron", {
           backgroundListen: beacon.backgroundListen.bind(beacon),
           stopBackgroundListen: beacon.stopBackgroundListen.bind(beacon),
-          beaconVolume,
-          listenToMusic: listenToMusicWithDriver,
-          readNews: { searchNewsBy, selectOneToRead },
-          getAudioDevices,
+          // beaconVolume,
+          // listenToMusic: listenToMusicWithDriver,
+          // readNews: { searchNewsBy, selectOneToRead },
+          // getAudioDevices,
         });
       })
       .catch((err) => {
@@ -82,4 +82,13 @@ const init = () => {
   });
 };
 
-init();
+// init();
+
+contextBridge.exposeInMainWorld("electron", {
+  backgroundListen: beacon.backgroundListen.bind(beacon),
+  stopBackgroundListen: beacon.stopBackgroundListen.bind(beacon),
+  // beaconVolume,
+  // listenToMusic: listenToMusicWithDriver,
+  // readNews: { searchNewsBy, selectOneToRead },
+  // getAudioDevices,
+});

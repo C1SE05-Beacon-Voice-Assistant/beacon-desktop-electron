@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const sdk = require("microsoft-cognitiveservices-speech-sdk");
+const { PythonShell } = require("python-shell");
+const { options } = require("./helpers/optionPyshell");
 
 class BeaconSpeech {
   constructor(name, location) {
@@ -79,13 +81,29 @@ class BeaconSpeech {
     this.speechRecognizer.sessionStopped = (s, e) => {
       console.log("\nSession stopped event.");
       this.speechRecognizer.stopContinuousRecognitionAsync();
+      this.keywordRecognize();
     };
 
-    this.speechRecognizer.startContinuousRecognitionAsync();
+    this.keywordRecognize().then((result) => {
+      if (result) {
+        this.speechRecognizer.startContinuousRecognitionAsync();
+      } else {
+        console.log("Keyword not match");
+      }
+    });
   }
 
   stopBackgroundListen() {
     this.speechRecognizer.stopContinuousRecognitionAsync();
+  }
+
+  async keywordRecognize() {
+    const data = await PythonShell.run("keyword_recognition.py", options);
+    if (data[0] == "Hey Beacon") {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
 
