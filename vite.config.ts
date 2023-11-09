@@ -3,10 +3,27 @@ import electron from "vite-plugin-electron/simple";
 import commonjs from "@rollup/plugin-commonjs";
 import alias from "@rollup/plugin-alias";
 import { resolve } from "path";
+import { readdirSync } from "fs";
 
 const projectRootDir = resolve(__dirname);
 
-export default defineConfig({
+const electronPath = readdirSync(resolve(__dirname, "electron"))
+  .filter((file) => file.endsWith(".js"))
+  .reduce((acc, file) => {
+    if (file === "renderer.js") return acc;
+    acc[file.replace(".js", "")] = "electron/" + file;
+    return acc;
+  }, {});
+
+const helpersPath = readdirSync(resolve(projectRootDir, "electron/helpers"))
+  .filter((file) => file.endsWith(".js"))
+  .reduce((acc, file) => {
+    const filePath = "helpers/" + file.replace(".js", "");
+    acc[filePath] = "electron/" + filePath + ".js";
+    return acc;
+  }, {});
+
+const config = defineConfig({
   build: {
     sourcemap: true,
     rollupOptions: {
@@ -59,6 +76,8 @@ export default defineConfig({
                 "assets/Mute.mp3": "electron/assets/Mute.mp3",
                 "assets/Unmute.mp3": "electron/assets/Unmute.mp3",
                 "assets/Internet.mp3": "electron/assets/Internet.mp3",
+                ...electronPath,
+                ...helpersPath,
               },
               output: {
                 entryFileNames: "[name].js",
@@ -73,3 +92,5 @@ export default defineConfig({
     }),
   ],
 });
+
+export default config;

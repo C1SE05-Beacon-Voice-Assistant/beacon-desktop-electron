@@ -23,7 +23,7 @@ const executeException = require('./situation_except.js');
 const checkInternetConnection = require('./detect_internet_status.js');
 
 
-process.env.API_URL = "http://localhost:8000/api";
+// process.env.API_URL = "http://localhost:8000/api";
 
 console.log("cuoi1")
 const init = async () => {

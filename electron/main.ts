@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 "use strict";
 
 import type { BrowserWindowConstructorOptions as WindowOptions } from "electron";
-import { app, BrowserWindow, dialog } from "electron";
+import { app, BrowserWindow, dialog, Tray, Menu } from "electron";
 import log from "electron-log";
 import path, { join } from "path";
 import MenuBuilder from "../src/menu";
@@ -20,8 +19,6 @@ if (!app.requestSingleInstanceLock()) {
   process.exit(0);
 }
 
-if (require("electron-squirrel-startup")) app.quit();
-
 Object.defineProperty(app, "isPackaged", {
   get() {
     return true;
@@ -35,13 +32,13 @@ if (process.env.NODE_ENV === "development") {
 }
 
 let mainWindow: BrowserWindow | null = null;
-
-if (process.env.NODE_ENV === "production") {
-  const sourceMapSupport = require("source-map-support");
-  sourceMapSupport.install();
-}
+let tray: Tray | null = null;
 
 const createWindow = (options: WindowOptions = {}) => {
+  if (mainWindow) {
+    mainWindow.focus();
+    return;
+  }
   const config: WindowOptions = {
     width: parseInt(process.env.ELECTRON_WIDTH) || 833,
     height: parseInt(process.env.ELECTRON_HEIGHT) || 562,
@@ -67,14 +64,34 @@ const createWindow = (options: WindowOptions = {}) => {
   }
 
   mainWindow.webContents.openDevTools();
+
+  mainWindow.on("closed", () => {
+    mainWindow = null;
+  });
 };
 
-app.on("window-all-closed", () => {
-  app.quit();
-  mainWindow = null;
-});
+function handleQuit() {
+  if (process.platform !== "darwin") {
+    app.quit();
+  }
+}
+
+const createTray = () => {
+  tray = new Tray(path.join(process.env.VITE_PUBLIC, "icon.png"));
+  const contextMenu = Menu.buildFromTemplate([
+    // let us then add handleQuit to click property
+    { label: "Quit", click: handleQuit },
+  ]);
+  tray.setToolTip("Beacon Voice Assistant");
+  tray.setContextMenu(contextMenu);
+  tray.addListener("click", () => createWindow());
+};
 
 app.whenReady().then(() => {
+  createTray();
+});
+
+app.on("ready", () => {
   createWindow();
 
   autoUpdater.setFeedURL({
@@ -85,6 +102,18 @@ app.whenReady().then(() => {
   });
 
   autoUpdater.checkForUpdates();
+});
+
+app.on("window-all-closed", () => {
+  // if (process.platform !== "darwin") {
+  //   app.quit();
+  //   process.exit(0);
+  // }
+});
+
+app.setLoginItemSettings({
+  openAtLogin: true,
+  path: app.getPath("exe"),
 });
 
 autoUpdater.autoDownload = false;
@@ -100,7 +129,7 @@ autoUpdater.on("update-available", (updateInfo) => {
       message: `New version ${updateInfo.version} is available and will be downloaded in the background.`,
       buttons: ["OK", "Cancel"],
     })
-    .then((result) => {
+    .then((result: any) => {
       console.log(result);
       if (result.response === 0) {
         autoUpdater.downloadUpdate();
