@@ -1,9 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const sdk = require("microsoft-cognitiveservices-speech-sdk");
-// require("dotenv").config();
 
-// const SPEECH_KEY = "4d74b26c859a4d338226896369488f55";
-// const SPEECH_REGION = "southeastasia";
 class BeaconSpeech {
   constructor(name, location) {
     this.name = name;
