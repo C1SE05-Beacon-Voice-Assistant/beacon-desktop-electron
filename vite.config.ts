@@ -4,6 +4,7 @@ import commonjs from "@rollup/plugin-commonjs";
 import alias from "@rollup/plugin-alias";
 import { resolve } from "path";
 import { readdirSync } from "fs";
+import { viteStaticCopy } from "vite-plugin-static-copy";
 
 const projectRootDir = resolve(__dirname);
 
@@ -22,6 +23,8 @@ const helpersPath = readdirSync(resolve(projectRootDir, "electron/helpers"))
     acc[filePath] = "electron/" + filePath + ".js";
     return acc;
   }, {});
+
+console.log(resolve(projectRootDir, "dist-electron/assets"));
 
 const config = defineConfig({
   build: {
@@ -47,6 +50,14 @@ const config = defineConfig({
   },
   plugins: [
     alias(),
+    viteStaticCopy({
+      targets: [
+        {
+          src: resolve(projectRootDir, "public/assets"),
+          dest: resolve(projectRootDir, "dist-electron/assets"),
+        },
+      ],
+    }),
     electron({
       main: {
         entry: "electron/main.ts",

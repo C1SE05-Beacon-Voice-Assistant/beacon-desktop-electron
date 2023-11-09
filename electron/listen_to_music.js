@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const executeException = require("./situation_except");
 const { By, Builder } = require("selenium-webdriver");
-const driver = new Builder().forBrowser("chrome").build();
 
 async function listenToMusic(driver) {
   let platformName = null;
@@ -115,10 +114,5 @@ async function listenToMusic(driver) {
     next,
   };
 }
-
-listenToMusic(driver).then((res) => {
-  res.searchSong("fnwenwenfoewnfweo");
-  res.playOnMp3();
-});
 
 module.exports = listenToMusic;
