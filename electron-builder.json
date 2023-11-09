@@ -1,7 +1,7 @@
 {
   "appId": "com.beacon.voice.assistant",
   "asar": true,
-  "asarUnpack": ["**/*.{node,dll}"],
+  "asarUnpack": ["**/*.{node,dll}", "beacon_package"],
   "productName": "Beacon Voice Assistant",
   "copyright": "Copyright © 2023 ${author}",
   "directories": {

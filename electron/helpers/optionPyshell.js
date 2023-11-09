@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { join, resolve } = require("path");
 
-const pythonPath = resolve(__dirname, "../../beacon_package");
+const pythonPath = resolve(
+  __dirname,
+  "../../../app.asar.unpacked/beacon_package"
+);
 
 const options = {
   mode: "text",
