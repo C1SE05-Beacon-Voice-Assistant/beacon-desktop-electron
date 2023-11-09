@@ -1,2 +1,0 @@
-from driver import ChromeDriverCustom
-from read_news import NewsReader
