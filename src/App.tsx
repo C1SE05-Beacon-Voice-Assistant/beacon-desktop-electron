@@ -1,10 +1,12 @@
 import "@fontsource/open-sans";
 import "@fontsource/open-sans/600.css";
 import "@fontsource/open-sans/800.css";
-import { CssBaseline, createTheme } from "@mui/material";
+import { createTheme, CssBaseline } from "@mui/material";
 import { ThemeProvider } from "@mui/system";
+import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import MainLayout from "~/layouts/MainLayout";
+import { handleInput } from "~/lib/handleSpeech";
 import { AppRouter } from "~/util/constants/appRoutes";
 import { AboutPage, ConversationPage, HomePage, SettingPage } from "./pages";
 
@@ -14,6 +16,26 @@ export default function App() {
       mode: "dark",
     },
   });
+
+  const [resultNews, setResultNews] = useState<any[]>([]);
+  const [currentCommand, setCurrentCommand] = useState<any>();
+
+  useEffect(() => {
+    window.electron.backgroundListen((result: string) => {
+      handleInput(result, currentCommand, resultNews).then((res) => {
+        console.log(`New result: ${res.result}`);
+        console.log(`Old result: ${resultNews}`);
+        if (res.command && res.result) {
+          setCurrentCommand(res.command);
+          setResultNews(res.result);
+        }
+      });
+    });
+
+    return () => {
+      window.electron.stopBackgroundListen();
+    };
+  }, [resultNews, currentCommand]);
 
   return (
     <ThemeProvider theme={theme}>
