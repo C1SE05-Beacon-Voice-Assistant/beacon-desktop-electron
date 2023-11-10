@@ -1,0 +1,35 @@
+{
+  "appId": "com.beacon.voice.assistant",
+  "asar": true,
+  "asarUnpack": ["**/*.{node,dll}", "beacon_package"],
+  "productName": "Beacon Voice Assistant",
+  "copyright": "Copyright © 2023 ${author}",
+  "directories": {
+    "buildResources": "public",
+    "output": "release/build"
+  },
+  "extraResources": ["./public/**"],
+  "files": [
+    "dist",
+    "dist-electron",
+    "node_modules",
+    "package.json",
+    "beacon_package"
+  ],
+  "nsis": {
+    "oneClick": false,
+    "perMachine": true,
+    "allowToChangeInstallationDirectory": true,
+    "deleteAppDataOnUninstall": true
+  },
+  "win": {
+    "target": ["nsis"]
+  },
+  "publish": {
+    "provider": "github",
+    "releaseType": "release",
+    "private": true,
+    "channel": "latest"
+  },
+  "generateUpdatesFilesForAllChannels": true
+}
