@@ -31,7 +31,7 @@ def make_mask(batch_ids):
 
 def dataloader_from_text(labels=[], texts=[], tokenizer=None, savetodisk=None, loadformdisk=None, segment=False,
                          max_len=256, batch_size=16, infer=False):
-  ids_padded, masks = [], [], []
+  ids_padded, masks = [], []
   if loadformdisk == None:
     # segementer
     if segment:
@@ -75,8 +75,6 @@ def dataloader_from_text(labels=[], texts=[], tokenizer=None, savetodisk=None, l
   del ids_padded
   # masks = torch.tensor(masks)
   if not infer:
-    if labels[0].startswith('\ufeff'):
-      labels[0] = labels[0][1:]
     labels = torch.tensor(labels)
 
   print("CREATE DATALOADER")
