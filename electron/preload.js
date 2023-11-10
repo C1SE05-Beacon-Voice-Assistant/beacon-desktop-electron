@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { Builder } = require("selenium-webdriver");
-const { contextBridge } = require("electron");
+// const { contextBridge } = require("electron");
 const chromedriverPath = require("chromedriver").path.replace(
   "app.asar",
   "app.asar.unpacked"
