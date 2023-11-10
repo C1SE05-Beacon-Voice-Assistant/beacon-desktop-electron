@@ -6,7 +6,7 @@
   "main": "dist-electron/main.js",
   "author": "Beacon Team",
   "scripts": {
-    "copy": "node ./copyAudio.js",
+    "copy": "node ./copyStaticFiles.js",
     "dev": "npm run copy && vite",
     "make": "npm run copy && npm run build && electron-builder build --win",
     "build": "npm run copy && vite build",

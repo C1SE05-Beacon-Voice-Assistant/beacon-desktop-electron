@@ -35,6 +35,7 @@ const createWindow = (options: WindowOptions = {}) => {
     return;
   }
   const config: WindowOptions = {
+    // show: false,
     width: parseInt(process.env.ELECTRON_WIDTH) || 833,
     height: parseInt(process.env.ELECTRON_HEIGHT) || 562,
     icon: path.join(process.env.VITE_PUBLIC, "icon.png"),
@@ -43,6 +44,7 @@ const createWindow = (options: WindowOptions = {}) => {
       contextIsolation: true,
       preload: path.join(__dirname, "./preload.js"),
     },
+    // opacity: 0,
     resizable: false,
     ...options,
   };
