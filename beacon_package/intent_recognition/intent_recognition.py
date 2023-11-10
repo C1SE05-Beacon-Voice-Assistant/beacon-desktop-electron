@@ -9,8 +9,7 @@ import torch
 import numpy as np
 from sklearn.metrics import f1_score, accuracy_score
 import os
-from transformers import RobertaForSequenceClassification, RobertaConfig, AdamW, RobertaTokenizer, RobertaTokenizerFast, \
-  RobertaModel, AutoTokenizer
+from transformers import BertForSequenceClassification, AutoConfig, AdamW, AutoModel, AutoTokenizer
 from datetime import datetime
 import glob
 from sklearn.model_selection import train_test_split
@@ -98,7 +97,7 @@ class ROBERTAClassifier(torch.nn.Module):
     if bert_model != None:
       self.roberta = bert_model
     else:
-      self.roberta = RobertaModel.from_pretrained("vinai/phobert-base")
+      self.roberta = AutoModel.from_pretrained("vinai/phobert-base")
     self.d1 = torch.nn.Dropout(dropout_rate)
     self.l1 = torch.nn.Linear(768, 64)
     self.bn1 = torch.nn.LayerNorm(64)
@@ -119,14 +118,14 @@ class ROBERTAClassifier(torch.nn.Module):
 class BERTClassifier(torch.nn.Module):
   def __init__(self, num_labels):
     super(BERTClassifier, self).__init__()
-    bert_classifier_config = RobertaConfig.from_pretrained(
+    bert_classifier_config = AutoConfig.from_pretrained(
       config_path,
       from_tf=False,
       num_labels=num_labels,
       output_hidden_states=False,
     )
     print("LOAD BERT PRETRAIN MODEL")
-    self.bert_classifier = RobertaForSequenceClassification.from_pretrained(
+    self.bert_classifier = BertForSequenceClassification.from_pretrained(
       model_path,
       config=bert_classifier_config
     )
