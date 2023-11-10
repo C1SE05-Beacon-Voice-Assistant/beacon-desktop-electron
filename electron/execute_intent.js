@@ -2,6 +2,7 @@ const { SearchNewsBy } = require("./helpers/enum");
 
 const execute_intent = async (
   output_type,
+  output,
   object,
   newsList = [],
   index = 0
@@ -88,10 +89,7 @@ const execute_intent = async (
     },
     {
       name: "search_news",
-      feature_name: () =>
-        object
-          .searchByKeyword("Phân xác sông hồng")
-          .then((res) => console.log(res)),
+      feature_name: () => object.searchByKeyword(output),
     },
     {
       name: "latest_news",
@@ -117,6 +115,7 @@ const execute_intent = async (
   // });
   for (let f of features) {
     if (f.name === output_type) return f.feature_name();
+    // if (f.name == output_type) return f.feature_name();
   }
 };
 module.exports = {

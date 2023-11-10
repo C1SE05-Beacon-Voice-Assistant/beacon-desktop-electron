@@ -5,6 +5,9 @@ const { promisify } = require("util");
 const NewsReader = require("./helpers/newsReader.js");
 const { By } = require("selenium-webdriver");
 // const ChromeDriver = require("./helpers/driver.js");
+const textToSpeech = require("./text_to_speech.js");
+
+const executeException = require("./situation_except");
 
 const SearchNewsBy = {
   KEYWORD: "keyword",
@@ -79,30 +82,78 @@ class ReadNewsController {
       By.xpath(`//div[@id='automation_TV0']//article[position()<4]`)
     );
     const result = await this.getNewsInList(articlesList);
+
+    if (result.length <= 0) {
+      await textToSpeech("Rất tiếc tôi không tìm thấy tin tức nào");
+      throw Error("Không tìm thấy tin tức");
+    }
+
+    await textToSpeech(`
+      Tìm thấy ${result.length} kết quả, vui lòng chọn 1 tin tức mà bạn muốn đọc.
+    `);
+
+    for (let i = 0; i < result.length; i++) {
+      await textToSpeech(`${i + 1}. ${result[i].title}`);
+    }
+
     return result;
   }
 
   async searchByKeyword(keyword) {
-    const url = `https://timkiem.vnexpress.net/?q=${keyword}`;
-    await this.driver.get(url);
-    const articlesList = await this.driver.findElements(
-      By.xpath(`//div[@id='result_search']/article[position()<4]`)
-    );
-    return this.getNewsInList(articlesList);
+    try {
+      const url = `https://timkiem.vnexpress.net/?q=${keyword}`;
+      await this.driver.get(url);
+      const articlesList = await this.driver.findElements(
+        By.xpath(`//div[@id='result_search']/article[position()<4]`)
+      );
+      // return this.getNewsInList(articlesList);
+      const newsList = await this.getNewsInList(articlesList);
+
+      if (newsList.length === 0) {
+        await textToSpeech(
+          `Không tìm thấy kết quả tìm kiếm cho từ khóa ${keyword}`
+        );
+
+        throw new Error(
+          `Không tìm thấy kết quả tìm kiếm cho từ khóa ${keyword}`
+        );
+      }
+
+      await textToSpeech(`
+      Tìm thấy ${newsList.length} kết quả, vui lòng chọn 1 tin tức mà bạn muốn đọc.
+    `);
+
+      for (let i = 0; i < newsList.length; i++) {
+        await textToSpeech(`${i + 1}. ${newsList[i].title}`);
+      }
+
+      return newsList;
+    } catch (error) {
+      console.error("An error occurred:", error);
+      executeException("readNews");
+    }
   }
 
   async selectOneToRead(newsList, num) {
     console.log(newsList);
 
-    if (newsList.length === 0) throw new Error("Không có tin tức nào để đọc");
+    if (newsList.length === 0) {
+      // await textToSpeech("Rất tiếc, không có tin tức nào để đọc");
+      throw new Error("Không có tin tức nào để đọc");
+    }
 
     await this.driver.get(newsList[num].url);
     const html = await this.driver.getPageSource();
-    return this.newsReader.getNewsContent(
+    const result = await this.newsReader.getNewsContent(
       html,
       newsList[num].title,
       newsList[num].description
     );
+
+    await textToSpeech(result.title);
+    // await textToSpeech(result.content)
+
+    return result;
   }
 
   async start() {
@@ -156,8 +207,6 @@ class ReadNewsController {
       console.log(tmp);
     } catch (error) {
       console.log("152", error);
-    } finally {
-      rl.close();
     }
   }
 }

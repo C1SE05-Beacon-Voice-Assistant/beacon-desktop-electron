@@ -37,7 +37,11 @@ const config = defineConfig({
           ],
         }),
       ],
+      output: {
+        manualChunks: undefined,
+      },
     },
+    chunkSizeWarningLimit: 1000,
   },
   resolve: {
     alias: {
@@ -62,8 +66,8 @@ const config = defineConfig({
               },
               output: {
                 entryFileNames: "[name].js",
-                chunkFileNames: "[name].js",
-                assetFileNames: "[name].[ext]",
+                chunkFileNames: "[name].[ext]",
+                assetFileNames: "assets/[name].[ext]",
                 inlineDynamicImports: false,
               },
             },
