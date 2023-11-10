@@ -108,3 +108,5 @@ package-lock.json
 dist-electron/
 
 .env.production
+
+*.zip
