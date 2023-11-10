@@ -2,6 +2,7 @@
 const sdk = require("microsoft-cognitiveservices-speech-sdk");
 const { PythonShell } = require("python-shell");
 const { options } = require("./helpers/optionPyshell");
+const textToSpeech = require("./text_to_speech");
 
 class BeaconSpeech {
   constructor(name, location) {
@@ -52,14 +53,30 @@ class BeaconSpeech {
   }
 
   backgroundListen(callback) {
+    let isSpeechDetected = false;
+
+    // Set a timeout for 5 seconds
+    const timeoutId = setTimeout(() => {
+      if (!isSpeechDetected) {
+        console.log(
+          "No speech detected within 5 seconds. Stopping recognition."
+        );
+        this.speechRecognizer.stopContinuousRecognitionAsync();
+      }
+    }, 1000);
+
     this.speechRecognizer.recognizing = (s, e) => {
       console.log(`RECOGNIZING: Text=${e.result.text}`);
+      // If speech is detected, set the flag to true
+      isSpeechDetected = true;
     };
 
     this.speechRecognizer.recognized = (s, e) => {
-      if (e.result.reason == sdk.ResultReason.RecognizedSpeech) {
+      if (e.result.reason === sdk.ResultReason.RecognizedSpeech) {
+        // If speech is recognized, clear the timeout
+        clearTimeout(timeoutId);
         callback(e.result.text);
-      } else if (e.result.reason == sdk.ResultReason.NoMatch) {
+      } else if (e.result.reason === sdk.ResultReason.NoMatch) {
         console.log("NOMATCH: Speech could not be recognized.");
       }
     };
@@ -67,7 +84,7 @@ class BeaconSpeech {
     this.speechRecognizer.canceled = (s, e) => {
       console.log(`CANCELED: Reason=${e.reason}`);
 
-      if (e.reason == sdk.CancellationReason.Error) {
+      if (e.reason === sdk.CancellationReason.Error) {
         console.log(`"CANCELED: ErrorCode=${e.errorCode}`);
         console.log(`"CANCELED: ErrorDetails=${e.errorDetails}`);
         console.log(
@@ -75,22 +92,20 @@ class BeaconSpeech {
         );
       }
 
+      // Clear the timeout in case of cancellation
+      clearTimeout(timeoutId);
       this.speechRecognizer.stopContinuousRecognitionAsync();
     };
 
     this.speechRecognizer.sessionStopped = (s, e) => {
       console.log("\nSession stopped event.");
+      // Clear the timeout in case of session stop
+      clearTimeout(timeoutId);
       this.speechRecognizer.stopContinuousRecognitionAsync();
       this.keywordRecognize();
     };
 
-    this.keywordRecognize().then((result) => {
-      if (result) {
-        this.speechRecognizer.startContinuousRecognitionAsync();
-      } else {
-        console.log("Keyword not match");
-      }
-    });
+    this.speechRecognizer.startContinuousRecognitionAsync();
   }
 
   stopBackgroundListen() {
@@ -98,8 +113,10 @@ class BeaconSpeech {
   }
 
   async keywordRecognize() {
+    await textToSpeech("Nói hey bi cần để bắt đầu");
     const data = await PythonShell.run("keyword_recognition.py", options);
     if (data[0] == "Hey Beacon") {
+      await textToSpeech("Tôi đây, bạn cần gì ạ?");
       return true;
     } else {
       return false;

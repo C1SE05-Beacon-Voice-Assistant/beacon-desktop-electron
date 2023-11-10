@@ -2,7 +2,7 @@ import os
 import azure.cognitiveservices.speech as speechsdk
 
 def keyword_recognition():
-    model = speechsdk.KeywordRecognitionModel(os.path.join(os.path.dirname(__file__), "408cc6c9-291c-4a2f-8e52-34bb2ff82329.table"))
+    model = speechsdk.KeywordRecognitionModel(os.path.join(os.path.dirname(__file__), "final_highfa.table"))
 
     keyword_recognizer = speechsdk.KeywordRecognizer()
 
