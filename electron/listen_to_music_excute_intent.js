@@ -1,12 +1,10 @@
-const { SearchNewsBy } = require("./helpers/enum");
-
-const excute_intent = async (output_type, object, newsList = [], index = 0) => {
+const listen_to_music_excute_intent = async (output_type, object, output_cmd) => {
   const features = [
     {
       name: "play_music",
       feature_name: () =>
         object.then(async (res) => {
-          await res.searchSong("Anh nho em nguoi yeu cu");
+          await res.searchSong(output_cmd);
           // await res.playOnYoutube();
           await res.playOnMp3()
         }),
@@ -81,42 +79,14 @@ const excute_intent = async (output_type, object, newsList = [], index = 0) => {
           await res.next()
         }),
     },
-    {
-      name: "search_news",
-      feature_name: () =>
-        object
-          .searchByKeyword("Phân xác sông hồng")
-          .then((res) => console.log(res)),
-    },
-    {
-      name: "latest_news",
-      feature_name: () => object.search(SearchNewsBy.LATEST),
-    },
-    {
-      name: "most_read_news",
-      feature_name: () => object.search(SearchNewsBy.MOST_READ),
-    },
-    {
-      name: "hottest_news",
-      feature_name: () => object.search(SearchNewsBy.MOST_READ),
-    },
-    {
-      name: "read_news",
-      feature_name: () => object.selectOneToRead(newsList, index),
-    },
   ];
-  // features.forEach(async (feature) => {
-  //   if (feature.name === output_type) {
-  //     return feature.feature_name();
-  //   }
-  // });
-  for (let f of features) {
-    if (f.name === output_type) return f.feature_name();
-  }
+  features.forEach(async (feature) => {
+    if (feature.name === output_type) {
+      await feature.feature_name();
+    }
+  });
 };
-module.exports = {
-  excute_intent,
-};
+module.exports = listen_to_music_excute_intent
 // read_nnuews
 // user_maal
 // next_content
