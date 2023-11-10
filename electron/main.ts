@@ -35,6 +35,7 @@ const createWindow = (options: WindowOptions = {}) => {
     return;
   }
   const config: WindowOptions = {
+    // show: false,
     width: parseInt(process.env.ELECTRON_WIDTH) || 833,
     height: parseInt(process.env.ELECTRON_HEIGHT) || 562,
     icon: path.join(process.env.VITE_PUBLIC, "icon.png"),
@@ -43,6 +44,7 @@ const createWindow = (options: WindowOptions = {}) => {
       contextIsolation: true,
       preload: path.join(__dirname, "./preload.js"),
     },
+    // opacity: 0,
     resizable: false,
     ...options,
   };
@@ -125,18 +127,20 @@ autoUpdater.allowDowngrade = true;
 autoUpdater.allowPrerelease = true;
 
 autoUpdater.on("update-available", (updateInfo) => {
-  // show update available notification for user
-  dialog
-    .showMessageBox({
-      type: "info",
-      title: "Update available",
-      message: `New version ${updateInfo.version} is available and will be downloaded in the background.`,
-      buttons: ["OK", "Cancel"],
-    })
-    .then((result: any) => {
-      console.log(result);
-      if (result.response === 0) {
-        autoUpdater.downloadUpdate();
-      }
-    });
+  // if new version > current version
+  if (updateInfo.version > app.getVersion()) {
+    dialog
+      .showMessageBox({
+        type: "info",
+        title: "Update available",
+        message: `New version ${updateInfo.version} is available and will be downloaded in the background.`,
+        buttons: ["OK", "Cancel"],
+        textWidth: 300,
+      })
+      .then((result) => {
+        if (result.response === 0) {
+          autoUpdater.downloadUpdate();
+        }
+      });
+  }
 });
