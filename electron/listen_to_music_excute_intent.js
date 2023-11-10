@@ -1,4 +1,4 @@
-const excute_intent = async (output_type, object, output_cmd) => {
+const listen_to_music_excute_intent = async (output_type, object, output_cmd) => {
   const features = [
     {
       name: "play_music",
@@ -86,7 +86,7 @@ const excute_intent = async (output_type, object, output_cmd) => {
     }
   });
 };
-module.exports = excute_intent
+module.exports = listen_to_music_excute_intent
 // read_nnuews
 // user_maal
 // next_content
