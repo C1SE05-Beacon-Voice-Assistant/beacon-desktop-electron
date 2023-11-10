@@ -28,12 +28,10 @@ const beacon = new BeaconSpeech("Beacon", "Hanoi");
 
 const init = () => {
   checkInternetConnection(async (isConnected) => {
-    if (isConnected) {
-      console.error("Máy tính đang kết nối internet.");
-    } else {
-      console.log("Máy tính không có kết nối internet.");
+    if (!isConnected) {
       executeException("noInternet");
     }
+
     await textToSpeech("Xin chào, tôi là Beacon, tôi có thể giúp gì cho bạn?");
     start()
       .then(async (res) => {

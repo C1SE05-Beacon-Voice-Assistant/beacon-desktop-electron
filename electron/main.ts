@@ -127,18 +127,20 @@ autoUpdater.allowDowngrade = true;
 autoUpdater.allowPrerelease = true;
 
 autoUpdater.on("update-available", (updateInfo) => {
-  // show update available notification for user
-  dialog
-    .showMessageBox({
-      type: "info",
-      title: "Update available",
-      message: `New version ${updateInfo.version} is available and will be downloaded in the background.`,
-      buttons: ["OK", "Cancel"],
-    })
-    .then((result: any) => {
-      console.log(result);
-      if (result.response === 0) {
-        autoUpdater.downloadUpdate();
-      }
-    });
+  // if new version > current version
+  if (updateInfo.version > app.getVersion()) {
+    dialog
+      .showMessageBox({
+        type: "info",
+        title: "Update available",
+        message: `New version ${updateInfo.version} is available and will be downloaded in the background.`,
+        buttons: ["OK", "Cancel"],
+        textWidth: 300,
+      })
+      .then((result) => {
+        if (result.response === 0) {
+          autoUpdater.downloadUpdate();
+        }
+      });
+  }
 });
