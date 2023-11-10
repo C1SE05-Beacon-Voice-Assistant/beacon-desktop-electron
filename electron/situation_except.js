@@ -72,10 +72,3 @@ function executeException(funcName) {
 
 // Sử dụng hàm executeException và truyền vào tên chức năng để kiểm tra
 module.exports = executeException;
-
-// function playErrorSound() {
-//   const audioPath = "assets/Youtube.mp3";
-//   const voiceFilePath = path.join(__dirname, audioPath);
-//   console.log(voiceFilePath);
-//   sound.play(voiceFilePath).then(() => console.log("done"));
-// }

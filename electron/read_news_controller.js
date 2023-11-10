@@ -172,4 +172,6 @@ class ReadNewsController {
   }
 }
 
+// new ReadNewsController().start();
+
 module.exports = ReadNewsController;

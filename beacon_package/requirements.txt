@@ -2,6 +2,4 @@ python-dotenv~=1.0.0
 azure-cognitiveservices-speech
 azure-ai-language-conversations
 pyaudio~=0.2.11
-g4f~=0.0.3.4
-PyExecJS~=1.5.1
-pycaw
+requests~=2.31.0

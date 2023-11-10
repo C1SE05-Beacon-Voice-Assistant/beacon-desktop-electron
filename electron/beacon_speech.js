@@ -53,28 +53,12 @@ class BeaconSpeech {
   }
 
   backgroundListen(callback) {
-    let isSpeechDetected = false;
-
-    // Set a timeout for 5 seconds
-    const timeoutId = setTimeout(() => {
-      if (!isSpeechDetected) {
-        console.log(
-          "No speech detected within 5 seconds. Stopping recognition."
-        );
-        this.speechRecognizer.stopContinuousRecognitionAsync();
-      }
-    }, 1000);
-
     this.speechRecognizer.recognizing = (s, e) => {
       console.log(`RECOGNIZING: Text=${e.result.text}`);
-      // If speech is detected, set the flag to true
-      isSpeechDetected = true;
     };
 
     this.speechRecognizer.recognized = (s, e) => {
       if (e.result.reason === sdk.ResultReason.RecognizedSpeech) {
-        // If speech is recognized, clear the timeout
-        clearTimeout(timeoutId);
         callback(e.result.text);
       } else if (e.result.reason === sdk.ResultReason.NoMatch) {
         console.log("NOMATCH: Speech could not be recognized.");
@@ -92,17 +76,12 @@ class BeaconSpeech {
         );
       }
 
-      // Clear the timeout in case of cancellation
-      clearTimeout(timeoutId);
       this.speechRecognizer.stopContinuousRecognitionAsync();
     };
 
     this.speechRecognizer.sessionStopped = (s, e) => {
       console.log("\nSession stopped event.");
-      // Clear the timeout in case of session stop
-      clearTimeout(timeoutId);
       this.speechRecognizer.stopContinuousRecognitionAsync();
-      this.keywordRecognize();
     };
 
     this.speechRecognizer.startContinuousRecognitionAsync();
