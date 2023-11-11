@@ -1,13 +1,16 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const sdk = require("microsoft-cognitiveservices-speech-sdk");
+const { PythonShell } = require("python-shell");
+const { options } = require("./helpers/optionPyshell");
+const textToSpeech = require("./text_to_speech");
 
 class BeaconSpeech {
   constructor(name, location) {
     this.name = name;
     this.location = location;
     this.speechConfig = sdk.SpeechConfig.fromSubscription(
-      "cd1e1747056d4ccfadbbd424183e92bf",
-      "eastasia"
+      "4d74b26c859a4d338226896369488f55",
+      "southeastasia"
     );
     this.speechConfig.speechRecognitionLanguage = "vi-VN";
     this.speechRecognizer = new sdk.SpeechRecognizer(
@@ -55,9 +58,9 @@ class BeaconSpeech {
     };
 
     this.speechRecognizer.recognized = (s, e) => {
-      if (e.result.reason == sdk.ResultReason.RecognizedSpeech) {
+      if (e.result.reason === sdk.ResultReason.RecognizedSpeech) {
         callback(e.result.text);
-      } else if (e.result.reason == sdk.ResultReason.NoMatch) {
+      } else if (e.result.reason === sdk.ResultReason.NoMatch) {
         console.log("NOMATCH: Speech could not be recognized.");
       }
     };
@@ -65,7 +68,7 @@ class BeaconSpeech {
     this.speechRecognizer.canceled = (s, e) => {
       console.log(`CANCELED: Reason=${e.reason}`);
 
-      if (e.reason == sdk.CancellationReason.Error) {
+      if (e.reason === sdk.CancellationReason.Error) {
         console.log(`"CANCELED: ErrorCode=${e.errorCode}`);
         console.log(`"CANCELED: ErrorDetails=${e.errorDetails}`);
         console.log(
@@ -86,6 +89,17 @@ class BeaconSpeech {
 
   stopBackgroundListen() {
     this.speechRecognizer.stopContinuousRecognitionAsync();
+  }
+
+  async keywordRecognize() {
+    await textToSpeech("Nói hey bi cần để bắt đầu");
+    const data = await PythonShell.run("keyword_recognition.py", options);
+    if (data[0] == "Hey Beacon") {
+      await textToSpeech("Tôi đây, bạn cần gì ạ?");
+      return true;
+    } else {
+      return false;
+    }
   }
 }
 

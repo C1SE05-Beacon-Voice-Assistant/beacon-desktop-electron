@@ -23,10 +23,10 @@ git clone https://github.com/C1SE05-Beacon-Voice-Assistant/beacon-desktop-electr
 npm install
 ```
 
-- Go to the `beacon-package` directory
+- Go to the `beacon_package` directory
 
 ```bash
-cd beacon-package
+cd beacon_package
 ```
 
 - Copy `.env.example` to `.env`
@@ -56,24 +56,27 @@ pip install -r requirements.txt
 ```
 
 - Download phobert-base
+
 ```bash
 wget https://public.vinai.io/PhoBERT_base_transformers.tar.gz
 tar -xzvf PhoBERT_base_transformers.tar.gz
 ```
 
 - Install vncorenlp
+
 ```bash
 pip install vncorenlp
-mkdir -p vncorenlp/models/wordsegmenter  
-wget https://raw.githubusercontent.com/vncorenlp/VnCoreNLP/master/VnCoreNLP-1.1.1.jar  
-wget https://raw.githubusercontent.com/vncorenlp/VnCoreNLP/master/models/wordsegmenter/vi-vocab  
-wget https://raw.githubusercontent.com/vncorenlp/VnCoreNLP/master/models/wordsegmenter/wordsegmenter.rdr  
-mv VnCoreNLP-1.1.1.jar vncorenlp/   
-mv vi-vocab vncorenlp/models/wordsegmenter/  
-mv wordsegmenter.rdr vncorenlp/models/wordsegmenter/  
+mkdir -p vncorenlp/models/wordsegmenter
+wget https://raw.githubusercontent.com/vncorenlp/VnCoreNLP/master/VnCoreNLP-1.1.1.jar
+wget https://raw.githubusercontent.com/vncorenlp/VnCoreNLP/master/models/wordsegmenter/vi-vocab
+wget https://raw.githubusercontent.com/vncorenlp/VnCoreNLP/master/models/wordsegmenter/wordsegmenter.rdr
+mv VnCoreNLP-1.1.1.jar vncorenlp/
+mv vi-vocab vncorenlp/models/wordsegmenter/
+mv wordsegmenter.rdr vncorenlp/models/wordsegmenter/
 ```
 
 - Install transformers
+
 ```bash
 pip install transformers
 ```
@@ -113,7 +116,7 @@ npm run package
 ## Train model
 
 - Run file intent_recognition.py (change path)
-`python ./beacon_package/intent_recognition/intent_recognition.py`
+  `python ./beacon_package/intent_recognition/intent_recognition.py`
 
 ## How it works
 
