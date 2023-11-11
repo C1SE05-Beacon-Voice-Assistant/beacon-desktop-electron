@@ -1,7 +1,6 @@
 from read_csv_file import read_csv
 from vncorenlp import VnCoreNLP
 from keras.utils import pad_sequences
-import random
 from tqdm import tqdm
 import pickle
 from torch.utils.data import TensorDataset, DataLoader, RandomSampler, SequentialSampler
@@ -9,7 +8,7 @@ import torch
 import numpy as np
 from sklearn.metrics import f1_score, accuracy_score
 import os
-from transformers import BertForSequenceClassification, AutoConfig, AdamW, AutoModel, AutoTokenizer
+from transformers import BertForSequenceClassification, AutoConfig, AdamW, AutoTokenizer
 from datetime import datetime
 import glob
 from sklearn.model_selection import train_test_split
@@ -90,31 +89,6 @@ def dataloader_from_text(labels=[], texts=[], tokenizer=None, savetodisk=None, l
   print("LOAD DATA ALL DONE")
   return dataloader
 
-
-class ROBERTAClassifier(torch.nn.Module):
-  def __init__(self, num_labels, bert_model, dropout_rate=0.3):
-    super(ROBERTAClassifier, self).__init__()
-    if bert_model != None:
-      self.roberta = bert_model
-    else:
-      self.roberta = AutoModel.from_pretrained("vinai/phobert-base")
-    self.d1 = torch.nn.Dropout(dropout_rate)
-    self.l1 = torch.nn.Linear(768, 64)
-    self.bn1 = torch.nn.LayerNorm(64)
-    self.d2 = torch.nn.Dropout(dropout_rate)
-    self.l2 = torch.nn.Linear(64, num_labels)
-
-  def forward(self, input_ids, attention_mask):
-    _, x = self.roberta(input_ids=input_ids, attention_mask=attention_mask)
-    x = self.d1(x)
-    x = self.l1(x)
-    x = self.bn1(x)
-    x = torch.nn.Tanh()(x)
-    x = self.d2(x)
-    x = self.l2(x)
-    return x
-
-
 class BERTClassifier(torch.nn.Module):
   def __init__(self, num_labels):
     super(BERTClassifier, self).__init__()
@@ -140,7 +114,7 @@ class BERTClassifier(torch.nn.Module):
 
 
 class ClassifierTrainner():
-  def __init__(self, bert_model, train_dataloader, valid_dataloader, epochs=10, cuda_device="cpu", save_dir=None):
+  def __init__(self, bert_model, train_dataloader=None, valid_dataloader=None, epochs=1, cuda_device="cpu", save_dir=None):
 
     # if cuda_device == "cpu":
     #     self.device == torch.device("cpu")
@@ -284,43 +258,44 @@ class ClassifierTrainner():
 
     print("Training complete!")
 
-    def predict_dataloader(self, dataloader, classes, tokenizer):
-      for batch in dataloader:
-        batch = tuple(t.to(self.device) for t in batch)
-        b_input_ids, b_input_mask = batch
-        with torch.no_grad():
-          outputs = self.model(b_input_ids,
-                               attention_mask=b_input_mask,
-                               labels=None
-                               )
-          logits = outputs
-          logits = logits.detach().cpu().numpy()
-          pred_flat = np.argmax(logits, axis=1).flatten()
-          print("[PREDICT] {}:{}".format(classes[int(pred_flat)], tokenizer.decode(b_input_ids)))
-
-    def predict_text(self, text, classes, tokenizer, max_len=256):
-      ids = tokenizer.encode(text)
-      ids_padded = pad_sequences(ids, maxlen=max_len, dtype="long", value=0, truncating="post", padding="post")
-      mask = [int(token_id > 0) for token_id in ids_padded]
-      input_ids = torch.tensor(ids_padded)
-      intput_mask = torch.tensor(mask)
+  def predict_dataloader(self, dataloader, classes, tokenizer):
+    for batch in dataloader:
+      batch = tuple(t.to(self.device) for t in batch)
+      b_input_ids, b_input_mask = batch
       with torch.no_grad():
-        logits = self.model(input_ids,
-                            attention_mask=intput_mask,
-                            labels=None
-                            )
+        outputs = self.model(b_input_ids,
+                             attention_mask=b_input_mask,
+                             labels=None
+                             )
+        logits = outputs
         logits = logits.detach().cpu().numpy()
         pred_flat = np.argmax(logits, axis=1).flatten()
-        print("[PREDICT] {}:{}".format(classes[int(pred_flat)], text))
+        print("[PREDICT] {}:{}".format(classes[int(pred_flat)], tokenizer.decode(b_input_ids)))
+
+  def predict_text(self, text, classes, tokenizer, max_len=256):
+    ids = []
+    ids.append(tokenizer.encode(text))
+    ids_padded = pad_sequences(ids, maxlen=max_len, dtype="long", value=0, truncating="post", padding="post")
+    mask = [int(token_id > 0) for sequence in ids_padded for token_id in sequence]
+    input_ids = torch.tensor(ids_padded)
+    intput_mask = torch.tensor(mask).unsqueeze(0)
+    with torch.no_grad():
+      logits = self.model(input_ids,
+                          attention_mask=intput_mask,
+                          labels=None
+                          )
+      logits = logits.logits.cpu().numpy()
+      pred_flat = np.argmax(logits, axis=1).flatten()
+      print("[PREDICT] {}:{}".format(classes[int(pred_flat[0])], text))
 
 
 def main():
-  classes = {'listen_to_music': 0, 'gpt_ai': 1, 'read_news': 2, 'user_manual': 3}
+  classes_map = {'listen_to_music': 0, 'gpt_ai': 1, 'read_news': 2, 'user_manual': 3}
 
   #Đọc file train.csv
   texts, train_labels = read_csv()
 
-  labels = [classes[label] for label in train_labels]
+  labels = [classes_map[label] for label in train_labels]
 
   #Split train to train:valid = 90:10
   train_texts, val_texts, train_labels, val_labels = train_test_split(texts, labels, test_size=0.1)
@@ -335,12 +310,28 @@ def main():
                                           max_len=MAX_LEN, batch_size=16)
 
   # bert model
-  bert_classifier_model = BERTClassifier(len(classes))
+  bert_classifier_model = BERTClassifier(len(classes_map))
   # train model
   bert_classifier_trainer = ClassifierTrainner(bert_model=bert_classifier_model, train_dataloader=train_dataloader,
-                                               valid_dataloader=valid_dataloader, epochs=10,
+                                               valid_dataloader=valid_dataloader, epochs=2,
                                                cuda_device="cpu")  # cuda_device: "cpu"=cpu hoac 0=gpu0, 1=gpu1,
   bert_classifier_trainer.train_classifier()
 
+def run(text_input):
+  classes = ['listen_to_music', 'gpt_ai', 'read_news', 'user_manual']
+  tokenizer = AutoTokenizer.from_pretrained("vinai/phobert-large")
+  model_path1 = 'E:/PROJECT/beacon-desktop-electron/beacon_package/intent_recognition/model_epoch9.pt'
+  # bert model
+  bert_classifier_model = BERTClassifier(len(classes))
+  # train model
+  bert_classifier_trainer = ClassifierTrainner(bert_model=bert_classifier_model,
+                                               cuda_device="cpu")  # cuda_device: "cpu"=cpu hoac 0=gpu0, 1=gpu1,
+  bert_classifier_trainer.load_checkpoint(model_path1)
 
-main()
+  return bert_classifier_trainer.predict_text(text_input, classes, tokenizer)
+
+if __name__ == '__main__':
+    print(run("Tôi muốn đọc tin tức mới nhất"))
+
+
+
