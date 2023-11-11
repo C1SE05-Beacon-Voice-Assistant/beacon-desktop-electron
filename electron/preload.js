@@ -49,9 +49,8 @@ const { start, register } = require(path.join(__dirname, "start.js"));
 
 // const beacon = new BeaconSpeech("Beacon", "Hanoi");
 
-// setTimeout(() => {
-//   execute_intent("next_content", listenToMusic(driver));
-// }, 20000);
+
+process.env.API_URL = "http://localhost:8000/api";
 
 // setTimeout(() => {
 //   execute_intent("next_content", listenToMusic(driver));
