@@ -1,21 +1,22 @@
-from read_csv_file import read_csv
-from vncorenlp import VnCoreNLP
-from keras.utils import pad_sequences
-import random
-from tqdm import tqdm
-import pickle
-from torch.utils.data import TensorDataset, DataLoader, RandomSampler, SequentialSampler
-import torch
-import numpy as np
-from sklearn.metrics import f1_score, accuracy_score
-import os
-from transformers import BertForSequenceClassification, AutoConfig, AdamW, AutoModel, AutoTokenizer
-from datetime import datetime
 import glob
+import os
+import pickle
+from datetime import datetime
+
+import numpy as np
+import torch
+from keras.utils import pad_sequences
+from sklearn.metrics import f1_score, accuracy_score
 from sklearn.model_selection import train_test_split
+from torch.utils.data import TensorDataset, DataLoader, SequentialSampler
+from tqdm import tqdm
+from transformers import BertForSequenceClassification, AutoConfig, AdamW, AutoTokenizer
+from vncorenlp import VnCoreNLP
+
+from .read_csv_file import read_csv
 
 # PATH
-base_dir = os.path.dirname(os.path.abspath(''))
+base_dir = os.path.dirname(os.path.abspath(__file__))
 vncorenlp_path = os.path.join(base_dir, 'vncorenlp', 'VnCoreNLP-1.1.1.jar')
 config_path = os.path.join(base_dir, 'phobert-base', 'config.json')
 model_path = os.path.join(base_dir, 'phobert-base', 'model.bin')
@@ -31,10 +32,10 @@ def make_mask(batch_ids):
 
 def dataloader_from_text(labels=None, texts=None, tokenizer=None, savetodisk=None, loadformdisk=None, segment=False,
                          max_len=256, batch_size=16, infer=False):
-    if labels is None:
-        labels = []
     if texts is None:
         texts = []
+    if labels is None:
+        labels = []
     ids_padded, masks = [], []
     if loadformdisk is None:
         # segementer
@@ -68,7 +69,6 @@ def dataloader_from_text(labels=None, texts=None, tokenizer=None, savetodisk=Non
             try:
                 with open(savetodisk, 'rb') as f:
                     ids_padded = pickle.load(ids_padded, f)
-                    # masks = pickle.load(masks, f)
                     labels = pickle.load(labels, f)
                 print("LOADED IDS DATA FORM DISK")
             except:
@@ -77,47 +77,20 @@ def dataloader_from_text(labels=None, texts=None, tokenizer=None, savetodisk=Non
     print("CONVERT TO TORCH TENSOR")
     ids_inputs = torch.tensor(ids_padded)
     del ids_padded
-    # masks = torch.tensor(masks)
     if not infer:
         labels = torch.tensor(labels)
 
     print("CREATE DATALOADER")
     if infer:
-        # input_data = TensorDataset(ids_inputs, masks)
         input_data = TensorDataset(ids_inputs)
     else:
         input_data = TensorDataset(ids_inputs, labels)
-        # input_data = TensorDataset(ids_inputs, masks, labels)
     input_sampler = SequentialSampler(input_data)
     dataloader = DataLoader(input_data, sampler=input_sampler, batch_size=batch_size)
 
     print("len dataloader:", len(dataloader))
     print("LOAD DATA ALL DONE")
     return dataloader
-
-
-class ROBERTAClassifier(torch.nn.Module):
-    def __init__(self, num_labels, bert_model, dropout_rate=0.3):
-        super(ROBERTAClassifier, self).__init__()
-        if bert_model is not None:
-            self.roberta = bert_model
-        else:
-            self.roberta = AutoModel.from_pretrained("vinai/phobert-base")
-        self.d1 = torch.nn.Dropout(dropout_rate)
-        self.l1 = torch.nn.Linear(768, 64)
-        self.bn1 = torch.nn.LayerNorm(64)
-        self.d2 = torch.nn.Dropout(dropout_rate)
-        self.l2 = torch.nn.Linear(64, num_labels)
-
-    def forward(self, input_ids, attention_mask):
-        _, x = self.roberta(input_ids=input_ids, attention_mask=attention_mask)
-        x = self.d1(x)
-        x = self.l1(x)
-        x = self.bn1(x)
-        x = torch.nn.Tanh()(x)
-        x = self.d2(x)
-        x = self.l2(x)
-        return x
 
 
 class BERTClassifier(torch.nn.Module):
@@ -129,7 +102,7 @@ class BERTClassifier(torch.nn.Module):
             num_labels=num_labels,
             output_hidden_states=False,
         )
-        print("LOAD BERT PRETRAIN MODEL")
+        # print("LOAD BERT PRETRAIN MODEL")
         self.bert_classifier = BertForSequenceClassification.from_pretrained(
             model_path,
             config=bert_classifier_config
@@ -144,34 +117,33 @@ class BERTClassifier(torch.nn.Module):
         return output
 
 
-class ClassifierTrainner():
-    def __init__(self, bert_model, train_dataloader, valid_dataloader, epochs=10, cuda_device="cpu", save_dir=None):
+class ClassifierTrainner:
+    def __init__(self, bert_model, train_dataloader=None, valid_dataloader=None, epochs=1,
+                 save_dir=None, load_dir=None):
 
-        # if cuda_device == "cpu":
-        #     self.device == torch.device("cpu")
-        # else:
-        #     self.device == torch.device("cpu")
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
         self.model = bert_model
-        if save_dir is not None and os.path.exists(save_dir):
-            print("Load weight from file:{}".format(save_dir))
-            self.save_dir = save_dir
-            echo_checkpoint_path = glob.glob("{}/model_epoch*".format(self.save_dir))
-            if len(echo_checkpoint_path) == 0:
-                print("No checkpoint found in: {}\nCheck save_dir...".format(self.save_dir))
-            else:
-                self.load_checkpoint(echo_checkpoint_path)
-                print("Restore weight successful from: {}".format(echo_checkpoint_path))
+        if load_dir is not None:
+            self.load_checkpoint(load_dir)
         else:
-            self.save_dir = datetime.now().strftime("%d-%m-%Y_%H-%M-%S")
-            os.makedirs(self.save_dir)
-            print("Training new model, save to: {}".format(self.save_dir))
+            if save_dir is not None and os.path.exists(save_dir):
+                print("Load weight from file:{}".format(save_dir))
+                self.save_dir = save_dir
+                epcho_checkpoint_path = glob.glob("{}/model_epoch*".format(self.save_dir))
+                if len(epcho_checkpoint_path) == 0:
+                    print("No checkpoint found in: {}\nCheck save_dir...".format(self.save_dir))
+                else:
+                    self.load_checkpoint(epcho_checkpoint_path)
+                    print("Restore weight successful from: {}".format(epcho_checkpoint_path))
+            else:
+                self.save_dir = datetime.now().strftime("%d-%m-%Y_%H-%M-%S")
+                os.makedirs(self.save_dir)
+                print("Training new model, save to: {}".format(self.save_dir))
 
         self.train_dataloader = train_dataloader
         self.valid_dataloader = valid_dataloader
         self.epochs = epochs
-        # self.batch_size = batch_size
 
     def save_checkpoint(self, save_path):
         state_dict = {'model_state_dict': self.model.state_dict()}
@@ -180,7 +152,7 @@ class ClassifierTrainner():
 
     def load_checkpoint(self, load_path):
         state_dict = torch.load(load_path, map_location=self.device)
-        print(f'Model restored from <== {load_path}')
+        # print(f'Model restored from <== {load_path}')
         self.model.load_state_dict(state_dict['model_state_dict'])
 
     @staticmethod
@@ -235,12 +207,13 @@ class ClassifierTrainner():
                 torch.nn.utils.clip_grad_norm_(self.model.parameters(), 1.0)
                 optimizer.step()
                 if step % 100 == 0:
-                    print(
-                        "[TRAIN] Epoch {}/{} | Batch {}/{} | Train Loss={} | Train Acc={}".format(epoch_i, self.epochs,
-                                                                                                  step,
-                                                                                                  len(self.train_dataloader),
-                                                                                                  loss.item(),
-                                                                                                  tmp_train_accuracy))
+                    print("[TRAIN] Epoch {}/{} | Batch {}/{} | Train Loss={} | Train Acc={}"
+                          .format(epoch_i,
+                                  self.epochs,
+                                  step,
+                                  len(self.train_dataloader),
+                                  loss.item(),
+                                  tmp_train_accuracy))
 
             avg_train_loss = total_loss / len(self.train_dataloader)
             print(" Train Accuracy: {0:.4f}".format(train_accuracy / nb_train_steps))
@@ -291,57 +264,44 @@ class ClassifierTrainner():
 
         print("Training complete!")
 
-        def predict_dataloader(self, dataloader, classes, tokenizer):
-            for batch in dataloader:
-                batch = tuple(t.to(self.device) for t in batch)
-                b_input_ids, b_input_mask = batch
-                with torch.no_grad():
-                    outputs = self.model(b_input_ids,
-                                         attention_mask=b_input_mask,
-                                         labels=None
-                                         )
-                    logits = outputs
-                    logits = logits.detach().cpu().numpy()
-                    pred_flat = np.argmax(logits, axis=1).flatten()
-                    print("[PREDICT] {}:{}".format(classes[int(pred_flat)], tokenizer.decode(b_input_ids)))
-
-        def predict_text(self, text, classes, tokenizer, max_len=256):
-            ids = tokenizer.encode(text)
-            ids_padded = pad_sequences(ids, maxlen=max_len, dtype="long", value=0, truncating="post", padding="post")
-            mask = [int(token_id > 0) for token_id in ids_padded]
-            input_ids = torch.tensor(ids_padded)
-            intput_mask = torch.tensor(mask)
+    def predict_dataloader(self, dataloader, classes, tokenizer):
+        for batch in dataloader:
+            batch = tuple(t.to(self.device) for t in batch)
+            b_input_ids, b_input_mask = batch
             with torch.no_grad():
-                logits = self.model(input_ids,
-                                    attention_mask=intput_mask,
-                                    labels=None
-                                    )
+                outputs = self.model(b_input_ids,
+                                     attention_mask=b_input_mask,
+                                     labels=None
+                                     )
+                logits = outputs
                 logits = logits.detach().cpu().numpy()
                 pred_flat = np.argmax(logits, axis=1).flatten()
-                print("[PREDICT] {}:{}".format(classes[int(pred_flat)], text))
+                print("[PREDICT] {}:{}".format(classes[int(pred_flat)], tokenizer.decode(b_input_ids)))
 
     def predict_text(self, text, classes, tokenizer, max_len=256):
-        ids = tokenizer.encode(text)
-        ids_padded = pad_sequences([list(ids)], maxlen=max_len, dtype="long", value=0, truncating="post",
-                                   padding="post")
-        mask = [int(token_id > 0) for token_id in ids_padded[0]]
+        ids = [tokenizer.encode(text)]
+        ids_padded = pad_sequences(ids, maxlen=max_len, dtype="long", value=0, truncating="post", padding="post")
+        mask = [int(token_id > 0) for sequence in ids_padded for token_id in sequence]
         input_ids = torch.tensor(ids_padded)
-        input_mask = torch.tensor([mask])
-
+        intput_mask = torch.tensor(mask).unsqueeze(0)
         with torch.no_grad():
-            logits = self.model(input_ids, attention_mask=input_mask, labels=None)
-            logits = logits.logits.detach().cpu().numpy()
+            logits = self.model(input_ids,
+                                attention_mask=intput_mask,
+                                labels=None
+                                )
+            logits = logits.logits.cpu().numpy()
             pred_flat = np.argmax(logits, axis=1).flatten()
-            print("[PREDICT] {}:{}".format(classes[int(pred_flat)], text))
+            # print("[PREDICT] {}:{}".format(classes[int(pred_flat[0])], text))
+            return "{}:{}".format(classes[int(pred_flat[0])], text)
 
 
 def main():
-    classes = {'listen_to_music': 0, 'gpt_ai': 1, 'read_news': 2, 'user_manual': 3}
+    classes_map = {'listen_to_music': 0, 'gpt_ai': 1, 'read_news': 2, 'user_manual': 3}
 
     # Đọc file train.csv
     texts, train_labels = read_csv()
 
-    labels = [classes[label] for label in train_labels]
+    labels = [classes_map[label] for label in train_labels]
 
     # Split train to train:valid = 90:10
     train_texts, val_texts, train_labels, val_labels = train_test_split(texts, labels, test_size=0.1)
@@ -355,30 +315,30 @@ def main():
                                             max_len=MAX_LEN, batch_size=16)
 
     # bert model
-    bert_classifier_model = BERTClassifier(len(classes))
+    bert_classifier_model = BERTClassifier(len(classes_map))
     # train model
     bert_classifier_trainer = ClassifierTrainner(bert_model=bert_classifier_model, train_dataloader=train_dataloader,
-                                                 valid_dataloader=valid_dataloader, epochs=10,
-                                                 cuda_device="cpu")
-
-    bert_classifier_trainer.predict_text("Tôi muốn nghe nhạc", classes, tokenizer)
+                                                 valid_dataloader=valid_dataloader, epochs=2)
+    bert_classifier_trainer.train_classifier()
 
 
-def predict_text(text):
-    classes = {'listen_to_music': 0, 'gpt_ai': 1, 'read_news': 2, 'user_manual': 3}
-    model = BERTClassifier(len(classes))
-    best_val_loss_model_path = os.path.join(base_dir, 'model', 'model_best_valoss.pt')
-    best_val_loss_model_state_dict = torch.load(best_val_loss_model_path)
-    best_val_loss_model = BERTClassifier(len(classes))
-    best_val_loss_model.load_state_dict(best_val_loss_model_state_dict)
-    best_val_loss_model.eval()
+def run(text_input):
+    from transformers import logging
+    logging.set_verbosity_error()
+    classes = ['listen_to_music', 'gpt_ai', 'read_news', 'user_manual']
+    tokenizer = AutoTokenizer.from_pretrained("vinai/phobert-large")
+    model_trained_path = os.path.join(base_dir, 'model', 'model_epoch9.pt')
+    # bert model
+    bert_classifier_model = BERTClassifier(len(classes))
+    # train model
+    bert_classifier_trainer = ClassifierTrainner(bert_model=bert_classifier_model, load_dir=model_trained_path)
 
-    epoch9_model_path = os.path.join(base_dir, 'model', 'model_epoch9.pt')
-    epoch9_model_state_dict = torch.load(epoch9_model_path)
-    epoch9_model = BERTClassifier(len(classes))
-    epoch9_model.load_state_dict(epoch9_model_state_dict)
-    epoch9_model.eval()
+    return bert_classifier_trainer.predict_text(text_input, classes, tokenizer)
 
 
 if __name__ == '__main__':
-    print(predict_text("Tôi muốn nghe nhạc"))
+    import time
+
+    start = time.time()
+    print(run("Mở em của anh đừng của ai"))
+    print(time.time() - start, "s")

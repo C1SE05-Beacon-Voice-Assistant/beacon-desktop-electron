@@ -23,69 +23,7 @@ git clone https://github.com/C1SE05-Beacon-Voice-Assistant/beacon-desktop-electr
 npm install
 ```
 
-- Go to the `beacon_package` directory
-
-```bash
-cd beacon_package
-```
-
-- Copy `.env.example` to `.env`
-
-```bash
-cp .env.example .env
-```
-
-- Create virtual environment name `venv39` in the `beacon_package` directory
-
-```bash
-python -m venv venv39
-```
-
-- Activate the virtual environment
-
-```bash
-venv39\Scripts\activate.bat
-or
-source venv39/Scripts/activate
-```
-
-- Install the required packages
-
-```bash
-pip install -r requirements.txt
-```
-
-- Download phobert-base
-
-```bash
-wget https://public.vinai.io/PhoBERT_base_transformers.tar.gz
-tar -xzvf PhoBERT_base_transformers.tar.gz
-```
-
-- Install vncorenlp
-
-```bash
-pip install vncorenlp
-mkdir -p vncorenlp/models/wordsegmenter
-wget https://raw.githubusercontent.com/vncorenlp/VnCoreNLP/master/VnCoreNLP-1.1.1.jar
-wget https://raw.githubusercontent.com/vncorenlp/VnCoreNLP/master/models/wordsegmenter/vi-vocab
-wget https://raw.githubusercontent.com/vncorenlp/VnCoreNLP/master/models/wordsegmenter/wordsegmenter.rdr
-mv VnCoreNLP-1.1.1.jar vncorenlp/
-mv vi-vocab vncorenlp/models/wordsegmenter/
-mv wordsegmenter.rdr vncorenlp/models/wordsegmenter/
-```
-
-- Install transformers
-
-```bash
-pip install transformers
-```
-
-- Go back to the root directory
-
-```bash
-cd ..
-```
+- Go to the `beacon_package` directory and read the [README.md](./beacon_package/README.md) file
 
 - Copy `.env.example` to `.env`
 
@@ -104,19 +42,14 @@ npm install
 - Run the application in development mode
 
 ```bash
-npm start
+npm run dev
 ```
 
-- Package the application (read [here](https://www.electronjs.org/docs/tutorial/application-distribution) for more information)
+- Package the application (read [here](https://www.electron.build/cli) for more information)
 
 ```bash
-npm run package
+npm run make
 ```
-
-## Train model
-
-- Run file intent_recognition.py (change path)
-  `python ./beacon_package/intent_recognition/intent_recognition.py`
 
 ## How it works
 
