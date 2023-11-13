@@ -1,4 +1,4 @@
-from intent_recognition.intent_recognition import run
+from intent_recognition.intent_recognition import RunModel
 import sys
 
 if __name__ == '__main__':
@@ -8,4 +8,6 @@ if __name__ == '__main__':
 
     if len(sys.argv) > 1:
         query = sys.argv[1]
-        print(run(query))
+        run_model = RunModel()
+        label, text = run_model.predict(query)
+        print("{}:{}".format(label, text))

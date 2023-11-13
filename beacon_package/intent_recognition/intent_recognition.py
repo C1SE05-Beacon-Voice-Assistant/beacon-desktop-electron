@@ -119,27 +119,24 @@ class BERTClassifier(torch.nn.Module):
 
 class ClassifierTrainner:
     def __init__(self, bert_model, train_dataloader=None, valid_dataloader=None, epochs=1,
-                 save_dir=None, load_dir=None):
+                 save_dir=None, is_run=False):
 
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
         self.model = bert_model
-        if load_dir is not None:
-            self.load_checkpoint(load_dir)
-        else:
-            if save_dir is not None and os.path.exists(save_dir):
-                print("Load weight from file:{}".format(save_dir))
-                self.save_dir = save_dir
-                epcho_checkpoint_path = glob.glob("{}/model_epoch*".format(self.save_dir))
-                if len(epcho_checkpoint_path) == 0:
-                    print("No checkpoint found in: {}\nCheck save_dir...".format(self.save_dir))
-                else:
-                    self.load_checkpoint(epcho_checkpoint_path)
-                    print("Restore weight successful from: {}".format(epcho_checkpoint_path))
+        if save_dir is not None and os.path.exists(save_dir):
+            print("Load weight from file:{}".format(save_dir))
+            self.save_dir = save_dir
+            epcho_checkpoint_path = glob.glob("{}/model_epoch*".format(self.save_dir))
+            if len(epcho_checkpoint_path) == 0:
+                print("No checkpoint found in: {}\nCheck save_dir...".format(self.save_dir))
             else:
-                self.save_dir = datetime.now().strftime("%d-%m-%Y_%H-%M-%S")
-                os.makedirs(self.save_dir)
-                print("Training new model, save to: {}".format(self.save_dir))
+                self.load_checkpoint(epcho_checkpoint_path)
+                print("Restore weight successful from: {}".format(epcho_checkpoint_path))
+        elif is_run is False:
+            self.save_dir = datetime.now().strftime("%d-%m-%Y_%H-%M-%S")
+            os.makedirs(self.save_dir)
+            print("Training new model, save to: {}".format(self.save_dir))
 
         self.train_dataloader = train_dataloader
         self.valid_dataloader = valid_dataloader
@@ -152,8 +149,8 @@ class ClassifierTrainner:
 
     def load_checkpoint(self, load_path):
         state_dict = torch.load(load_path, map_location=self.device)
-        # print(f'Model restored from <== {load_path}')
         self.model.load_state_dict(state_dict['model_state_dict'])
+        # print(f'Model loaded from <== {load_path}')
 
     @staticmethod
     def flat_accuracy(preds, labels):
@@ -207,13 +204,12 @@ class ClassifierTrainner:
                 torch.nn.utils.clip_grad_norm_(self.model.parameters(), 1.0)
                 optimizer.step()
                 if step % 100 == 0:
-                    print("[TRAIN] Epoch {}/{} | Batch {}/{} | Train Loss={} | Train Acc={}"
-                          .format(epoch_i,
-                                  self.epochs,
-                                  step,
-                                  len(self.train_dataloader),
-                                  loss.item(),
-                                  tmp_train_accuracy))
+                    print("[TRAIN] Epoch {}/{} | Batch {}/{} | Train Loss={} | Train Acc={}".format(epoch_i,
+                                                                                                    self.epochs,
+                                                                                                    step,
+                                                                                                    len(self.train_dataloader),
+                                                                                                    loss.item(),
+                                                                                                    tmp_train_accuracy))
 
             avg_train_loss = total_loss / len(self.train_dataloader)
             print(" Train Accuracy: {0:.4f}".format(train_accuracy / nb_train_steps))
@@ -291,8 +287,7 @@ class ClassifierTrainner:
                                 )
             logits = logits.logits.cpu().numpy()
             pred_flat = np.argmax(logits, axis=1).flatten()
-            # print("[PREDICT] {}:{}".format(classes[int(pred_flat[0])], text))
-            return "{}:{}".format(classes[int(pred_flat[0])], text)
+        return classes[int(pred_flat[0])], text
 
 
 def main():
@@ -322,23 +317,31 @@ def main():
     bert_classifier_trainer.train_classifier()
 
 
-def run(text_input):
-    from transformers import logging
-    logging.set_verbosity_error()
-    classes = ['listen_to_music', 'gpt_ai', 'read_news', 'user_manual']
-    tokenizer = AutoTokenizer.from_pretrained("vinai/phobert-large")
-    model_trained_path = os.path.join(base_dir, 'model', 'model_epoch9.pt')
-    # bert model
-    bert_classifier_model = BERTClassifier(len(classes))
-    # train model
-    bert_classifier_trainer = ClassifierTrainner(bert_model=bert_classifier_model, load_dir=model_trained_path)
+class RunModel:
+    def __init__(self):
+        from transformers import logging
+        logging.set_verbosity_error()
 
-    return bert_classifier_trainer.predict_text(text_input, classes, tokenizer)
+        self.classes = ['listen_to_music', 'gpt_ai', 'read_news', 'user_manual']
+        self.tokenizer = AutoTokenizer.from_pretrained("vinai/phobert-large")
+        model_trained_path = os.path.join(base_dir, 'model', 'model_epoch9.pt')
+        # bert model
+        bert_classifier_model = BERTClassifier(len(self.classes))
+        # train model
+        self.bert_classifier_trainer = ClassifierTrainner(bert_model=bert_classifier_model, is_run=True)
+        self.bert_classifier_trainer.load_checkpoint(model_trained_path)
+
+    def predict(self, text_input):
+        return self.bert_classifier_trainer.predict_text(text_input, self.classes, self.tokenizer)
 
 
 if __name__ == '__main__':
     import time
 
     start = time.time()
-    print(run("Mở em của anh đừng của ai"))
-    print(time.time() - start, "s")
+    run_model = RunModel()
+    label1, text1 = run_model.predict("Tin tức gì mới nhất hôm nay")
+    # label2, text2 = run_model.predict("Nhạc nhẹ nhàng")
+    print("{}:{}".format(label1, text1))
+    print("Time predict: {}s".format(time.time() - start))
+    # print("[PREDICT] {}:{}".format(label2, text2))

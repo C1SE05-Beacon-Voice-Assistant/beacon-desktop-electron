@@ -49,9 +49,9 @@ pip install -r requirements.txt
 
 ### Train model
 
-- Run `main` function in file [intent_recognition/intent_recognition2.py](./intent_recognition/intent_recognition.py) to train model
+- Run `main` function in file [intent_recognition/intent_recognition2.py](./intent_recognition/intent_recognition.bk.py) to train model
 
 ### Test model
 
-- Init class RunModel `run_model = RunModel()` in file [intent_recognition/intent_recognition2.py](./intent_recognition/intent_recognition.py) to load model and tokenizer
+- Init class RunModel `run_model = RunModel()` in file [intent_recognition/intent_recognition2.py](./intent_recognition/intent_recognition.bk.py) to load model and tokenizer
 - And use `predict` function like `label1, text1 = run_model.predict("Tin tức gì mới nhất hôm nay")` to get predict many times without wasting much time reloading the model
