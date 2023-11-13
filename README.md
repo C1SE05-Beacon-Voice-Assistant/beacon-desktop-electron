@@ -23,43 +23,7 @@ git clone https://github.com/C1SE05-Beacon-Voice-Assistant/beacon-desktop-electr
 npm install
 ```
 
-- Go to the `beacon-package` directory
-
-```bash
-cd beacon-package
-```
-
-- Copy `.env.example` to `.env`
-
-```bash
-cp .env.example .env
-```
-
-- Create virtual environment name `venv39` in the `beacon_package` directory
-
-```bash
-python -m venv venv39
-```
-
-- Activate the virtual environment
-
-```bash
-venv39\Scripts\activate.bat
-or
-source venv39/Scripts/activate
-```
-
-- Install the required packages
-
-```bash
-pip install -r requirements.txt
-```
-
-- Go back to the root directory
-
-```bash
-cd ..
-```
+- Go to the `beacon_package` directory and read the [README.md](./beacon_package/README.md) file
 
 - Copy `.env.example` to `.env`
 
@@ -78,13 +42,13 @@ npm install
 - Run the application in development mode
 
 ```bash
-npm start
+npm run dev
 ```
 
-- Package the application (read [here](https://www.electronjs.org/docs/tutorial/application-distribution) for more information)
+- Package the application (read [here](https://www.electron.build/cli) for more information)
 
 ```bash
-npm run package
+npm run make
 ```
 
 ## How it works
