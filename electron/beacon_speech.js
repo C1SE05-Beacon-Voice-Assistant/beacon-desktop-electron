@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const sdk = require("microsoft-cognitiveservices-speech-sdk");
+import * as sdk from "microsoft-cognitiveservices-speech-sdk";
 const { PythonShell } = require("python-shell");
 const { options } = require("./helpers/optionPyshell");
 const textToSpeech = require("./text_to_speech");
@@ -103,4 +103,5 @@ class BeaconSpeech {
   }
 }
 
+// export default BeaconSpeech;
 module.exports = BeaconSpeech;

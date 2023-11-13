@@ -9,15 +9,14 @@
     "noImplicitAny": true,
     "sourceMap": true,
     "outDir": "dist",
-    "moduleResolution": "node",
+    "moduleResolution": "Node",
     "resolveJsonModule": true,
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
       "~/*": ["src/*"]
     },
-    "lib": ["es6", "dom"],
-    "types": ["node"]
+    "lib": ["es2015", "es2017", "dom"]
   },
   "include": ["src", "electron/main.ts"]
 }
