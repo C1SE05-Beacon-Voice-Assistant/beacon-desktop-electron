@@ -84,3 +84,43 @@ hoặc "Tin tức nóng nhất nhất hôm nay là gì"
 
 Ví dụ: "Tìm cho tôi bài báo được đọc nhiều nhất"
 hoặc "Đọc cho tôi những bài báo được đọc nhiều nhất"
+
+### 4. Chức năng nghe nhạc
+
+Để phát một bài hát, bạn có thể sử dụng các lệnh sau:
+
+"Phát bài hát [tên bài hát]": Phát một bài hát cụ thể bằng cách đề cập đến tên của nó.
+"Phát [tên nghệ sĩ]": Phát các bài hát của một nghệ sĩ cụ thể.
+"Phát [tên album]": Phát các bài hát trong một album cụ thể.
+
+### 4.1 Điều khiển âm lượng
+
+Để điều chỉnh âm lượng, bạn có thể sử dụng các lệnh sau:
+
+"Tăng âm lượng": Tăng âm lượng phát nhạc.
+"Giảm âm lượng": Giảm âm lượng phát nhạc.
+"Đặt âm lượng là [giá trị]": Đặt mức âm lượng cụ thể.
+
+### 4.2 Phát danh sách nhạc
+
+Để phát danh sách nhạc, bạn có thể sử dụng các lệnh sau:
+
+"Phát danh sách nhạc [tên danh sách]": Phát một danh sách nhạc cụ thể bằng cách đề cập đến tên của nó.
+"Phát danh sách nhạc yêu thích của tôi": Phát danh sách nhạc yêu thích của bạn.
+
+### 4.3 Tìm kiếm bài hát
+
+Để tìm kiếm một bài hát, bạn có thể sử dụng các lệnh sau:
+
+"Tìm kiếm bài hát [tên bài hát]": Tìm kiếm một bài hát cụ thể bằng cách đề cập đến tên của nó.
+"Tìm kiếm bài hát của [tên nghệ sĩ]": Tìm kiếm các bài hát của một nghệ sĩ cụ thể.
+"Tìm kiếm bài hát trong album [tên album]": Tìm kiếm các bài hát trong một album cụ thể.
+
+### 4.4 Điều khiển phát nhạc
+
+Để điều khiển phát nhạc, bạn có thể sử dụng các lệnh sau:
+
+"Phát": Tiếp tục phát nhạc nếu đang ở trạng thái tạm dừng.
+"Dừng": Tạm dừng phát nhạc.
+"Chuyển bài tiếp theo": Chuyển đến bài hát tiếp theo trong danh sách phát.
+"Quay lại bài trước đó": Quay lại bài hát trước đó trong danh sách phát.
