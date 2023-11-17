@@ -8,7 +8,7 @@ async function intentRecognition(text) {
     args: [text],
   });
 
-  return data;
+  return data[0];
 }
 
 // intentRecognition("Mở bài hát bạn đời")

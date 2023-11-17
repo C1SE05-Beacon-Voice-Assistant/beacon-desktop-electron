@@ -33,8 +33,13 @@ const handleInput = async (
   currentCommand: string,
   resultNews: any[] = []
 ) => {
-  const text = input.toLowerCase();
-  console.log("Handling input: ", text);
+  const output = input.split(":");
+  const label = output[0];
+  const text = output[1];
+
+  console.log("label: ", label);
+  console.log("text: ", text);
+
   const listen = await window.electron.listenToMusic;
   const read = await window.electron.readNews;
 

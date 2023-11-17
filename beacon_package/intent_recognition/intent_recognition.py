@@ -2,14 +2,15 @@ import os
 
 import numpy as np
 import torch
-from transformers import BertForSequenceClassification, AutoTokenizer, AutoConfig
+from transformers import BertForSequenceClassification, AutoTokenizer
 
 # PATH
 base_dir = os.path.dirname(os.path.abspath(__file__))
-config_path = os.path.join(base_dir, 'phobert-base', 'config.json')
-model_path = os.path.join(base_dir, 'phobert-base', 'model.bin')
-
 model_train_path = os.path.join(base_dir, 'model', 'model_epoch9.pt')
+
+cache_dir = os.path.join(base_dir, 'cache')
+if not os.path.exists(cache_dir):
+    os.makedirs(cache_dir)
 
 
 class RunModel:
@@ -24,18 +25,14 @@ class RunModel:
                         'middle_of_content', 'min_volume', 'most_read_news', 'mute', 'next_content', 'pause_content',
                         'play_music', 'pre_content', 'restart_content', 'resume_content', 'stop_content', 'un_mute']
 
-        self.tokenizer = AutoTokenizer.from_pretrained(
-            "vinai/phobert-base",
-            use_fast=False
-        )
+        self.tokenizer = AutoTokenizer.from_pretrained('vinai/phobert-base', use_fast=False)
 
-        config = AutoConfig.from_pretrained(
-            config_path,
-            num_labels=len(self.classes)
-        )
         self.model = BertForSequenceClassification.from_pretrained(
-            model_path,
-            config=config
+            'vinai/phobert-base',
+            num_labels=len(self.classes),
+            output_attentions=False,
+            output_hidden_states=False,
+            # cache_dir=cache_dir
         )
 
         model_state_dict = torch.load(model_train_path, map_location=torch.device('cpu'), weights_only=True)[

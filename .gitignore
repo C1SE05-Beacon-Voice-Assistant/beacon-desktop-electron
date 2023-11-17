@@ -127,3 +127,5 @@ beacon_package/**/*.bk.py
 *.ipynb
 
 *.csv
+
+beacon_package/intent_recognition/cache/
