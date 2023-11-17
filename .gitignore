@@ -112,3 +112,13 @@ dist-electron/
 *.zip
 
 *.table
+
+beacon_package/Model/
+
+*.gz
+
+beacon_package/phobert-base/
+
+beacon_package/intent_recognition/phobert-base/
+
+beacon_package/intent_recognition/model/

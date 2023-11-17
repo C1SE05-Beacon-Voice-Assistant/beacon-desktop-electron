@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Add text to speech feature
 - Add read news feature
 - Add listen to music feature
+- Add keyword recognition feature
 
 ### Fixed
 
