@@ -11,7 +11,7 @@ async function intentRecognition(text) {
   return data;
 }
 
-// intentRecognition("Mở bạn đời")
+// intentRecognition("Mở bài hát bạn đời")
 //   .then((data) => {
 //     console.log(data);
 //   })
