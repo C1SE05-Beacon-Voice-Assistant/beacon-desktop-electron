@@ -16,7 +16,7 @@
     "package.json",
     "beacon_package",
     "!**/node_modules/*/{CHANGES.md,CHANGELOG.md,README.md,README,readme.md,readme,test,__tests__,tests,powered-test,example,examples}/**",
-    "!beacon_package/{CHANGELOG.md,README.md,*.example}",
+    "!beacon_package/{CHANGELOG.md,README.md,*.example,*.csv,*.ipynb,*.bk.py}",
     "!beacon_package/**/*.bk.*",
     "!**/*.csv",
     "!beacon_package/vncorenlp/**",
