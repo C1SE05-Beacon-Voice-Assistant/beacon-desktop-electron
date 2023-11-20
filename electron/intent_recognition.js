@@ -8,10 +8,10 @@ async function intentRecognition(text) {
     args: [text],
   });
 
-  return data;
+  return data[0];
 }
 
-// intentRecognition("Mở bạn đời")
+// intentRecognition("Mở bài hát bạn đời")
 //   .then((data) => {
 //     console.log(data);
 //   })
