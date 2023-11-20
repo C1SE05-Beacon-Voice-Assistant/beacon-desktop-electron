@@ -1,0 +1,321 @@
+﻿Text,Label,Predict
+Tôi muốn nghe bài em,play_music,user_manual
+Bài hát em,play_music,user_manual
+Mở bài hát em,play_music,user_manual
+Phát bài hát em cho tôi,play_music,user_manual
+Mở  bài em,play_music,end_of_content
+Mở ca khúc em,play_music,play_music
+Chơi bài hát em,play_music,user_manual
+Tìm và phát bài em,play_music,user_manual
+Nghe bài em,play_music,end_of_content
+Cho tôi nghe em,play_music,hottest_news
+Play bài hát em,play_music,user_manual
+Phát nhạc jazz sôi động,play_music,user_manual
+Mở danh sách nhạc của ca sĩ khởi my,play_music,user_manual
+Phát nhạc thiền ,play_music,user_manual
+Các bài hát của k-pop,play_music,user_manual
+Bài hát hot nhất hiện nay,play_music,user_manual
+Nhạc dành cho trẻ em,play_music,max_volume
+Mở nhạc buồn ,play_music,play_music
+Tìm abum cải lương,play_music,user_manual
+Phát nhạc lo-fi chill để làm việc,play_music,user_manual
+Nhạc rap của giới trẻ hiện nay,play_music,user_manual
+Tìm bài hát nổi tiếng của taylor swift,play_music,user_manual
+Bật nhạc miền tây cho tôi,play_music,user_manual
+Nhạc tập thể dục cho buổi sáng ,play_music,user_manual
+Bật nhạc chứa giai điệu buồn ,play_music,user_manual
+Nhạc dành cho người thất tình ,play_music,user_manual
+Tìm bài hát kèm tiếng đàn nhẹ nhàng ,play_music,user_manual
+Phát nhạc edm,play_music,user_manual
+Tìm những bài hát từ các thập kỉ 90,play_music,user_manual
+Phát nhạc trữ tình của Việt Nam,play_music,user_manual
+Bật danh sách nhạc yêu đời ,play_music,user_manual
+"Các bài hát tiếng anh hay , độc đáo ",play_music,user_manual
+Bài hát có giọng hát nội lực ,play_music,user_manual
+Phát nhạc giúp giảm stress,play_music,user_manual
+Bật nhạc quê hương,play_music,end_of_content
+Bài hát được yêu thích hiện nay,play_music,user_manual
+Bài hát đứng top 1 của giới trẻ ,play_music,user_manual
+Tìm ca sĩ hát hay,play_music,user_manual
+Tìm nghệ sĩ ,play_music,user_manual
+Tìm abum ,play_music,un_mute
+Tìm theo nội dung,play_music,end_of_content
+Tìm nhạc POP,play_music,user_manual
+Tìm nhạc Nhật Bản ,play_music,increase_volume
+Tìm nhạc nước ngoài ,play_music,user_manual
+Tìm abum chill chill,play_music,user_manual
+Tôi muốn bắt đầu nghe em ngay bây giờ,play_music,start_content
+Làm thế nào để phát nhạc?,user_manual,user_manual
+Có thể giúp tôi nghe một bài hát được không?,user_manual,user_manual
+Cách sử dụng tính năng nghe nhạc là gì?,user_manual,user_manual
+Xin hướng dẫn cách mở một bài hát,user_manual,user_manual
+Các chức năng của bạn là gì ,user_manual,user_manual
+Đọc cho tôi hướng dẫn sử dụng,user_manual,user_manual
+Tôi muốn biết cách chơi danh sách nhạc,user_manual,read_news
+Làm sao để điều khiển âm nhạc qua lời nói?,user_manual,user_manual
+Có lệnh nào để tìm kiếm bài hát không?,user_manual,user_manual
+"Tôi cần một số lệnh để nghe nhạc, bạn có thể giúp không?",user_manual,user_manual
+Tôi muốn biết cách truy cập tin tức mới nhất ,user_manual,user_manual
+Xin hỏi cách chỉ định một bài hát cụ thể để nghe.,user_manual,user_manual
+Giới thiệu về ứng dụng và mục tiêu của nó,user_manual,user_manual
+Hãy Cung cấp thông tin về giao diện,user_manual,end_of_content
+Cho tôi biết cách sử dụng các chức năng của ứng dụng,user_manual,user_manual
+Hướng dẫn cách truy cập và đăng nhập vào ứng dụng,user_manual,user_manual
+Tôi muốn xem nội dụng đã lưu như thế nào,user_manual,user_manual
+Bạn có cung cấp việc đánh giá ứng dụng không,user_manual,user_manual
+Báo có nội dung như thế nào?,user_manual,user_manual
+Các ngôn ngữ mà ứng dụng hỗ trợ,user_manual,user_manual
+Tìm hướng dẫn sử dụng,user_manual,user_manual
+Tôi muốn cập nhật thông tin cá nhân của mình ,user_manual,user_manual
+Ứng dụng của bạn sử dụng offline được không,user_manual,user_manual
+Mô tả cho tôi ứng dụng của bạn,user_manual,user_manual
+Các thay đổi gần đây của tôi,user_manual,user_manual
+Có cách nào để tôi cập nhật phiên bản không,user_manual,user_manual
+Bạn có tài liệu hay trợ giúp nào nữa không,user_manual,user_manual
+Ứng dụng của bạn gồm những tính năng nào ,user_manual,user_manual
+Tôi muốn thay đổi màu giao diện như thế nào ,user_manual,user_manual
+Làm thế nào để tôi chia sẽ với bạn bè ?,user_manual,user_manual
+Bạn có sử dụng nhanh không,user_manual,user_manual
+Tôi có thể sử dụng ứng dụng mà không kết nối internet không,user_manual,user_manual
+Bạn có thể đọc lại hướng dẫn không,user_manual,user_manual
+Thay đổi mật khẩu cho tôi thành abcd,user_manual,user_manual
+Tìm thông tin về tính năng đồng bộ hóa ,user_manual,user_manual
+Cách đổi mật khẩu,user_manual,user_manual
+Tôi muốn thay đổi ngôn ngữ bằng cách nào?,user_manual,user_manual
+Có chức năng nói chuyện không,user_manual,user_manual
+Nói cho tôi cách liên hệ hoặc hỗ trợ nếu người dùng gặp vấn đề khi sử dụng ,user_manual,user_manual
+Chuyển sang bài hát tiếp theo.,next_content,resume_content
+Phát bài tiếp theo.,next_content,resume_content
+Cho tôi nghe bài kế tiếp.,next_content,hottest_news
+Tôi muốn bài khác kế tiếp,next_content,user_manual
+"Next content, xin vui lòng",next_content,end_of_content
+Tìm và phát video tiếp theo trên YouTube,next_content,next_content
+Nghe bài hát tiếp theo từ danh sách phát.,next_content,resume_content
+Chuyển đến nội dung tiếp theo trên zingmp3,next_content,next_content
+Bỏ qua bài hát hiện tại.,next_content,next_content
+"Next content, xin vui lòng tới nội dung mới.",next_content,end_of_content
+Chuyển đến bài hát tiếp theo trong danh sách.,next_content,resume_content
+Quay lại bài hát trước đó,pre_content,pre_content
+Phát lại nội dung trước đó,pre_content,pre_content
+Nghe lại bài hát cũ,pre_content,restart_content
+"Previous content, xin vui lòng",pre_content,end_of_content
+Bài trước đó nữa ,pre_content,user_manual
+Chuyển đến video trước đó trên YouTube,pre_content,pre_content
+Nghe lại bài hát trước đó từ danh sách phát,pre_content,pre_content
+Quay lại nội dung trước trên zingmp3 ,pre_content,pre_content
+Quay lại bài hát trước đó trong danh sách,pre_content,pre_content
+"Previous content, xin vui lòng tới nội dung trước đó",pre_content,pre_content
+Chuyển đến bài hát trước đó,pre_content,pre_content
+Hãy tăng âm lượng lên,increase_volume,increase_volume
+Mở âm lượng lớn hơn,increase_volume,increase_volume
+Làm lớn tiếng hơn,increase_volume,increase_volume
+Hãy tăng cường âm thanh,increase_volume,increase_volume
+Tăng volume lên 50,increase_volume,increase_volume
+Cho tôi nghe to hơn đi,increase_volume,decrease_volume
+Tăng cường âm thanh được không,increase_volume,increase_volume
+Điều chỉnh âm lượng đến 50,increase_volume,user_manual
+Tôi muốn đặt âm lượng ở mức 40,increase_volume,user_manual
+Tôi muốn tăng âm lượng lên 10 bước ,increase_volume,user_manual
+"Tăng âm lượng lên 3 bước. Sau đó, giảm âm lượng đi 2 bước",increase_volume,increase_volume
+Mở nhỏ hơn một chút ,decrease_volume,increase_volume
+Giảm âm thanh nhỏ hơn nữa ,decrease_volume,increase_volume
+Giảm âm lượng đi.,decrease_volume,decrease_volume
+Hãy nhỏ tiếng xuống ,decrease_volume,user_manual
+Giảm volume đi một tí ,decrease_volume,stop_content
+Bạn hãy làm bé tiếng lại,decrease_volume,user_manual
+Giảm âm thanh xuống giúp tôi,decrease_volume,increase_volume
+Volume nhỏ hơn đi,decrease_volume,decrease_volume
+Giảm âm lượng đến 30 ,decrease_volume,increase_volume
+Tôi muốn giảm âm lượng ở mức 60,decrease_volume,user_manual
+Đặt âm lượng mặc định cho tôi là 70,default_volume,increase_volume
+Hãy cài đặt âm lượng mặc định là 50,default_volume,user_manual
+Làm mức âm lượng mặc đinh là 80,default_volume,user_manual
+Hãy thiết lập âm lượng khi mở app là 60,default_volume,user_manual
+Bạn hãy đặt âm lượng khi bắt đầu là 70,default_volume,user_manual
+Làm mức âm lượng khi mở là 90,default_volume,user_manual
+Giúp tôi bỏ âm lượng ở mức 50,default_volume,user_manual
+Đặt âm lượng 45,default_volume,decrease_volume
+Đặt âm lượng nhỏ nhất là 20,min_volume,user_manual
+Thấp nhất ở 30,min_volume,user_manual
+Bỏ tối thiểu âm lượng là 25,min_volume,user_manual
+Đặt mức âm lượng nhỏ nhất là 10,min_volume,user_manual
+Cho mức nhỏ nhất là 10,min_volume,user_manual
+Yêu cầu mức âm lượng nhỏ nhất là 15,min_volume,user_manual
+Tôi muốn âm lượng nhỏ nhất có thể ,min_volume,user_manual
+Âm lượng nhỏ nhất là bao nhiêu,min_volume,user_manual
+Hãy đặt âm lượng cao nhất là 80,max_volume,user_manual
+Mức âm lượng tối đa là 90,max_volume,user_manual
+Đặt mức âm lượng lớn nhất là 85,max_volume,user_manual
+Đưa âm lượng tối đa lêm 85,max_volume,increase_volume
+Yêu cầu mức âm lượng lớn nhất là 75,max_volume,user_manual
+Hãy đặt âm lượng tối đa cho tôi,max_volume,max_volume
+Đặt âm lượng ở mức lớn nhất có thể ,max_volume,user_manual
+Đặt ở mức cao nhất ,max_volume,increase_volume
+Hãy đặt âm lượng lên cực đại,max_volume,user_manual
+Tắt âm lượng đi,mute,decrease_volume
+Mute âm thanh giúp tôi,mute,user_manual
+Ngưng nghe nhạc,mute,next_content
+Tạm dừng âm thanh,mute,increase_volume
+Tôi không muốn nghe tiếng ,mute,user_manual
+Tắt tiếng đi,mute,stop_content
+Mute âm lượng,mute,increase_volume
+Tắt tiếng nhạc đi,mute,user_manual
+Hãy tắt âm lượng,mute,increase_volume
+Đặt âm lượng ở mức tắt ,mute,user_manual
+Hãy tắt tiếng ,mute,play_music
+Đặt âm lượng thành không ,mute,increase_volume
+Giúp tôi vô hiệu hóa âm lượng,mute,user_manual
+Hãy làm im lặng âm thanh ,mute,increase_volume
+Hãy bật âm lượng,un_mute,increase_volume
+Bật âm lượng giúp tôi,un_mute,user_manual
+Bật âm lượng lại,un_mute,increase_volume
+Hãy mở tiếng,un_mute,user_manual
+Unmute âm lượng,un_mute,decrease_volume
+Kích hoạt âm lượng ,un_mute,increase_volume
+Phát âm thanh trở lại,un_mute,increase_volume
+Mở tiếng,un_mute,un_mute
+Tiếp tục nghe nhạc,un_mute,increase_volume
+Bỏ tắt tiếng ,un_mute,read_news
+Bật tiếng lên,un_mute,increase_volume
+Tua nhanh đến cuối bài hát ,end_of_content,user_manual
+Nhảy đến cuối bài ,end_of_content,user_manual
+Tôi muốn kết của bài hát ,end_of_content,user_manual
+Mở phần cuối của bài hát ,end_of_content,user_manual
+Phần cuối cùng của bài ,end_of_content,user_manual
+Nhảy đến giữa bài hát ,middle_of_content,user_manual
+Chuyển đến giữa bài hát cho tôi,middle_of_content,user_manual
+Bắt đầu từ giữa bài ,middle_of_content,user_manual
+Tôi muốn nghe phần giữa của bài hát ,middle_of_content,user_manual
+Đến trung tâm của bài hát ,middle_of_content,user_manual
+Nhảy đến phần giữa ,middle_of_content,user_manual
+Hãy bắt đầu bài hát ,start_content,user_manual
+Phát nội dung của bài hát ,start_content,user_manual
+Chơi bài hát  ,start_content,user_manual
+Mở nội dung bài hát ,start_content,user_manual
+Bắt đầu phát bài hát này ,start_content,user_manual
+Chơi nội dung của bài hát này ,start_content,user_manual
+Bắt đầu lại từ đầu bài hát ,restart_content,user_manual
+Phát lại từ đầu cho tôi,restart_content,user_manual
+Khởi động lại bài hát ,restart_content,user_manual
+Nghe từ đầu bài hát ,restart_content,user_manual
+Bắt đầu lại bài hát ,restart_content,user_manual
+Chơi lại từ đầu ,restart_content,increase_volume
+Dừng nhạc lại,stop_content,increase_volume
+Tạm dừng bài hát ,stop_content,increase_volume
+ Hãy ngừng phát bài hát ,stop_content,user_manual
+Stop nhạc,stop_content,next_content
+Kết thúc bài hát ,stop_content,user_manual
+Dừng lại ,stop_content,end_of_content
+Tắt bài hát ,stop_content,user_manual
+Ngừng phát nội dung của bài hát ,stop_content,user_manual
+Hãy dừng lại và kết thúc bài hát ,stop_content,user_manual
+Tắt âm thanh ủa bài hát ,stop_content,user_manual
+Hãy kết thúc và dừng phát nội dung âm nhạc,stop_content,user_manual
+Hãy tiếp tục bài hát ,resume_content,user_manual
+Phát lại nội dung của bài hát ,resume_content,user_manual
+Tiếp tục bài hát ,resume_content,user_manual
+Chơi tiếp bài hát cho tôi,resume_content,user_manual
+Hãy tiếp tục phát nội dung đã tạm dừng của bài hát ,resume_content,user_manual
+Hãy phát lại từ cổ đã tạm dừng trong bài hát ,resume_content,user_manual
+Chơi tiếp nội dung của bài hát ,resume_content,user_manual
+Tiếp tục phát nhạc,resume_content,user_manual
+Tôi muốn nghe tiếp ,resume_content,user_manual
+Bắt đầu lại phát nhạc,resume_content,user_manual
+Nghe tiếp ,resume_content,play_music
+Chơi tiếp ,resume_content,un_mute
+Tiếp tục bài hát trước ,resume_content,user_manual
+Hãy tạm dừng bài hát ,pause_content,user_manual
+Tạm dừng phát nội dung bài hát ,pause_content,user_manual
+Dừng lại bài hát một chút ,pause_content,user_manual
+ Tạm ngừng phát nhạc ,pause_content,user_manual
+Hãy tạm dừng và dừng phát nội dung của bài hát,pause_content,stop_content
+Hãy tạm dừng âm thanh của bài hát,pause_content,increase_volume
+Hãy dừng lại và tạm dừng phát nội dung âm nhạc.,pause_content,pause_content
+Pause nhạc lại,pause_content,user_manual
+Dùng nhạc một chú,pause_content,resume_content
+Đọc tin tức mới nhất ,lastest_news,user_manual
+Xem tin tức mới,lastest_news,user_manual
+Cho tôi biết tin tức gần đây,lastest_news,user_manual
+Cập nhật tin tức ,lastest_news,end_of_content
+Đọc tin mới nhất từ báo ,lastest_news,user_manual
+Cung cấp cho tôi tin tức mới nhất ,lastest_news,user_manual
+Hãy đọc báo cho tôi,lastest_news,user_manual
+Hãy cập nhật tôi với tin tức mới nhất ,lastest_news,user_manual
+Cho tôi biết những tin tức mới nhất ,lastest_news,user_manual
+Đọc các bản tin mới ,lastest_news,user_manual
+Tin tức của một vài giờ trước,lastest_news,user_manual
+Tin tức tiêu điểm gần đây,lastest_news,user_manual
+Diễn biến của tin tức gần đây,lastest_news,user_manual
+Kể cho tôi nghe về các tin vừa xảy ra ,lastest_news,user_manual
+Đưa tôi đến tin mới vừa rồi ,lastest_news,user_manual
+Những bản tin vừa xuất hiện,lastest_news,user_manual
+Tìm hiểu thông tin gần đây,lastest_news,user_manual
+Cập nhật các sự kiện đang diễn ra ,lastest_news,user_manual
+Một số sự kiện mới nhất ,lastest_news,user_manual
+Một số bài hát mới nhất ,lastest_news,user_manual
+Những gì cảy ra hôm nay,lastest_news,user_manual
+Bài báo gần nhất vừa rồi là gì ,lastest_news,user_manual
+Tôi muốn nghe nội dung các các bài báo hôm trước ,lastest_news,user_manual
+Tôi muốn nghe nội dung các các bài báo xảy ra ngay bây giờ,lastest_news,user_manual
+Cho tôi biết tin nóng nhất ,hottest_news,user_manual
+Đọc tin tức hot nhất ,hottest_news,user_manual
+Xem tin tức được xem nhiều nhất ,hottest_news,user_manual
+Cập nhật tin tức hot,hottest_news,increase_volume
+Thông tin về các tin nóng nhất ,hottest_news,user_manual
+Một số tin tức nóng nhất,hottest_news,user_manual
+Hãy cho tôi viết về tin tức hot nhất hôm nay,hottest_news,user_manual
+Tiêu điểm về tin tức hôm nay,hottest_news,max_volume
+Diễn biến của tin tức nóng nhất ,hottest_news,user_manual
+Cung cấp cho tôi tin tức nóng nhất ,hottest_news,user_manual
+Những tin tức nóng vừa xảy ra ,hottest_news,user_manual
+Đưa tôi đến tin nóng vừa rồi ,hottest_news,user_manual
+Một số bài báo hot nhất ,hottest_news,user_manual
+Các tin nóng trong vài ngày qua ,hottest_news,user_manual
+Tin sốc hôm nay là gì,hottest_news,user_manual
+Tìm hiểu về tin sốc hôm nay,hottest_news,user_manual
+Một số tin tức gẫy sốt vừa qua ,hottest_news,user_manual
+Tìm hiểu về sự kiện đang nóng sắp tới ,hottest_news,user_manual
+Cung cấp cho tôi các bài báo giật tít ,hottest_news,user_manual
+Kể cho tôi về những tiêu điển của các bài báo nóng ,hottest_news,user_manual
+Diễn biến của sự kiện hot nhất ,hottest_news,user_manual
+Đọc tin tức được đọc nhiều nhất ,most_read_news,user_manual
+Xem tin tức phổ biến nhất ,most_read_news,user_manual
+Cập nhật tin tức được đọc nhiều nhất ,most_read_news,user_manual
+Thông tin về tin tức hot nhất ,most_read_news,user_manual
+Đọc những tin tức được xem nhiều nhất ,most_read_news,user_manual
+Một số trang báo về tin tức được đọc nhiều nhất ,most_read_news,user_manual
+Thông tin tin tức được xem nhiều nhất ,most_read_news,user_manual
+Cung cấp tin tức phổ biến nhất ,most_read_news,user_manual
+Thông tin về những tin tức được đọc nhiều nhất.,most_read_news,most_read_news
+Đọc những tin tức được xem nhiều nhất trong báo.,most_read_news,most_read_news
+Kể cho tôi các tin được đọc nhiều nhất ,most_read_news,user_manual
+Cung cấp cho tôi một số bài báo được đọc nhiều nhất,most_read_news,user_manual
+Tìm kiếm tin được đọc nhiều nhất,most_read_news,user_manual
+Cập nhật cho tôi về tin được đọc nhiều nhất,most_read_news,user_manual
+Tiêu điểm của các tin được đọc nhiều nhất,most_read_news,user_manual
+Những bài báo được đọc nhiều nhất đang xảy ra vừa rồi ,most_read_news,user_manual
+Diễn biến của báo được đọc nhiều nhất,most_read_news,user_manual
+Thông tin được đọc nhiều nhất là gì ,most_read_news,user_manual
+Đưa tôi đến tin được đọc nhiều nhất,most_read_news,user_manual
+Nghe tin tức từ các báo ,read_news,user_manual
+Đọc các tin tức gần đây,read_news,user_manual
+Cho tôi thông tin tin tức ,read_news,hottest_news
+Nghe tin  tức từ nguồn tin tức ,read_news,user_manual
+Xin vui lòng đọc tin tức hôm nay,read_news,user_manual
+Thông tin tin tức từ các nguồn tin,read_news,user_manual
+Cung cấp tin tức gần đây,read_news,user_manual
+Đọc các bản tin từ các báo ,read_news,user_manual
+Tôi muốn nghe tin tức từ nguồn tin tức,read_news,user_manual
+Tôi muốn chọn tin tức đầu tiên,read_news,user_manual
+Tôi muốn chọn tin tức thứ hai,read_news,user_manual
+Tôi muốn chọn tin tức thứ ba ,read_news,user_manual
+Tôi muốn chọn tin tức cuối cùng ,read_news,user_manual
+Hãy đọc tin tức quan trọng của tin thứ hai cho tôi,read_news,user_manual
+Cập nhật và chọn tin tức thứ hai,read_news,user_manual
+Hãy đọc tin thứ nhất ,read_news,user_manual
+Tôi muốn biết nội dung của bài báo số ba,read_news,user_manual
+Đọc tiêu đề và nội dung của bài báo đã chọn,read_news,user_manual
+Cập nhật về tin tức thứ nhất ,read_news,user_manual
+Đọc tóm tắt về bài báo thứ ba,read_news,user_manual
+"Tôi thích bài báo 2 , đọc nó cho tôi",read_news,user_manual
+Cho tôi biết chi tiết về bài báo bạn đã tìm được,read_news,user_manual

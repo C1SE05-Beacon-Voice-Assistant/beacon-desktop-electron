@@ -14,6 +14,7 @@ from transformers import BertForSequenceClassification, AutoConfig, AdamW, AutoT
 from vncorenlp import VnCoreNLP
 
 from read_csv_file import read_csv
+import csv
 
 # PATH
 base_dir = os.path.dirname(os.path.abspath(''))
@@ -289,11 +290,15 @@ class ClassifierTrainner:
                                 )
             logits = logits.logits.cpu().numpy()
             pred_flat = np.argmax(logits, axis=1).flatten()
-        return classes[int(pred_flat[0])], text
+        return classes[int(pred_flat[0])]
 
 
 def main():
-    classes_map = {'listen_to_music': 0, 'gpt_ai': 1, 'read_news': 2, 'user_manual': 3}
+    classes_map = {'play_music': 0, 'user_manual': 1, 'next_content': 2, 'pre_content': 3, 'end_of_content': 4,
+               'middle_of_content': 5, 'start_content': 6, 'stop_content': 7, 'restart_content': 8, 'pause_content': 9,
+               'resume_content': 10, 'increase_volume': 11, 'decrease_volume': 12, 'default_volume': 13,
+               'min_volume': 14, 'max_volume': 15, 'mute': 16, 'un_mute': 17, 'lastest_news': 18, 'hottest_news': 19,
+               'most_read_news': 20, 'read_news': 21}
 
     # Đọc file train.csv
     texts, train_labels = read_csv()
@@ -321,7 +326,11 @@ def main():
 
 class RunModel:
     def __init__(self):
-        self.classes = ['listen_to_music', 'gpt_ai', 'read_news', 'user_manual']
+        self.classes = ['play_music', 'user_manual', 'next_content', 'pre_content', 'end_of_content',
+               'middle_of_content', 'start_content', 'stop_content', 'restart_content', 'pause_content',
+               'resume_content', 'increase_volume', 'decrease_volume', 'default_volume',
+               'min_volume', 'max_volume', 'mute', 'un_mute', 'lastest_news', 'hottest_news',
+               'most_read_news', 'read_news']
         self.tokenizer = AutoTokenizer.from_pretrained("vinai/phobert-large")
         model_path1 = os.path.join(base_dir, 'intent_recognition', 'model_epoch9.pt')
         # bert model
@@ -334,10 +343,55 @@ class RunModel:
         return self.bert_classifier_trainer.predict_text(text_input, self.classes, self.tokenizer)
 
 
+class RunModelTest:
+    def __init__(self):
+        self.classes = ['play_music', 'user_manual', 'next_content', 'pre_content', 'end_of_content',
+                        'middle_of_content', 'start_content', 'stop_content', 'restart_content', 'pause_content',
+                        'resume_content', 'increase_volume', 'decrease_volume', 'default_volume',
+                        'min_volume', 'max_volume', 'mute', 'un_mute', 'lastest_news', 'hottest_news',
+                        'most_read_news', 'read_news']
+        self.tokenizer = AutoTokenizer.from_pretrained("vinai/phobert-large")
+        model_path1 = os.path.join(base_dir, 'intent_recognition', 'model_epoch9.pt')
+        # bert model
+        self.bert_classifier_model = BERTClassifier(len(self.classes))
+        # train model
+        self.bert_classifier_trainer = ClassifierTrainner(bert_model=self.bert_classifier_model, is_run=True)
+        self.bert_classifier_trainer.load_checkpoint(model_path1)
+
+    def test(self):
+        texts, labels = read_csv()
+        isFalse = 0
+        total = 0
+        label_predict_full  = []
+        print("text: label - predict")
+        for i in range(len(texts)):
+            predict_test = self.bert_classifier_trainer.predict_text(texts[i], self.classes, self.tokenizer)
+            total += 1
+            label_predict_full.append(predict_test)
+            if predict_test != labels[i]:
+                isFalse += 1
+                print(texts[i] + ": " + labels[i] + " - "+str(predict_test))
+        print("Score: " + str(((total-isFalse)/total)*100) + "%")
+        print("True: " + str((total-isFalse)) +", False: " + str(isFalse)+", Total: "+str(total))
+        fieldnames = ['Text', 'Label', 'Predict']
+        csv_file = os.path.join(os.path.dirname(__file__), 'finish_test.csv')
+        with open(csv_file, mode='w',newline='', encoding='utf-8-sig') as file:
+          writer = csv.DictWriter(file, fieldnames=fieldnames)
+
+          # Ghi tên các cột vào file CSV
+          writer.writeheader()
+
+          # Ghi từng hàng dữ liệu vào file CSV
+          for i in range(len(texts)):
+            writer.writerow({'Text': texts[i], 'Label': labels[i], 'Predict': label_predict_full[i]})
+
+        print("Dữ liệu đã được ghi vào file CSV.")
+
+
+
 
 if __name__ == '__main__':
-    run_model = RunModel()
-    label1, text1 = run_model.predict("Tin tức gì mới nhất hôm nay")
-    label2, text2 = run_model.predict("Nhạc nhẹ nhàng")
-    print("[PREDICT] {}:{}".format(label1, text1))
-    print("[PREDICT] {}:{}".format(label2, text2))
+    run_model_test = RunModelTest()
+    run_model_test.test()
+
+

@@ -2,7 +2,7 @@ import pandas as pd
 import os
 
 # Đọc dữ liệu từ file CSV
-data = pd.read_csv(os.path.join(os.path.dirname(__file__), 'train.csv'))
+data = pd.read_csv(os.path.join(os.path.dirname(__file__), 'test.csv'))
 
 
 # Lấy các cột chứa văn bản và nhãn
