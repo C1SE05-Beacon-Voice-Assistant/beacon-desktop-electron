@@ -122,3 +122,10 @@ beacon_package/phobert-base/
 beacon_package/intent_recognition/phobert-base/
 
 beacon_package/intent_recognition/model/
+beacon_package/**/*.bk.py
+
+*.ipynb
+
+*.csv
+
+beacon_package/intent_recognition/cache/

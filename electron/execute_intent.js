@@ -87,6 +87,12 @@ const execute_intent = async (
           await res.next();
         }),
     },
+
+    /**
+     * Read news intent
+     *
+     */
+
     {
       name: "search_news",
       feature_name: () => object.searchByKeyword(output),
@@ -107,6 +113,16 @@ const execute_intent = async (
       name: "read_news",
       feature_name: () => object.selectOneToRead(newsList, index),
     },
+
+    /**
+     * User Manual intent
+     *
+     */
+
+    {
+      name: "user_manual",
+      feature_name: () => object.readFull(),
+    },
   ];
   // features.forEach(async (feature) => {
   //   if (feature.name === output_type) {
@@ -115,7 +131,6 @@ const execute_intent = async (
   // });
   for (let f of features) {
     if (f.name === output_type) return f.feature_name();
-    // if (f.name == output_type) return f.feature_name();
   }
 };
 module.exports = {

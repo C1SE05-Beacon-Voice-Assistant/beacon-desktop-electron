@@ -16,14 +16,15 @@
     "package.json",
     "beacon_package",
     "!**/node_modules/*/{CHANGES.md,CHANGELOG.md,README.md,README,readme.md,readme,test,__tests__,tests,powered-test,example,examples}/**",
-    "!beacon_package/{CHANGELOG.md,README.md,*.example}",
-    "!beacon_package/**/*.bk.*",
+    "!beacon_package/{CHANGELOG.md,README.md,*.example,*.csv,*.ipynb,*.bk.py}",
+    "!beacon_package/**/{*.bk.*,*.ipynb}",
     "!**/*.csv",
     "!beacon_package/vncorenlp/**",
     "!**/__pycache__/**",
     "!beacon_package/requirements.txt",
     "!**/.idea/**",
-    "!beacon_package/**/*.{tar.gz,zip}"
+    "!beacon_package/**/*.{tar.gz,zip}",
+    "!beacon_package/**/cache/**"
   ],
   "nsis": {
     "oneClick": false,

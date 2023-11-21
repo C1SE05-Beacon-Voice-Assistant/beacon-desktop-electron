@@ -8,7 +8,7 @@
   "scripts": {
     "copy": "node ./copyStaticFiles.js",
     "dev": "npm run copy && vite",
-    "make": "npm run copy && npm run build && electron-builder build --win",
+    "make": "npm run build && electron-builder build --win",
     "build": "npm run copy && vite build",
     "release": "npm run copy && vite build && electron-builder --publish always",
     "lint": "eslint --ext .ts,.tsx ."
