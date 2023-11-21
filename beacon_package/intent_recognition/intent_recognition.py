@@ -20,10 +20,11 @@ class RunModel:
         warnings.filterwarnings('ignore', category=UserWarning, message='TypedStorage is deprecated')
         logging.set_verbosity_error()
 
-        self.classes = ['listen_to_music', 'read_news', 'user_manual', 'decrease_volume', 'default_volume',
-                        'end_of_content', 'hottest_news', 'increase_volume', 'lastest_news', 'max_volume',
-                        'middle_of_content', 'min_volume', 'most_read_news', 'mute', 'next_content', 'pause_content',
-                        'play_music', 'pre_content', 'restart_content', 'resume_content', 'stop_content', 'un_mute']
+        self.classes = ['play_music', 'user_manual', 'next_content', 'pre_content', 'end_of_content',
+       'middle_of_content', 'start_content', 'stop_content', 'restart_content', 'pause_content',
+       'resume_content', 'increase_volume', 'decrease_volume', 'default_volume',
+       'min_volume', 'max_volume', 'mute', 'un_mute', 'latest_news', 'hottest_news',
+       'most_read_news', 'read_news']
 
         self.tokenizer = AutoTokenizer.from_pretrained('vinai/phobert-base', use_fast=False)
 
