@@ -24,6 +24,16 @@ const listen_to_music_guide = {
     "Đặt âm lượng: để đặt mức âm lượng mong muốn, hãy nói 'Đặt âm lượng' kèm theo số lượng. Ví dụ: 'Đặt âm lượng 20'.",
   next_content:
     "Nội dung tiếp theo: để chuyển sang nội dung tiếp theo, hãy nói 'Nội dung tiếp theo' hoặc 'Bài tiếp theo'.",
+  search_news:
+    "Tìm kiếm tin tức theo từ khóa: để sử dụng hãy nói Tìm kiếm tin tức kèm theo từ khóa mà bạn muốn tìm kiếm. Ví dụ: Tìm tin tức về đội tuyển bóng đá Việt Nam",
+  hottest_news:
+    "Tìm tin tức nóng nhất: để sử dụng bạn có thể ra lệnh bằng cách sử dụng từ như: tin tức, bản tin, đọc báo kèm với những từ để chọn chế độ đọc như: nóng nhất, nóng hổi nhất, gây sốt trong câu của mình. Ví dụ:Những tin tức gây sốt đang diễn ra hiện tại",
+  latest_news:
+    "Tìm tin tức mới nhất: để sử dụng bạn có thể ra lệnh bằng cách sử dụng từ như: tin tức, bản tin, đọc báo kèm với những từ để chọn chế độ đọc như: mới nhất, gần đây trong câu của mình. Ví dụ:Tìm kiếm những bản tin mới nhất",
+  most_read_news:
+    "Tìm tin tức được đọc nhiều nhất: để sử dụng bạn có thể ra lệnh bằng cách sử dụng từ như: tin tức, bản tin, đọc báo kèm với những từ chọn chế độ đọc như: được đọc nhiều nhất trong câu của mình. Ví dụ: Tìm những bài báo được đọc nhiều nhất",
+  read_news:
+    "Chọn 1 trong danh sách bài báo để đọc: để thực hiện hãy nói: Đọc bài báo kèm với số thứ tự. Ví dụ: Đọc bài báo số 1",
 };
 
 module.exports = listen_to_music_guide;
