@@ -137,9 +137,9 @@ class ReadNewsController {
   async selectOneToRead(newsList, num) {
     console.log(newsList);
 
-    if (newsList.length === 0) {
+    if (newsList.length < num) {
       // await textToSpeech("Rất tiếc, không có tin tức nào để đọc");
-      throw new Error("Không có tin tức nào để đọc");
+      throw new Error(`Yêu cầu chọn tin tức ${num + 1} không hợp lệ`);
     }
 
     await this.driver.get(newsList[num].url);

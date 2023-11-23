@@ -11,4 +11,6 @@ async function textToSpeech(text) {
   return data;
 }
 
+textToSpeech("Xin chào");
+
 module.exports = textToSpeech;

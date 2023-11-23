@@ -2,7 +2,6 @@ const { SearchNewsBy } = require("./helpers/enum");
 
 const execute_intent = async (
   output_type,
-  output,
   object,
   newsList = [],
   index = 0
@@ -121,7 +120,7 @@ const execute_intent = async (
 
     {
       name: "user_manual",
-      feature_name: () => object.readFull(),
+      feature_name: () => object.start(),
     },
   ];
   // features.forEach(async (feature) => {
