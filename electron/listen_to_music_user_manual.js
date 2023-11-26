@@ -76,7 +76,6 @@ class UserManual {
   }
 }
 
-new UserManual().start();
+// new UserManual().start();
 
 module.exports = UserManual;
-

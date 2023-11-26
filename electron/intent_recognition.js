@@ -11,12 +11,12 @@ async function intentRecognition(text) {
   return data[0];
 }
 
-intentRecognition("tim kiem nhung tin tức ve CEO OpenAI")
-  .then((data) => {
-    console.log(data);
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+// intentRecognition("tim kiem nhung tin tức ve CEO OpenAI")
+//   .then((data) => {
+//     console.log(data);
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//   });
 
 module.exports = intentRecognition;

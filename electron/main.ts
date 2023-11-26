@@ -1,7 +1,7 @@
 "use strict";
 
 import type { BrowserWindowConstructorOptions as WindowOptions } from "electron";
-import { app, BrowserWindow, dialog, Tray, Menu } from "electron";
+import { app, BrowserWindow, dialog, Tray, Menu, ipcRenderer } from "electron";
 import log from "electron-log";
 import path, { join } from "path";
 import MenuBuilder from "../src/menu";

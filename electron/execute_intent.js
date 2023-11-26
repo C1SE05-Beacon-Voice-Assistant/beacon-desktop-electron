@@ -110,7 +110,7 @@ const execute_intent = async (
     },
     {
       name: "read_news",
-      feature_name: () => object.selectOneToRead(newsList, index),
+      feature_name: () => object.selectOneToRead(newsList, index - 1), //index start with 0
     },
 
     /**

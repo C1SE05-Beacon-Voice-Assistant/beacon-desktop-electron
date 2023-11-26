@@ -150,8 +150,8 @@ class ReadNewsController {
       newsList[num].description
     );
 
-    await textToSpeech(result.title);
-    // await textToSpeech(result.content)
+    await textToSpeech(result.title); //for testing only, comment this in production
+    // await textToSpeech(result.content) //uncomment this in production
 
     return result;
   }

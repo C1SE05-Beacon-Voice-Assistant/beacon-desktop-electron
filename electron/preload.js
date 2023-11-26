@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 require("dotenv").config();
 const { Builder } = require("selenium-webdriver");
-const { contextBridge } = require("electron");
+const { contextBridge, ipcRenderer } = require("electron");
 const chromedriverPath = require("chromedriver").path.replace(
   "app.asar",
   "app.asar.unpacked"
@@ -27,7 +27,7 @@ const UserManual = require(path.join(__dirname, "user_manual.js"));
 const serviceBuilder = new ServiceBuilder(chromedriverPath);
 const driver = new Builder()
   .forBrowser("chrome")
-  .setChromeOptions()
+  // .setChromeOptions()
   // .setChromeService(serviceBuilder)
   .build();
 // excute_intent("play_music", listenToMusic(driver));
@@ -40,7 +40,6 @@ const driver = new Builder()
 const readNews = new ReadNewsController(driver);
 // const searchNewsBy = readNews.search.bind(readNews);
 // const selectOneToRead = readNews.selectOneToRead.bind(readNews);
-const userManual = new UserManual();
 
 /**
  * Test excute readnews related intents
@@ -62,6 +61,7 @@ const { start, register } = require(path.join(__dirname, "start.js"));
 
 execute_intent("play_music", listenToMusic(driver));
 const beacon = new BeaconSpeech("Beacon", "Hanoi");
+const userManual = new UserManual(beacon);
 
 process.env.API_URL = "http://localhost:8000/api";
 
@@ -132,10 +132,10 @@ contextBridge.exposeInMainWorld("electron", {
   backgroundListen: beacon.backgroundListen.bind(beacon),
   stopBackgroundListen: beacon.stopBackgroundListen.bind(beacon),
   keywordRecognize: beacon.keywordRecognize.bind(beacon),
-  beaconVolume,
-  listenToMusic: listenToMusicWithDriver,
-  readNews: { searchNewsBy, selectOneToRead, searchKeyword },
-  getAudioDevices,
+  // beaconVolume,
+  // listenToMusic: listenToMusicWithDriver,
+  // readNews: { searchNewsBy, selectOneToRead, searchKeyword },
+  // getAudioDevices,
   intentRecognition,
   executeIntent: execute_intent,
 });

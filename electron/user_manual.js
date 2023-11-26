@@ -7,64 +7,65 @@ class UserManual {
     this.beacon = BeaconSpeech;
   }
 
-  readIntroduction() {
-    textToSpeech(guide.introduction);
+  async readIntroduction() {
+    await textToSpeech(guide.introduction);
   }
 
-  readRequirements() {
-    textToSpeech(guide.requirements);
+  async readRequirements() {
+    await textToSpeech(guide.requirements);
   }
 
-  readFull() {
+  async readFull() {
     for (var key in guide) {
-      console.log(guide[key]);
+      // console.log(guide[key]);
+      await textToSpeech(guide[key]);
     }
   }
 
-  readNews() {
-    textToSpeech(guide.read_news);
+  async readMusic() {
+    await textToSpeech(guide.play_music);
+  }
+
+  async readVolume() {
+    await textToSpeech(guide.control_vol);
+  }
+
+  async readNews() {
+    await textToSpeech(guide.read_news);
   }
 
   async start() {
     let options = `
-        Bạn muốn đọc hướng dẫn cho chức năng nào? (Vui lòng đọc số thứ tự để chọn)
+        Bạn muốn tôi hướng dẫn sử dụng cho chức năng nào? (Vui lòng đọc số thứ tự để chọn)
         1. Giới thiệu về ứng dụng
-        2. Đọc toàn bộ
-        3. Cách sử dụng chức năng đọc tin tức
-        
-        6. Phát nhạc
-        7. Dừng nội dung
-        8. Tiếp tục nội dung
-        9. Tăng âm lượng
-        10. Giảm âm lượng
-        11. Âm lượng nhỏ nhất
-        12. Âm lượng lớn nhất
-        13. Tắt tiếng
-        14. Bật tiếng
-        15. Đặt âm lượng
-        16. Nội dung tiếp theo
+        2. Hướng dẫn chức năng đọc tin tức
+        3. Hướng dẫn chức năng phát nhạc
+        4. Hướng dẫn chức năng điều chỉnh âm lượng máy tính
+        5. Đọc toàn bộ hướng dẫn
         0. Kết thúc đọc hướng dẫn
     `;
 
     while (true) {
       await textToSpeech(options);
       const input = await this.beacon.recognizeFromMicrophone();
-      const optionChoosen = input.match(/[0,9]/);
+      const index = input.match(/[0,9]/);
 
       if (!optionChoosen) {
         await textToSpeech("Lựa chọn không hợp lệ");
         continue;
       }
 
-      const index = parseInt(optionChoosen);
       switch (index) {
         case 1:
-          this.readIntroduction();
+          await this.readIntroduction();
         case 2:
-          this.readFull();
+          await this.readNewsByType();
         case 3:
-          this.readNewsByType();
-
+          await this.readMusic();
+        case 4:
+          await this.readVolume();
+        case 5:
+          await this.readFull();
         case 0:
           return;
       }
@@ -72,6 +73,6 @@ class UserManual {
   }
 }
 
-new UserManual().start();
+// new UserManual().start();
 
 module.exports = UserManual;
