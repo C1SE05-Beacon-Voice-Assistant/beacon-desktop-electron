@@ -15,6 +15,7 @@ const ReadNewsController = require(path.join(
   "read_news_controller.js"
 ));
 const getAudioDevices = require(path.join(__dirname, "detect_device.js"));
+const {storeConversation, getAllConversations, clearConversations} = require(path.join(__dirname, "conversation.js"));
 const { checkInternetConnection } = require(path.join(
   __dirname,
   "detect_internet_status.js"
@@ -23,7 +24,7 @@ const executeException = require(path.join(__dirname, "situation_except.js"));
 const textToSpeech = require(path.join(__dirname, "text_to_speech.js"));
 const { start, register } = require(path.join(__dirname, "start.js"));
 
-const beacon = new BeaconSpeech("Beacon", "Hanoi");
+// const beacon = new BeaconSpeech("Beacon", "Hanoi");
 
 // process.env.API_URL = "http://localhost:8000/api";
 
@@ -72,9 +73,12 @@ const init = () => {
 // const selectOneToRead = readNews.selectOneToRead.bind(readNews);
 
 contextBridge.exposeInMainWorld("electron", {
-  backgroundListen: beacon.backgroundListen.bind(beacon),
-  stopBackgroundListen: beacon.stopBackgroundListen.bind(beacon),
-  keywordRecognize: beacon.keywordRecognize.bind(beacon),
+  // backgroundListen: beacon.backgroundListen.bind(beacon),
+  // stopBackgroundListen: beacon.stopBackgroundListen.bind(beacon),
+  // keywordRecognize: beacon.keywordRecognize.bind(beacon),
+  storeConversation,
+  getAllConversations,
+  clearConversations
   // beaconVolume,
   // listenToMusic: listenToMusicWithDriver,
   // readNews: { searchNewsBy, selectOneToRead },

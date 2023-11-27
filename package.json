@@ -27,6 +27,8 @@
     "electron-updater": "^6.1.4",
     "loudness": "^0.4.2",
     "microsoft-cognitiveservices-speech-sdk": "^1.32.0",
+    "moment": "^2.29.4",
+    "node-cron": "^3.0.3",
     "node-machine-id": "^1.1.12",
     "python-shell": "^5.0.0",
     "selenium-webdriver": "^4.14.0",
