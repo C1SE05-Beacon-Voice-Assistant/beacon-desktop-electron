@@ -40,7 +40,6 @@ export default function Conversation() {
     return accumulator;
   }, {});
 
-  console.log(mergedArray);
   return (
     <div className={styles.container}>
       <div className="body">
@@ -60,9 +59,9 @@ export default function Conversation() {
                   const diffDays = currentDate.diff(date, "days");
                   let formattedTime = "";
                   if (diffDays === 0) {
-                    formattedTime = "Ngày hôm nay";
+                    formattedTime = "Hôm nay";
                   } else if (diffDays === 1) {
-                    formattedTime = "Ngày hôm qua";
+                    formattedTime = "Hôm qua";
                   } else {
                     formattedTime = `${Math.abs(diffDays)} ngày trước`;
                   }
