@@ -2,7 +2,7 @@
 const loudness = require("loudness");
 const executeException = require("./situation_except");
 
-async function createBeaconVolume() {
+async function beaconVolume() {
   const volume = await loudness.getVolume();
 
   async function setVolume(newVolume) {
@@ -77,4 +77,4 @@ async function createBeaconVolume() {
   };
 }
 
-module.exports = createBeaconVolume;
+module.exports = beaconVolume;

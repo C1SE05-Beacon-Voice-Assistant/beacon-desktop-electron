@@ -5,9 +5,7 @@ import App from "./App";
 
 const container = createRoot(document.getElementById("root"));
 container.render(
-  <React.StrictMode>
     <HashRouter>
       <App />
     </HashRouter>
-  </React.StrictMode>
 );

@@ -1,7 +1,7 @@
 "use strict";
 
 import type { BrowserWindowConstructorOptions as WindowOptions } from "electron";
-import { app, BrowserWindow, dialog, Tray, Menu } from "electron";
+import { app, BrowserWindow, dialog, Tray, Menu, ipcMain } from "electron";
 import log from "electron-log";
 import path, { join } from "path";
 import MenuBuilder from "../src/menu";
@@ -13,6 +13,17 @@ process.env.DIST = path.join(__dirname, "../dist");
 process.env.VITE_PUBLIC = app.isPackaged
   ? process.env.DIST
   : path.join(process.env.DIST, "../public");
+
+if (!app.requestSingleInstanceLock()) {
+  app.quit();
+  process.exit(0);
+}
+
+Object.defineProperty(app, "isPackaged", {
+  get() {
+    return true;
+  },
+});
 
 // set path for logs root project in dev mode
 if (process.env.NODE_ENV === "development") {
@@ -34,6 +45,11 @@ const createWindow = (options: WindowOptions = {}) => {
     mainWindow.focus();
     return;
   }
+  ipcMain.on("activate-component", (event, componentId) => {
+    // Kích hoạt thành phần dựa trên componentId
+    // Ví dụ: Gửi thông điệp đến renderer process để kích hoạt thành phần
+    mainWindow.webContents.send("activate-component", componentId);
+  });
   const config: WindowOptions = {
     // show: false,
     width: parseInt(process.env.ELECTRON_WIDTH) || 833,
@@ -43,6 +59,7 @@ const createWindow = (options: WindowOptions = {}) => {
       nodeIntegration: true,
       contextIsolation: true,
       preload: path.join(__dirname, "./preload.js"),
+      // nodeIntegrationInWorker: true,
     },
     // opacity: 0,
     resizable: false,

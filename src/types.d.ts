@@ -2,10 +2,10 @@ export interface IElectron {
   backgroundListen: (callback: (text: string) => void) => void;
   stopBackgroundListen: () => void;
   keywordRecognize: () => Promise<string>;
-  // listenToMusic: any;
-  // beaconVolume: any;
-  // readNews: any;
-  // getAudioDevices: () => any;
+  storeConversation: () => Promise<any>;
+  getAllConversations: () => Promise<any>;
+  clearConversations: () => Promise<any>;
+  executeIntent: (intent: object) => Promise<any>;
 }
 
 declare global {
