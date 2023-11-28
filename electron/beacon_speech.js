@@ -3,7 +3,6 @@ import * as sdk from "microsoft-cognitiveservices-speech-sdk";
 const { PythonShell } = require("python-shell");
 const { options } = require("./helpers/optionPyshell");
 const textToSpeech = require("./text_to_speech");
-const intentRecognition = require("./intent_recognition");
 
 class BeaconSpeech {
   constructor(name, location) {
@@ -60,8 +59,7 @@ class BeaconSpeech {
     this.speechRecognizer.recognized = async (s, e) => {
       if (e.result.reason === sdk.ResultReason.RecognizedSpeech) {
         console.log(`RECOGNIZED: Text=${e.result.text}`);
-        const result = await intentRecognition(e.result.text);
-        callback(result);
+        callback(e.result.text);
       } else if (e.result.reason === sdk.ResultReason.NoMatch) {
         console.log("NOMATCH: Speech could not be recognized.");
       }

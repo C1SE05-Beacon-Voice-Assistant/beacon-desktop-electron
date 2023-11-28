@@ -24,12 +24,12 @@ export default function App() {
 
   useEffect(() => {
     if (isStop) {
-      window.electron.keywordRecognize().then((res) => {
-        if (res) {
-          console.log("30", res);
-          setIsListening(true);
-        }
-      });
+      // window.electron.keywordRecognize().then((res) => {
+      //   if (res) {
+      //     console.log("30", res);
+      //     setIsListening(true);
+      //   }
+      // });
     }
   }, [isStop]);
 
@@ -50,12 +50,12 @@ export default function App() {
         });
       });
     } else {
-      window.electron.stopBackgroundListen();
+      // window.electron.stopBackgroundListen();
       setIsStop(true);
     }
 
     return () => {
-      window.electron.stopBackgroundListen();
+      // window.electron.stopBackgroundListen();
     };
   }, [isListening, resultNews, currentCommand]);
 
