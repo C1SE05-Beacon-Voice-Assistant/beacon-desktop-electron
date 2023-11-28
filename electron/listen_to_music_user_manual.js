@@ -71,8 +71,8 @@ class UserManual {
     11. Nội dung tiếp theo
     0. Kết thúc đọc hướng dẫn
   `;
-    textToSpeech(options);
-    this.readMostReadNews();
+    // textToSpeech(options);
+    // this.readMostReadNews();
   }
 }
 
