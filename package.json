@@ -7,7 +7,7 @@
   "author": "Beacon Team",
   "scripts": {
     "copy": "node ./copyStaticFiles.js",
-    "dev": "npm run copy && vite",
+    "dev": "npm run copy && rm -rf ./dist-electron && vite",
     "make": "npm run build && electron-builder build --win",
     "build": "npm run copy && vite build",
     "release": "npm run copy && vite build && electron-builder --publish always",
@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@types/selenium-webdriver": "^4.1.19",
-    "axios": "^1.4.0",
+    "axios": "^1.6.2",
     "cheerio": "^1.0.0-rc.12",
     "chromedriver": "119.0.1",
     "electron-debug": "^3.2.0",
@@ -27,7 +27,8 @@
     "electron-updater": "^6.1.4",
     "loudness": "^0.4.2",
     "microsoft-cognitiveservices-speech-sdk": "^1.32.0",
-    "mwl-loudness": "^0.3.0",
+    "moment": "^2.29.4",
+    "node-cron": "^3.0.3",
     "node-machine-id": "^1.1.12",
     "python-shell": "^5.0.0",
     "selenium-webdriver": "^4.14.0",

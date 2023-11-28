@@ -18,25 +18,40 @@ const ReadNewsController = require(path.join(
   "read_news_controller.js"
 ));
 const getAudioDevices = require(path.join(__dirname, "detect_device.js"));
-const textToSpeech = require(path.join(__dirname, "text_to_speech.js"));
-const intentRecognition = require(path.join(
+const {
+  storeConversation,
+  getAllConversations,
+  clearConversations,
+} = require(path.join(__dirname, "conversation.js"));
+const { checkInternetConnection } = require(path.join(
   __dirname,
   "intent_recognition.js"
 ));
-const UserManual = require(path.join(__dirname, "user_manual.js"));
-const driver = new Builder().forBrowser("chrome").setChromeOptions().build();
-const readNews = new ReadNewsController(driver);
+const executeException = require(path.join(__dirname, "situation_except.js"));
+const textToSpeech = require(path.join(__dirname, "text_to_speech.js"));
+const { start, register } = require(path.join(__dirname, "start.js"));
+
+const IS_PRODUCTION = process.env.NODE_ENV === "production";
+
 const beacon = new BeaconSpeech("Beacon", "Hanoi");
 const userManual = new UserManual(beacon);
 // const { start, register } = require(path.join(__dirname, "start.js"));
 
-// process.env.API_URL = "http://localhost:8000/api";
+if (IS_PRODUCTION) {
+  const serviceBuilder = new ServiceBuilder(chromedriverPath);
+  const driver = new Builder()
+    .forBrowser("chrome")
+    .setChromeService(serviceBuilder)
+    .build();
+} else {
+  const driver = new Builder().forBrowser("chrome").build();
+}
 
-// const beaconVolume = createBeaconVolume().then((result) => result);
-// const listenToMusicWithDriver = listenToMusic(driver);
-// // const readNews = new ReadNewsController(driver);
-// const searchNewsBy = readNews.search.bind(readNews);
-// const selectOneToRead = readNews.selectOneToRead.bind(readNews);
-// const searchKeyword = readNews.searchByKeyword.bind(readNews);
-
-contextBridge.exposeInMainWorld("electron", {});
+contextBridge.exposeInMainWorld("electron", {
+  backgroundListen: beacon.backgroundListen.bind(beacon),
+  stopBackgroundListen: beacon.stopBackgroundListen.bind(beacon),
+  keywordRecognize: beacon.keywordRecognize.bind(beacon),
+  storeConversation,
+  getAllConversations,
+  clearConversations,
+});
