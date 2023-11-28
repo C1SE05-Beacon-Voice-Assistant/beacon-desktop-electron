@@ -34,10 +34,10 @@ const createWindow = (options: WindowOptions = {}) => {
     mainWindow.focus();
     return;
   }
-  ipcMain.on('activate-component', (event, componentId) => {
+  ipcMain.on("activate-component", (event, componentId) => {
     // Kích hoạt thành phần dựa trên componentId
     // Ví dụ: Gửi thông điệp đến renderer process để kích hoạt thành phần
-    mainWindow.webContents.send('activate-component', componentId);
+    mainWindow.webContents.send("activate-component", componentId);
   });
   const config: WindowOptions = {
     // show: false,
@@ -48,7 +48,7 @@ const createWindow = (options: WindowOptions = {}) => {
       nodeIntegration: true,
       contextIsolation: true,
       preload: path.join(__dirname, "./preload.js"),
-      nodeIntegrationInWorker: true,
+      // nodeIntegrationInWorker: true,
     },
     // opacity: 0,
     resizable: false,

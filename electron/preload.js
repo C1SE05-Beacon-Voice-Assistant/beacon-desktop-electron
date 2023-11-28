@@ -15,7 +15,11 @@ const ReadNewsController = require(path.join(
   "read_news_controller.js"
 ));
 const getAudioDevices = require(path.join(__dirname, "detect_device.js"));
-const {storeConversation, getAllConversations, clearConversations} = require(path.join(__dirname, "conversation.js"));
+const {
+  storeConversation,
+  getAllConversations,
+  clearConversations,
+} = require(path.join(__dirname, "conversation.js"));
 const { checkInternetConnection } = require(path.join(
   __dirname,
   "detect_internet_status.js"
@@ -24,63 +28,25 @@ const executeException = require(path.join(__dirname, "situation_except.js"));
 const textToSpeech = require(path.join(__dirname, "text_to_speech.js"));
 const { start, register } = require(path.join(__dirname, "start.js"));
 
-// const beacon = new BeaconSpeech("Beacon", "Hanoi");
+const IS_PRODUCTION = process.env.NODE_ENV === "production";
 
-// process.env.API_URL = "http://localhost:8000/api";
+const beacon = new BeaconSpeech("Beacon", "Hanoi");
 
-const init = () => {
-  checkInternetConnection(async (isConnected) => {
-    if (!isConnected) {
-      executeException("noInternet");
-    }
-
-    await textToSpeech("Xin chào, tôi là Beacon, tôi có thể giúp gì cho bạn?");
-    start()
-      .then(async (res) => {
-        // if (res) {
-        //   console.log("exist");
-        //   return true;
-        // } else {
-        //   await textToSpeech("Hãy đăng ký thông tin của bạn");
-        //   await textToSpeech("Nhập tên");
-        //   const name = await beacon.recognizeFromMicrophone();
-        //   await textToSpeech("Nhập số điện thoại");
-        //   const phone = await beacon.recognizeFromMicrophone();
-        //   const userInfo = {
-        //     name,
-        //     phone,
-        //   };
-        //   return register(userInfo);
-        // }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  });
-};
-
-// init();
-
-// const serviceBuilder = new ServiceBuilder(chromedriverPath);
-// const driver = new Builder()
-//   .forBrowser("chrome")
-//   .setChromeService(serviceBuilder)
-//   .build();
-// const beaconVolume = createBeaconVolume().then((result) => result);
-// const listenToMusicWithDriver = listenToMusic(driver);
-// const readNews = new ReadNewsController(driver);
-// const searchNewsBy = readNews.search.bind(readNews);
-// const selectOneToRead = readNews.selectOneToRead.bind(readNews);
+if (IS_PRODUCTION) {
+  const serviceBuilder = new ServiceBuilder(chromedriverPath);
+  const driver = new Builder()
+    .forBrowser("chrome")
+    .setChromeService(serviceBuilder)
+    .build();
+} else {
+  const driver = new Builder().forBrowser("chrome").build();
+}
 
 contextBridge.exposeInMainWorld("electron", {
-  // backgroundListen: beacon.backgroundListen.bind(beacon),
-  // stopBackgroundListen: beacon.stopBackgroundListen.bind(beacon),
-  // keywordRecognize: beacon.keywordRecognize.bind(beacon),
+  backgroundListen: beacon.backgroundListen.bind(beacon),
+  stopBackgroundListen: beacon.stopBackgroundListen.bind(beacon),
+  keywordRecognize: beacon.keywordRecognize.bind(beacon),
   storeConversation,
   getAllConversations,
-  clearConversations
-  // beaconVolume,
-  // listenToMusic: listenToMusicWithDriver,
-  // readNews: { searchNewsBy, selectOneToRead },
-  // getAudioDevices,
+  clearConversations,
 });
