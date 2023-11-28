@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const executeException = require("./situation_except");
-const { By, Builder } = require("selenium-webdriver");
+const { By } = require("selenium-webdriver");
 
 async function listenToMusic(driver) {
   let platformName = null;
@@ -104,6 +104,10 @@ async function listenToMusic(driver) {
     }
   }
 
+  async function stop() {
+    await driver.get("https://www.google.com");
+  }
+
   return {
     exit,
     searchSong,
@@ -112,6 +116,7 @@ async function listenToMusic(driver) {
     pause,
     resume,
     next,
+    stop,
   };
 }
 

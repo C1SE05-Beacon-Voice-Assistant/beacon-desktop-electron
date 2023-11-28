@@ -14,5 +14,7 @@ const NewsTypes = {
   PODCAST: "podcast",
 };
 
-module.exports.SearchNewsBy = SearchNewsBy;
-module.exports.NewsTypes = NewsTypes;
+module.exports = {
+  SearchNewsBy,
+  NewsTypes,
+};

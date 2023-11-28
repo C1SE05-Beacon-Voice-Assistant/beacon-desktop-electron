@@ -1,6 +1,6 @@
-const path = require("path");
+/* eslint-disable @typescript-eslint/no-var-requires */
 const textToSpeech = require("./text_to_speech");
-const guide = require(path.join(__dirname, "helpers/guide.js"));
+const { guide } = require("./helpers/guide");
 
 class UserManual {
   constructor(BeaconSpeech) {
@@ -17,7 +17,6 @@ class UserManual {
 
   async readFull() {
     for (var key in guide) {
-      // console.log(guide[key]);
       await textToSpeech(guide[key]);
     }
   }
@@ -48,31 +47,39 @@ class UserManual {
     while (true) {
       await textToSpeech(options);
       const input = await this.beacon.recognizeFromMicrophone();
-      const index = input.match(/[0,9]/);
+      const optionChosen = input.match(/[0,9]/);
 
-      if (!optionChoosen) {
+      if (!optionChosen) {
         await textToSpeech("Lựa chọn không hợp lệ");
         continue;
       }
 
-      switch (index) {
-        case 1:
+      switch (optionChosen) {
+        case 1: {
           await this.readIntroduction();
-        case 2:
+          break;
+        }
+        case 2: {
           await this.readNewsByType();
-        case 3:
+          break;
+        }
+        case 3: {
           await this.readMusic();
-        case 4:
+          break;
+        }
+        case 4: {
           await this.readVolume();
-        case 5:
+          break;
+        }
+        case 5: {
           await this.readFull();
+          break;
+        }
         case 0:
           return;
       }
     }
   }
 }
-
-// new UserManual().start();
 
 module.exports = UserManual;
