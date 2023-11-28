@@ -1,44 +1,26 @@
-import bot from "~/assets/bot.png";
 import styles from "./Conversation.module.css";
 import Bot from "~/components/bot";
 import { useEffect, useState } from "react";
-import moment from "moment";
+import { getAllConversation } from "~/services/conversation";
+import { diffDate } from "~/lib/date";
+
 export default function Conversation() {
   const [conversations, setConversation] = useState([]);
   useEffect(() => {
-    // Handle save log to tmp, main log file and display all log to conversation pages
-    handleStoreAndGetConversation();
-    // Setup 10s to clear and send request to save logs on server;
-    window.electron.clearConversations()
-  }, []);
-  const getAllConversation = async () => {
-    fetch("/beacon_package/log/main.log")
-      .then(async (response) => response.text())
-      .then((data: any) => {
+    getAllConversation()
+      .then((res) => res.text())
+      .then((data) => {
         const conversations = data.split("\n"); // Split content into lines
         // Append each line to the conversation array
-        let array: any = [];
+        const arrTmp: Array<object> = [];
         conversations.forEach((line: any) => {
           if (line) {
-            array.push(line);
+            arrTmp.push(line);
           }
         });
-        setConversation(array);
+        setConversation(arrTmp);
       });
-  };
-  const handleStoreAndGetConversation = async () => {
-    await window.electron.storeConversation();
-    await getAllConversation();
-  };
-
-  const mergedArray = conversations.reduce((accumulator, currentValue) => {
-    const date = JSON.parse(currentValue).date.split("T")[0]; // Lấy phần ngày từ chuỗi ngày-giờ
-    if (!accumulator[date]) {
-      accumulator[date] = [];
-    }
-    accumulator[date].push(currentValue);
-    return accumulator;
-  }, {});
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -49,36 +31,30 @@ export default function Conversation() {
 
         <div className={styles["content-wrapper"]}>
           {conversations.length > 0 ? (
-            Object.keys(mergedArray).map((key: string, index) => {
-              const conversationFormatByDate = mergedArray[key];
-              return conversationFormatByDate.map(
-                (conversation: any, index: number) => {
-                  const data = JSON.parse(conversation);
-                  const currentDate = moment().startOf("day");
-                  const date = moment(key);
-                  const diffDays = currentDate.diff(date, "days");
-                  let formattedTime = "";
-                  if (diffDays === 0) {
-                    formattedTime = "Hôm nay";
-                  } else if (diffDays === 1) {
-                    formattedTime = "Hôm qua";
-                  } else {
-                    formattedTime = `${Math.abs(diffDays)} ngày trước`;
-                  }
-                  return (
-                    <div key={index} className={styles.content}>
-                      <h3 className={styles.time}>
-                        {index === 0 && formattedTime}
-                      </h3>
-                      <div className={styles.conversion}>
-                        <div className={styles.img}>
-                          <img src={bot} alt="" />
-                        </div>
-                        <div className={styles.message}>{data.query}</div>
-                      </div>
+            conversations.reverse().map((item, index) => {
+              const data = JSON.parse(item);
+              return (
+                <div key={index} className={styles.content}>
+                  <div className={styles.conversion}>
+                    <div className={styles.svg}>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+                        />
+                      </svg>
                     </div>
-                  );
-                }
+                    <div className={styles.message}>{data.query}</div>
+                  </div>
+                  <p className={styles.time}>{diffDate(data.date)}</p>
+                </div>
               );
             })
           ) : (

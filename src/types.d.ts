@@ -3,8 +3,8 @@ export interface IElectron {
   stopBackgroundListen: () => void;
   keywordRecognize: () => Promise<string>;
   storeConversation: () => Promise<any>;
-  getAllConversations: () => Promise<any>
-  clearConversations: () => Promise<any>
+  getAllConversations: () => Promise<any>;
+  clearConversations: () => Promise<any>;
   // listenToMusic: any;
   // beaconVolume: any;
   // readNews: any;
@@ -14,8 +14,8 @@ export interface IElectron {
 declare global {
   interface Window extends Window {
     electron: IElectron;
-    storeConversation: () => Promise<any>
-    getAllConversations: () => Promise<any>
-    clearConversations: () => Promise<any>
+    storeConversation: () => Promise<any>;
+    getAllConversations: () => Promise<any>;
+    clearConversations: () => Promise<any>;
   }
 }
