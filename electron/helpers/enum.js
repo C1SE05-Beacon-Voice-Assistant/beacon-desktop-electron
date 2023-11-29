@@ -14,7 +14,12 @@ const NewsTypes = {
   PODCAST: "podcast",
 };
 
+const TextSpeak = {
+  SEARCHING: "Đang tìm kiếm",
+};
+
 module.exports = {
   SearchNewsBy,
   NewsTypes,
+  TextSpeak,
 };

@@ -17,17 +17,22 @@ export default function App() {
     },
   });
 
+  const [history, setHistory] = useState<object[]>([]);
+
   useEffect(() => {
     window.electron.backgroundListen((result: string) => {
-      handleInput(result).then((res) => {
+      handleInput(result, history).then((res: any) => {
         console.log(res);
+        if (res?.type) {
+          setHistory((prev) => [...prev, ...res.result]);
+        }
       });
     });
 
     return () => {
       window.electron.stopBackgroundListen();
     };
-  }, []);
+  }, [history]);
 
   return (
     <ThemeProvider theme={theme}>
