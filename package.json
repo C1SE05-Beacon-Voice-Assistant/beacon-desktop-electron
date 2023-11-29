@@ -9,7 +9,7 @@
     "copy": "node ./copyStaticFiles.js",
     "dev": "npm run copy && rm -rf ./dist-electron && vite",
     "make": "npm run build && electron-builder build --win",
-    "build": "npm run copy && vite build",
+    "build": "npm run copy && rm -rf ./dist-electron && vite build",
     "release": "npm run copy && vite build && electron-builder --publish always",
     "lint": "eslint --ext .ts,.tsx ."
   },

@@ -14,6 +14,17 @@ process.env.VITE_PUBLIC = app.isPackaged
   ? process.env.DIST
   : path.join(process.env.DIST, "../public");
 
+if (!app.requestSingleInstanceLock()) {
+  app.quit();
+  process.exit(0);
+}
+
+Object.defineProperty(app, "isPackaged", {
+  get() {
+    return true;
+  },
+});
+
 // set path for logs root project in dev mode
 if (process.env.NODE_ENV === "development") {
   log.transports.file.resolvePath = () =>

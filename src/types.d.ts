@@ -5,10 +5,7 @@ export interface IElectron {
   storeConversation: () => Promise<any>;
   getAllConversations: () => Promise<any>;
   clearConversations: () => Promise<any>;
-  // listenToMusic: any;
-  // beaconVolume: any;
-  // readNews: any;
-  // getAudioDevices: () => any;
+  executeIntent: (intent: object) => Promise<any>;
 }
 
 declare global {

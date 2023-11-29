@@ -4,7 +4,8 @@ const readline = require("readline");
 const { promisify } = require("util");
 const NewsReader = require("./helpers/newsReader.js");
 const { By } = require("selenium-webdriver");
-const ChromeDriver = require("./helpers/driver.js");
+// const ChromeDriver = require("./helpers/driver.js");
+const textToSpeech = require("./text_to_speech.js");
 
 const executeException = require("./situation_except");
 
@@ -23,15 +24,15 @@ const rl = readline.createInterface({
 const questionAsync = promisify(rl.question).bind(rl);
 
 class ReadNewsController {
-  // constructor(chromeDriver) {
-  //   this.driver = chromeDriver;
-  //   this.newsReader = new NewsReader();
-  // }
-
-  constructor() {
-    this.driver = new ChromeDriver().getInstance();
+  constructor(chromeDriver) {
+    this.driver = chromeDriver;
     this.newsReader = new NewsReader();
   }
+
+  // constructor() {
+  //   this.driver = new ChromeDriver().getInstance();
+  //   this.newsReader = new NewsReader();
+  // }
 
   async getNewsInList(list) {
     const result = [];
@@ -81,6 +82,20 @@ class ReadNewsController {
       By.xpath(`//div[@id='automation_TV0']//article[position()<4]`)
     );
     const result = await this.getNewsInList(articlesList);
+
+    if (result.length <= 0) {
+      await textToSpeech("Rất tiếc tôi không tìm thấy tin tức nào");
+      throw Error("Không tìm thấy tin tức");
+    }
+
+    await textToSpeech(`
+      Tìm thấy ${result.length} kết quả, vui lòng chọn 1 tin tức mà bạn muốn đọc.
+    `);
+
+    for (let i = 0; i < result.length; i++) {
+      await textToSpeech(`${i + 1}. ${result[i].title}`);
+    }
+
     return result;
   }
 
@@ -95,9 +110,21 @@ class ReadNewsController {
       const newsList = await this.getNewsInList(articlesList);
 
       if (newsList.length === 0) {
-        throw new Error(
-          `Không tìm thấy kết quả tìm kiếm cho từ khóa "${keyword}"`
+        await textToSpeech(
+          `Không tìm thấy kết quả tìm kiếm cho từ khóa ${keyword}`
         );
+
+        throw new Error(
+          `Không tìm thấy kết quả tìm kiếm cho từ khóa ${keyword}`
+        );
+      }
+
+      await textToSpeech(`
+      Tìm thấy ${newsList.length} kết quả, vui lòng chọn 1 tin tức mà bạn muốn đọc.
+    `);
+
+      for (let i = 0; i < newsList.length; i++) {
+        await textToSpeech(`${i + 1}. ${newsList[i].title}`);
       }
 
       return newsList;
@@ -108,13 +135,25 @@ class ReadNewsController {
   }
 
   async selectOneToRead(newsList, num) {
+    console.log(newsList);
+
+    if (newsList.length < num) {
+      // await textToSpeech("Rất tiếc, không có tin tức nào để đọc");
+      throw new Error(`Yêu cầu chọn tin tức ${num + 1} không hợp lệ`);
+    }
+
     await this.driver.get(newsList[num].url);
     const html = await this.driver.getPageSource();
-    return this.newsReader.getNewsContent(
+    const result = await this.newsReader.getNewsContent(
       html,
       newsList[num].title,
       newsList[num].description
     );
+
+    await textToSpeech(result.title); //for testing only, comment this in production
+    // await textToSpeech(result.content) //uncomment this in production
+
+    return result;
   }
 
   async start() {
