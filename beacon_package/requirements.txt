@@ -1,8 +1,4 @@
 python-dotenv~=1.0.0
 azure-cognitiveservices-speech
 pyaudio~=0.2.11
-
 requests~=2.31.0
-transformers~=4.35.0
-numpy~=1.26.1
-torch

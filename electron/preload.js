@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-require("dotenv").config();
 const { contextBridge } = require("electron");
 const path = require("path");
 const executeIntent = require(path.join(__dirname, "execute_intent.js"));

@@ -24,13 +24,16 @@
     "!beacon_package/requirements.txt",
     "!**/.idea/**",
     "!beacon_package/**/*.{tar.gz,zip}",
-    "!beacon_package/**/cache/**"
+    "!beacon_package/**/cache/**",
+    "!beacon_package/logs/**"
   ],
   "nsis": {
     "oneClick": false,
     "perMachine": true,
     "allowToChangeInstallationDirectory": true,
-    "deleteAppDataOnUninstall": true
+    "deleteAppDataOnUninstall": true,
+    "uninstallDisplayName": "beacon-uninstall",
+    "license": "LICENSE.txt"
   },
   "win": {
     "target": ["nsis"]
