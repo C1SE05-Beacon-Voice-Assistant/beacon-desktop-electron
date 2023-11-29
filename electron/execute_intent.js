@@ -7,7 +7,9 @@ const chromedriverPath = require("chromedriver").path.replace(
 const { ServiceBuilder } = require("selenium-webdriver/chrome");
 const beaconVolume = require("./control_volume.js");
 const listenToMusic = require("./listen_to_music.js");
-const { SearchNewsBy } = require("./helpers/enum.js");
+const gptGenerate = require("./gpt_generate.js");
+const { SearchNewsBy, TextSpeak } = require("./helpers/enum.js");
+const textToSpeech = require("./text_to_speech.js");
 
 const IS_PRODUCTION = process.env.NODE_ENV === "production";
 
@@ -52,7 +54,7 @@ const handleOutput = (label, query) => {
   }
 };
 
-const executeIntent = async (output, object, newsList = [], index = 0) => {
+const executeIntent = async (output, history, newsList = [], index = 0) => {
   const label = output.label;
   const query = output.query;
   const listenControl = await listenToMusic(driver);
@@ -125,48 +127,73 @@ const executeIntent = async (output, object, newsList = [], index = 0) => {
         if (volume) await volumeControl.setVolume(volume.query);
       },
     },
-    {
-      name: "next_content",
-      feature_name: async () =>
-        object.then(async (res) => {
-          await res.next();
-        }),
-    },
+    // {
+    //   name: "next_content",
+    //   feature_name: async () =>
+    //     object.then(async (res) => {
+    //       await res.next();
+    //     }),
+    // },
 
     /**
      * Read news intent
      *
      */
 
-    {
-      name: "search_news",
-      feature_name: async () => object.searchByKeyword(output),
-    },
-    {
-      name: "latest_news",
-      feature_name: async () => object.search(SearchNewsBy.LATEST),
-    },
-    {
-      name: "most_read_news",
-      feature_name: async () => object.search(SearchNewsBy.MOST_READ),
-    },
-    {
-      name: "hottest_news",
-      feature_name: async () => object.search(SearchNewsBy.MOST_READ),
-    },
-    {
-      name: "read_news",
-      feature_name: async () => object.selectOneToRead(newsList, index - 1), //index start with 0
-    },
+    // {
+    //   name: "search_news",
+    //   feature_name: async () => object.searchByKeyword(output),
+    // },
+    // {
+    //   name: "latest_news",
+    //   feature_name: async () => object.search(SearchNewsBy.LATEST),
+    // },
+    // {
+    //   name: "most_read_news",
+    //   feature_name: async () => object.search(SearchNewsBy.MOST_READ),
+    // },
+    // {
+    //   name: "hottest_news",
+    //   feature_name: async () => object.search(SearchNewsBy.MOST_READ),
+    // },
+    // {
+    //   name: "read_news",
+    //   feature_name: async () => object.selectOneToRead(newsList, index - 1), //index start with 0
+    // },
+
+    // /**
+    //  * User Manual intent
+    //  *
+    //  */
+
+    // {
+    //   name: "user_manual",
+    //   feature_name: async () => object.start(),
+    // },
 
     /**
-     * User Manual intent
-     *
+     * GPT AI generate
      */
-
     {
-      name: "user_manual",
-      feature_name: async () => object.start(),
+      name: "gpt_ai",
+      feature_name: async () => {
+        const userData = {
+          role: "user",
+          content: query,
+        };
+        await textToSpeech(TextSpeak.SEARCHING);
+        const data = await gptGenerate([...history, userData]);
+        if (data) {
+          await textToSpeech(data[0]);
+        }
+        return [
+          userData,
+          {
+            role: "assistant",
+            content: data[0],
+          },
+        ];
+      },
     },
   ];
   // features.forEach(async (feature) => {
