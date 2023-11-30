@@ -1,20 +1,12 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-// const { SearchNewsBy } = require("./helpers/enum.js");
+const { SearchNewsBy } = require("./helpers/enum.js");
 const readline = require("readline");
 const { promisify } = require("util");
 const NewsReader = require("./helpers/newsReader.js");
 const { By } = require("selenium-webdriver");
-// const ChromeDriver = require("./helpers/driver.js");
 const textToSpeech = require("./text_to_speech.js");
 
 const executeException = require("./situation_except");
-
-const SearchNewsBy = {
-  KEYWORD: "keyword",
-  HOTTEST: "hottest",
-  MOST_READ: "mostRead",
-  LATEST: "latest",
-};
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -23,7 +15,7 @@ const rl = readline.createInterface({
 
 const questionAsync = promisify(rl.question).bind(rl);
 
-class ReadNewsController {
+class ReadNews {
   constructor(chromeDriver) {
     this.driver = chromeDriver;
     this.newsReader = new NewsReader();
@@ -211,6 +203,4 @@ class ReadNewsController {
   }
 }
 
-// new ReadNewsController().start();
-
-module.exports = ReadNewsController;
+module.exports = ReadNews;

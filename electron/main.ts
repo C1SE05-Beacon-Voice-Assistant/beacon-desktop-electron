@@ -1,11 +1,13 @@
-"use strict";
-
+/* eslint-disable @typescript-eslint/no-var-requires */
 import type { BrowserWindowConstructorOptions as WindowOptions } from "electron";
 import { app, BrowserWindow, dialog, Tray, Menu, ipcMain } from "electron";
 import log from "electron-log";
 import path, { join } from "path";
-import MenuBuilder from "../src/menu";
 import { autoUpdater } from "electron-updater";
+import MenuBuilder from "../src/menu";
+
+const { Builder } = require("selenium-webdriver");
+const chrome = require("selenium-webdriver/chrome");
 
 process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
 
@@ -19,16 +21,10 @@ if (!app.requestSingleInstanceLock()) {
   process.exit(0);
 }
 
-Object.defineProperty(app, "isPackaged", {
-  get() {
-    return true;
-  },
-});
-
 // set path for logs root project in dev mode
 if (process.env.NODE_ENV === "development") {
   log.transports.file.resolvePath = () =>
-    join(__dirname + "/../../logs", "main.log");
+    join(__dirname + "../logs", "main.log");
 
   Object.defineProperty(app, "isPackaged", {
     get() {
@@ -39,17 +35,14 @@ if (process.env.NODE_ENV === "development") {
 
 let mainWindow: BrowserWindow | null = null;
 let tray: Tray | null = null;
+let driverInstance: any = null;
 
 const createWindow = (options: WindowOptions = {}) => {
   if (mainWindow) {
     mainWindow.focus();
     return;
   }
-  ipcMain.on("activate-component", (event, componentId) => {
-    // Kích hoạt thành phần dựa trên componentId
-    // Ví dụ: Gửi thông điệp đến renderer process để kích hoạt thành phần
-    mainWindow.webContents.send("activate-component", componentId);
-  });
+
   const config: WindowOptions = {
     // show: false,
     width: parseInt(process.env.ELECTRON_WIDTH) || 833,
@@ -76,8 +69,9 @@ const createWindow = (options: WindowOptions = {}) => {
   } else {
     mainWindow.loadFile(path.join(__dirname, "../dist/index.html"));
   }
-
-  mainWindow.webContents.openDevTools();
+  if (process.env.NODE_ENV === "development") {
+    mainWindow.webContents.openDevTools();
+  }
 
   mainWindow.on("closed", () => {
     // hide window instead of closing it
@@ -85,9 +79,13 @@ const createWindow = (options: WindowOptions = {}) => {
   });
 };
 
-function handleQuit() {
+async function handleQuit() {
   if (process.platform !== "darwin") {
-    app.quit();
+    quitDriver().then(() => {
+      console.log("quitDriver");
+
+      app.quit();
+    });
   }
 }
 
@@ -106,7 +104,7 @@ app.whenReady().then(() => {
   createTray();
 });
 
-app.on("ready", () => {
+app.on("ready", async () => {
   createWindow();
 
   autoUpdater.setFeedURL({
@@ -116,17 +114,35 @@ app.on("ready", () => {
     private: true,
   });
 
-  autoUpdater.autoDownload = false;
-  autoUpdater.allowDowngrade = true;
-  autoUpdater.allowPrerelease = true;
+  autoUpdater.checkForUpdates();
 
-  mainWindow.on("close", function () {
-    console.log("close");
+  try {
+    await initDriver();
+    ipcMain.handle("get-driver", async (event, args) => {
+      return driverInstance; // Send the driver instance to the renderer process
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
 
-    mainWindow.webContents.send("before-quit", "close");
-  });
+async function initDriver() {
+  if (!driverInstance) {
+    driverInstance = await new Builder().forBrowser("chrome").build();
+  }
+}
 
-  // autoUpdater.checkForUpdates();
+async function quitDriver() {
+  if (driverInstance) {
+    driverInstance.quit().then(() => {
+      driverInstance = null;
+    });
+  }
+}
+
+app.on("before-quit", async () => {
+  console.log("before-quit");
+  await quitDriver();
 });
 
 app.on("window-all-closed", () => {

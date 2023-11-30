@@ -8,13 +8,13 @@ export interface IElectron {
   executeIntent: (intent: object, history: object[]) => Promise<any>;
 }
 
-export interface IElectronAPI {
-  onBeforeQuit: () => void;
+export interface ISelenium {
+  getDriver: () => Promise<any>;
 }
 
 declare global {
   interface Window extends Window {
     electron: IElectron;
-    electronAPI: IElectronAPI;
+    selenium: ISelenium;
   }
 }

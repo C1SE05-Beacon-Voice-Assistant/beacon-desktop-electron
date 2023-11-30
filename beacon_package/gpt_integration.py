@@ -11,7 +11,7 @@ g4f.check_version = False  # Disable automatic version checking
 
 def generate_gpt_response(input_message):
     # '[{"role":"user","content":"xin chào"}]'
-    # convert string to list
+    # convert string to list 
     input_message = input_message.replace("'", '"')
     input_message = json.loads(input_message)
 
