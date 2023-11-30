@@ -6,15 +6,11 @@ export interface IElectron {
   getAllConversations: () => Promise<any>;
   clearConversations: () => Promise<any>;
   executeIntent: (intent: object, history: object[]) => Promise<any>;
-}
-
-export interface ISelenium {
-  getDriver: () => Promise<any>;
+  quitDriver: () => void;
 }
 
 declare global {
   interface Window extends Window {
     electron: IElectron;
-    selenium: ISelenium;
   }
 }

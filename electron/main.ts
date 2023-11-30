@@ -6,9 +6,6 @@ import path, { join } from "path";
 import { autoUpdater } from "electron-updater";
 import MenuBuilder from "../src/menu";
 
-const { Builder } = require("selenium-webdriver");
-const chrome = require("selenium-webdriver/chrome");
-
 process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
 
 process.env.DIST = path.join(__dirname, "../dist");
@@ -35,7 +32,6 @@ if (process.env.NODE_ENV === "development") {
 
 let mainWindow: BrowserWindow | null = null;
 let tray: Tray | null = null;
-let driverInstance: any = null;
 
 const createWindow = (options: WindowOptions = {}) => {
   if (mainWindow) {
@@ -82,8 +78,7 @@ const createWindow = (options: WindowOptions = {}) => {
 async function handleQuit() {
   if (process.platform !== "darwin") {
     quitDriver().then(() => {
-      console.log("quitDriver");
-
+      console.log("quit driver");
       app.quit();
     });
   }
@@ -115,33 +110,15 @@ app.on("ready", async () => {
   });
 
   autoUpdater.checkForUpdates();
-
-  try {
-    await initDriver();
-    ipcMain.handle("get-driver", async (event, args) => {
-      return driverInstance; // Send the driver instance to the renderer process
-    });
-  } catch (err) {
-    console.log(err);
-  }
 });
 
-async function initDriver() {
-  if (!driverInstance) {
-    driverInstance = await new Builder().forBrowser("chrome").build();
-  }
-}
-
 async function quitDriver() {
-  if (driverInstance) {
-    driverInstance.quit().then(() => {
-      driverInstance = null;
-    });
+  if (mainWindow) {
+    await mainWindow.webContents.send("quit-driver");
   }
 }
 
 app.on("before-quit", async () => {
-  console.log("before-quit");
   await quitDriver();
 });
 
