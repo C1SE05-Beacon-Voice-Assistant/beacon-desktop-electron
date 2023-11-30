@@ -116,7 +116,17 @@ app.on("ready", () => {
     private: true,
   });
 
-  autoUpdater.checkForUpdates();
+  autoUpdater.autoDownload = false;
+  autoUpdater.allowDowngrade = true;
+  autoUpdater.allowPrerelease = true;
+
+  mainWindow.on("close", function () {
+    console.log("close");
+
+    mainWindow.webContents.send("before-quit", "close");
+  });
+
+  // autoUpdater.checkForUpdates();
 });
 
 app.on("window-all-closed", () => {
