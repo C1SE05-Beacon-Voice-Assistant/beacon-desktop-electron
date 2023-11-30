@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { contextBridge } = require("electron");
+const { contextBridge, ipcRenderer } = require("electron");
 const path = require("path");
 const executeIntent = require(path.join(__dirname, "execute_intent.js"));
 const BeaconSpeech = require(path.join(__dirname, "beacon_speech.js"));
@@ -8,10 +8,8 @@ const {
   getAllConversations,
   clearConversations,
 } = require(path.join(__dirname, "conversation.js"));
-const UserManual = require(path.join(__dirname, "user_manual.js"));
 
 const beacon = new BeaconSpeech("Beacon", "Hanoi");
-const userManual = new UserManual(beacon);
 
 contextBridge.exposeInMainWorld("electron", {
   backgroundListen: beacon.backgroundListen.bind(beacon),
@@ -21,4 +19,16 @@ contextBridge.exposeInMainWorld("electron", {
   getAllConversations,
   clearConversations,
   executeIntent: executeIntent,
+});
+
+contextBridge.exposeInMainWorld("selenium", {
+  getDriver: async () => {
+    try {
+      const driver = await ipcRenderer.invoke("get-driver");
+      return driver;
+    } catch (error) {
+      console.error("Error getting WebDriver:", error);
+      return null;
+    }
+  },
 });

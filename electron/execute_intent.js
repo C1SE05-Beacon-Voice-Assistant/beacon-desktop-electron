@@ -1,27 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { Builder } = require("selenium-webdriver");
-const chromedriverPath = require("chromedriver").path.replace(
-  "app.asar",
-  "app.asar.unpacked"
-);
-const { ServiceBuilder } = require("selenium-webdriver/chrome");
 const beaconVolume = require("./control_volume.js");
 const listenToMusic = require("./listen_to_music.js");
-const { SearchNewsBy } = require("./helpers/enum.js");
-
-const IS_PRODUCTION = process.env.NODE_ENV === "production";
-
-let driver;
-// init driver
-if (IS_PRODUCTION) {
-  const serviceBuilder = new ServiceBuilder(chromedriverPath);
-  driver = new Builder()
-    .forBrowser("chrome")
-    .setChromeService(serviceBuilder)
-    .build();
-} else {
-  driver = new Builder().forBrowser("chrome").build();
-}
+const readNews = require("./read_news.js");
+const gptGenerate = require("./gpt_generate.js");
+const { TextSpeak } = require("./helpers/enum.js");
+const textToSpeech = require("./text_to_speech.js");
 
 /**
  * @description handle output of intent
@@ -50,13 +33,27 @@ const handleOutput = (label, query) => {
       query: matchMusic[0],
     };
   }
+
+  // if label match news, get keyword from query
+  // example query: "đọc tin tức về covid" -> "covid"
+  const matchNews = /(tin tức|bản tin|thời sự)/.test(query);
+  if (matchNews) {
+    return {
+      label: label,
+      query: query.replace(/(tin tức|bản tin|thời sự)/, "").trim(),
+    };
+  }
 };
 
-const executeIntent = async (output, object, newsList = [], index = 0) => {
+const executeIntent = async (driver, output, history) => {
   const label = output.label;
   const query = output.query;
   const listenControl = await listenToMusic(driver);
+  const readNewsControl = new readNews(driver);
   const volumeControl = await beaconVolume();
+
+  console.log(output);
+
   const features = [
     {
       name: "play_music",
@@ -125,48 +122,81 @@ const executeIntent = async (output, object, newsList = [], index = 0) => {
         if (volume) await volumeControl.setVolume(volume.query);
       },
     },
-    {
-      name: "next_content",
-      feature_name: async () =>
-        object.then(async (res) => {
-          await res.next();
-        }),
-    },
+    // {
+    //   name: "next_content",
+    //   feature_name: async () =>
+    //     object.then(async (res) => {
+    //       await res.next();
+    //     }),
+    // },
 
     /**
      * Read news intent
      *
      */
 
-    {
-      name: "search_news",
-      feature_name: async () => object.searchByKeyword(output),
-    },
-    {
-      name: "latest_news",
-      feature_name: async () => object.search(SearchNewsBy.LATEST),
-    },
-    {
-      name: "most_read_news",
-      feature_name: async () => object.search(SearchNewsBy.MOST_READ),
-    },
-    {
-      name: "hottest_news",
-      feature_name: async () => object.search(SearchNewsBy.MOST_READ),
-    },
-    {
-      name: "read_news",
-      feature_name: async () => object.selectOneToRead(newsList, index - 1), //index start with 0
-    },
+    // {
+    //   name: "search_news",
+    //   feature_name: async () => {
+    //     const searchKey = handleOutput(label, query);
+    //     await textToSpeech(TextSpeak.SEARCHING);
+    //     const data = await readNewsControl.searchByKeyword(searchKey);
+    //     if (data) {
+    //       await textToSpeech(data);
+    //     }
+    //     return data;
+    //   },
+    // },
+    // {
+    //   name: "latest_news",
+    //   feature_name: async () => object.search(SearchNewsBy.LATEST),
+    // },
+    // {
+    //   name: "most_read_news",
+    //   feature_name: async () => object.search(SearchNewsBy.MOST_READ),
+    // },
+    // {
+    //   name: "hottest_news",
+    //   feature_name: async () => object.search(SearchNewsBy.MOST_READ),
+    // },
+    // {
+    //   name: "read_news",
+    //   feature_name: async () => object.selectOneToRead(newsList, index - 1), //index start with 0
+    // },
 
     /**
      * User Manual intent
      *
      */
 
+    // {
+    //   name: "user_manual",
+    //   feature_name: async () => object.start(),
+    // },
+
+    /**
+     * GPT AI generate
+     */
     {
-      name: "user_manual",
-      feature_name: async () => object.start(),
+      name: "gpt_ai",
+      feature_name: async () => {
+        const userData = {
+          role: "user",
+          content: query,
+        };
+        await textToSpeech(TextSpeak.SEARCHING);
+        const data = await gptGenerate([...history, userData]);
+        if (data) {
+          await textToSpeech(data[0]);
+        }
+        return [
+          userData,
+          {
+            role: "assistant",
+            content: data[0],
+          },
+        ];
+      },
     },
   ];
   // features.forEach(async (feature) => {
