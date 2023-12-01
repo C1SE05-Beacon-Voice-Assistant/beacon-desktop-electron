@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import type { BrowserWindowConstructorOptions as WindowOptions } from "electron";
-import { app, BrowserWindow, dialog, Tray, Menu, ipcMain } from "electron";
+import { app, BrowserWindow, dialog, Tray, Menu } from "electron";
 import log from "electron-log";
 import path, { join } from "path";
 import { autoUpdater } from "electron-updater";
@@ -22,12 +22,6 @@ if (!app.requestSingleInstanceLock()) {
 if (process.env.NODE_ENV === "development") {
   log.transports.file.resolvePath = () =>
     join(__dirname + "../logs", "main.log");
-
-  Object.defineProperty(app, "isPackaged", {
-    get() {
-      return true;
-    },
-  });
 }
 
 let mainWindow: BrowserWindow | null = null;
@@ -65,9 +59,9 @@ const createWindow = (options: WindowOptions = {}) => {
   } else {
     mainWindow.loadFile(path.join(__dirname, "../dist/index.html"));
   }
-  if (process.env.NODE_ENV === "development") {
-    mainWindow.webContents.openDevTools();
-  }
+  // if (process.env.NODE_ENV === "development") {
+  mainWindow.webContents.openDevTools();
+  // }
 
   mainWindow.on("closed", () => {
     // hide window instead of closing it
@@ -78,7 +72,7 @@ const createWindow = (options: WindowOptions = {}) => {
 async function handleQuit() {
   if (process.platform !== "darwin") {
     quitDriver().then(() => {
-      console.log("quit driver");
+      log.info("75: Driver quit");
       app.quit();
     });
   }
@@ -90,6 +84,7 @@ const createTray = () => {
     // let us then add handleQuit to click property
     { label: "Quit", click: handleQuit },
   ]);
+
   tray.setToolTip("Beacon Voice Assistant");
   tray.setContextMenu(contextMenu);
   tray.addListener("click", () => createWindow());
@@ -106,7 +101,7 @@ app.on("ready", async () => {
     provider: "github",
     owner: "C1SE05-Beacon-Voice-Assistant",
     repo: "beacon-desktop-electron",
-    private: true,
+    private: false,
   });
 
   autoUpdater.checkForUpdates();
@@ -123,6 +118,9 @@ app.on("before-quit", async () => {
 });
 
 app.on("window-all-closed", () => {
+  quitDriver().then(() => {
+    log.info("122: Driver quit");
+  });
   // if (process.platform !== "darwin") {
   //   app.quit();
   //   process.exit(0);
@@ -152,8 +150,8 @@ autoUpdater.on("update-available", (updateInfo) => {
     dialog
       .showMessageBox({
         type: "info",
-        title: "Update available",
-        message: `New version ${updateInfo.version} is available and will be downloaded in the background.`,
+        title: "Tìm thấy phiên bản mới",
+        message: `Phiên bản mới ${updateInfo.version} đã sẵn sàng để tải xuống. Bạn có muốn tải xuống ngay bây giờ?`,
         buttons: ["OK", "Cancel"],
         textWidth: 300,
       })

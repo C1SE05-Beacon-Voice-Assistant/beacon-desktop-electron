@@ -26,13 +26,13 @@ const handleOutput = (label, query) => {
   // example query: "phát nhạc bài hát đường tình đôi ngã" -> "đường tình đôi ngã"
   // example query: "Mở bài hát bạn ơi." -> "bạn ơi"
   // example query: "Mở bài bạn ơi" -> "bạn ơi"
-  // const matchMusic = label.match(/music/gi) && query.match(/(?<=bài hát ).*/gi);
-  // if (matchMusic) {
-  //   return {
-  //     label: label,
-  //     query: matchMusic[0],
-  //   };
-  // }
+  const matchMusic = label.match(/music/gi) && query.match(/(?<=bài hát ).*/gi);
+  if (matchMusic) {
+    return {
+      label: label,
+      query: matchMusic[0],
+    };
+  }
 
   // if label match news, get keyword from query
   // example query: "đọc tin tức về covid" -> "covid"
