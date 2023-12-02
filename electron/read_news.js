@@ -75,9 +75,9 @@ class ReadNews {
     );
     const result = await this.getNewsInList(articlesList);
 
-    if (result.length <= 0) {
+    if (result.length == 0) {
       await textToSpeech("Rất tiếc tôi không tìm thấy tin tức nào");
-      throw Error("Không tìm thấy tin tức");
+      return [];
     }
 
     await textToSpeech(`
@@ -129,9 +129,13 @@ class ReadNews {
   async selectOneToRead(newsList, num) {
     console.log(newsList);
 
+    if (newsList.length == 0) {
+      await textToSpeech("Rất tiếc, không có tin tức nào để đọc");
+      return;
+    }
     if (newsList.length < num) {
-      // await textToSpeech("Rất tiếc, không có tin tức nào để đọc");
-      throw new Error(`Yêu cầu chọn tin tức ${num + 1} không hợp lệ`);
+      await textToSpeech(`Lựa chọn ${num + 1} của bạn không hợp lệ`);
+      return;
     }
 
     await this.driver.get(newsList[num].url);
@@ -145,7 +149,7 @@ class ReadNews {
     await textToSpeech(result.title); //for testing only, comment this in production
     // await textToSpeech(result.content) //uncomment this in production
 
-    return result;
+    // return result;
   }
 
   async start() {
