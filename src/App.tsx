@@ -21,12 +21,14 @@ export default function App() {
 
   useEffect(() => {
     window.electron.backgroundListen((result: string) => {
-      handleInput(result, history).then((res: any) => {
-        console.log(res);
-        if (res?.type) {
-          setHistory((prev) => [...prev, ...res.result]);
-        }
-      });
+      console.log(result);
+
+      // handleInput(result, history).then((res: any) => {
+      //   console.log(res);
+      //   if (res?.type) {
+      //     setHistory((prev) => [...prev, ...res.result]);
+      //   }
+      // });
     });
 
     return () => {

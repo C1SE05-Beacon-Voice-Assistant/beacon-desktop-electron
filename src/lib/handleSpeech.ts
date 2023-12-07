@@ -17,6 +17,10 @@ async function executeIntentFromRenderer(intent: object, history: object[]) {
 }
 
 const handleInput = async (input: string, history: object[]) => {
+  // đọc hướng dẫn số 1
+
+  // đọc tin tức số 1
+
   const intent = await recognizeIntent(input);
   // if intent include "Phẩy" => rerturn
   if (intent.query.toLowerCase().includes("phẩy")) return;

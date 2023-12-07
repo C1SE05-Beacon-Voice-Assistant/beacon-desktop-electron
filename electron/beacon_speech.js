@@ -18,6 +18,7 @@ class BeaconSpeech {
       region
     );
     this.speechConfig.speechRecognitionLanguage = speechRecognitionLanguage;
+    this.speechConfig.endpointId = "4f3fb802-5a41-4b14-8901-a63365802db3";
     this.speechRecognizer = new sdk.SpeechRecognizer(
       this.speechConfig,
       sdk.AudioConfig.fromDefaultMicrophoneInput(),
