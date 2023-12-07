@@ -25,7 +25,7 @@ def keyword_recognition():
     if result_keyword_verify.reason == speechsdk.ResultReason.RecognizedKeyword:
         stop_future = keyword_recognizer.stop_recognition_async()
         stopped = stop_future.get()
-    
+
     return result_keyword_verify.text
 
 if __name__ == "__main__":
