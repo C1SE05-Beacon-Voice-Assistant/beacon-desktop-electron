@@ -1,15 +1,36 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import bot from "~/assets/bot.png";
 import microphone from "~/assets/microphone.png";
 import vector from "~/assets/vector.svg";
 
 import styles from "./HomePage.module.css";
+import handleInput from "~/lib/handleSpeech";
 
 export default function HomePage() {
   const [isStart, setIsStart] = useState<boolean | null>(false);
+  const [history, setHistory] = useState<object[]>([]);
+  const [content, setContent] = useState<string | null>();
+
+  useEffect(() => {
+    window.electron.backgroundListen((result: string) => {
+      handleInput(result, history).then((res: any) => {
+        console.log(res);
+        if (res?.label) {
+          setIsStart(true);
+          setContent(res?.query)
+        }
+      });
+    });
+
+    return () => {
+      window.electron.stopBackgroundListen();
+      setIsStart(false);
+    };
+  }, [history]);
   return (
     <section className={styles.home__container}>
-      <div className={styles.bot__vector}>
+     <span style={{ textAlign: 'left', width: '30%', position: 'absolute'}}>{content && content}</span>
+     <div className={styles.bot__vector}>
         <div className={styles.bot}>
           <img src={bot} alt={bot} />
         </div>
