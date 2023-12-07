@@ -11,14 +11,14 @@ class BeaconSpeech {
   constructor(name, location) {
     this.name = name;
     this.location = location;
-    const { subscriptionKey, region, speechRecognitionLanguage } =
+    const { subscriptionKey, region, speechRecognitionLanguage, endpointId } =
       speechConfigDefault;
     this.speechConfig = sdk.SpeechConfig.fromSubscription(
       subscriptionKey,
       region
     );
     this.speechConfig.speechRecognitionLanguage = speechRecognitionLanguage;
-    this.speechConfig.endpointId = "4f3fb802-5a41-4b14-8901-a63365802db3";
+    this.speechConfig.endpointId = endpointId;
     this.speechRecognizer = new sdk.SpeechRecognizer(
       this.speechConfig,
       sdk.AudioConfig.fromDefaultMicrophoneInput(),
