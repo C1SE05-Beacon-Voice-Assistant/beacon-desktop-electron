@@ -30,7 +30,7 @@ export default function HomePage() {
   }, [history]);
   return (
     <section className={styles.home__container}>
-     <span style={{ textAlign: 'left', width: '30%', position: 'absolute'}}>{content && content}</span>
+
      <div className={styles.bot__vector}>
         <div className={styles.bot}>
           <img src={bot} alt={bot} />
@@ -41,17 +41,10 @@ export default function HomePage() {
       </div>
       <div className={styles.title}>
         <div>
-          {isStart ? (
-            <p>Xin chào, Tiên</p>
-          ) : (
-            <p>
-              Xin chào! Tôi có thể giúp gì <br></br> cho bạn?
-            </p>
-          )}
+        <div style={{ textAlign: 'center', width: '80%', margin: '0 auto'}}>{content ? content : "content content contentcontentcontentcontentcontent "}</div>
         </div>
       </div>
-      {isStart && (
-        <div className={styles.container}>
+      <div className={styles.container}>
           <div className={styles.microphone}>
             <img src={microphone} alt={microphone} />
           </div>
@@ -59,7 +52,6 @@ export default function HomePage() {
           <div className={`${styles.circle} ${styles["circle-b"]}`}></div>
           <div className={`${styles.circle} ${styles["circle-c"]}`}></div>
         </div>
-      )}
     </section>
   );
 }
