@@ -18,6 +18,7 @@ export default function HomePage() {
         if (res?.label) {
           setIsStart(true);
           setContent(res?.query)
+          setHistory((prev) => [...prev, ...res.result]);
         }
       });
     });

@@ -17,7 +17,24 @@ export default function App() {
     },
   });
 
+  const [history, setHistory] = useState<object[]>([]);
 
+  useEffect(() => {
+    window.electron.backgroundListen((result: string) => {
+      console.log(result);
+
+      // handleInput(result, history).then((res: any) => {
+      //   console.log(res);
+      //   if (res?.type) {
+      //     setHistory((prev) => [...prev, ...res.result]);
+      //   }
+      // });
+    });
+
+    return () => {
+      window.electron.stopBackgroundListen();
+    };
+  }, [history]);
 
   return (
     <ThemeProvider theme={theme}>
