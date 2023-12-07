@@ -1,35 +1,35 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { textToSpeech } = require("./beacon_speech.js");
 const { guide } = require("./helpers/guide");
-
+const { textToSpeech, BeaconSpeech } = require("./beacon_speech.js");
+const beacon = new BeaconSpeech("Beacon", "Hanoi");
 class UserManual {
-  constructor(BeaconSpeech) {
-    this.beacon = BeaconSpeech;
-  }
-
-  async readIntroduction() {
+  static async readIntroduction() {
     await textToSpeech(guide.introduction);
   }
 
-  async readRequirements() {
+  static async readRequirements() {
     await textToSpeech(guide.requirements);
   }
 
-  async readFull() {
-    for (var key in guide) {
-      await textToSpeech(guide[key]);
+  static async readFull() {
+    const keys = Object.keys(guide)
+    const guides = []
+    for (let i = 0; i < keys.length; i++) {
+      guides.push(guide[keys[i]])
     }
+    await textToSpeech(guides.toString())
   }
 
-  async readMusic() {
+  static async readMusic() {
     await textToSpeech(guide.play_music);
   }
 
-  async readVolume() {
+  static async readVolume() {
     await textToSpeech(guide.control_vol);
   }
 
-  async readNews() {
+  static async readNews() {
     await textToSpeech(guide.read_news);
   }
 
@@ -44,42 +44,69 @@ class UserManual {
         0. Kết thúc đọc hướng dẫn
     `;
 
+    await textToSpeech(options);
     while (true) {
-      await textToSpeech(options);
-      const input = await this.beacon.recognizeFromMicrophone();
-      const optionChosen = input.match(/[0,9]/);
+      try {
+        let input = await beacon.recognizeFromMicrophone();
+        const result = input?.toLowerCase();
+        switch (result) {
+          case "một.":
+            input = 1;
+            break;
+          case "hai.":
+            input = 2;
+            break;
+          case "ba.":
+            input = 3;
+            break;
+          case "bốn.":
+            input = 4;
+            break;
+          case "năm.":
+            input = 5;
+            break;
+        }
+        if (input) {
+          input = input?.split("")[0];
+          console.log("input", input);
+          const optionChosen = input.match(/^[0-9]$/);
+          if (!optionChosen) {
+            await textToSpeech("Lựa chọn không hợp lệ");
+            continue;
+          }
 
-      if (!optionChosen) {
-        await textToSpeech("Lựa chọn không hợp lệ");
-        continue;
-      }
-
-      switch (optionChosen) {
-        case 1: {
-          await this.readIntroduction();
-          break;
+          switch (+optionChosen[0]) {
+            case 1: {
+              await UserManual.readIntroduction();
+              break;
+            }
+            case 2: {
+              await UserManual.readNews()
+              break;
+            }
+            case 3: {
+              await UserManual.readMusic();
+              break;
+            }
+            case 4: {
+              await UserManual.readVolume();
+              break;
+            }
+            case 5: {
+              await UserManual.readFull();
+              break;
+            }
+            case 0:
+              return;
+          }
         }
-        case 2: {
-          await this.readNewsByType();
-          break;
-        }
-        case 3: {
-          await this.readMusic();
-          break;
-        }
-        case 4: {
-          await this.readVolume();
-          break;
-        }
-        case 5: {
-          await this.readFull();
-          break;
-        }
-        case 0:
-          return;
+      } catch (error) {
+        console.log(error);
       }
     }
   }
 }
 
-module.exports = UserManual;
+module.exports = {
+  UserManual,
+};

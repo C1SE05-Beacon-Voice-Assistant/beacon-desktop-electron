@@ -9,6 +9,7 @@ const chromedriverPath = require("chromedriver").path.replace(
 );
 const ExecuteIntent = require(path.join(__dirname, "execute_intent.js"));
 const { BeaconSpeech } = require(path.join(__dirname, "beacon_speech.js"));
+const { UserManual } = require("./user_manual.js");
 const {
   storeConversation,
   getAllConversations,
