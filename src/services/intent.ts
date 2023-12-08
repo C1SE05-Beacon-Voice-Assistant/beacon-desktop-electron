@@ -1,6 +1,5 @@
 import axios from "axios";
-const API_INTENT_URL =
-  "https://api-inference.huggingface.co/models/yensubldg/model";
+const API_INTENT_URL = "https://api.beacon.id.vn/intent";
 
 type Intent = {
   label: string;
@@ -17,21 +16,18 @@ export const recognizeIntent = async (text: string): Promise<Intent> => {
   const response = await axios.post(
     API_INTENT_URL,
     {
-      inputs: cleanText,
+      query: cleanText,
     },
     {
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        Authorization: "Bearer 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",
       },
-      withCredentials: false,
     }
   );
 
   return {
-    label: response.data[0][0].label,
-    score: response.data[0][0].score,
+    label: response.data.result.label,
+    score: response.data.result.score,
     query: text,
   };
 };
