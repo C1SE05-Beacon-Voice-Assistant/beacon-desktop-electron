@@ -2,9 +2,7 @@ import os
 import azure.cognitiveservices.speech as speechsdk
 
 def keyword_recognition():
-    # f_dir = "D:\\HocTap\\Nam4\\Ki 1\\CAP\\beacon-desktop-electron\\beacon_package\\final_highfa.table"
     model = speechsdk.KeywordRecognitionModel(os.path.join(os.path.dirname(__file__), "final_highfa.table"))
-    # model = speechsdk.KeywordRecognitionModel(f_dir)
     
     keyword_recognizer = speechsdk.KeywordRecognizer()
 
