@@ -1,5 +1,8 @@
 export interface IElectron {
-  backgroundListen: (callback: (text: string) => void) => void;
+  backgroundListen: (
+    callback: (text: string) => void,
+    showText: (text: string) => void
+  ) => void;
   stopBackgroundListen: () => void;
   keywordRecognize: () => Promise<string>;
   storeConversation: () => Promise<any>;

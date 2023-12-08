@@ -31,7 +31,6 @@ const executeIntent = new ExecuteIntent(driver);
 contextBridge.exposeInMainWorld("electron", {
   backgroundListen: beacon.backgroundListen.bind(beacon),
   stopBackgroundListen: beacon.stopBackgroundListen.bind(beacon),
-  keywordRecognize: beacon.keywordRecognize.bind(beacon),
   storeConversation,
   getAllConversations,
   clearConversations,

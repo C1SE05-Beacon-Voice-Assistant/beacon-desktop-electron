@@ -18,13 +18,13 @@
 
 .title {
   position: absolute;
-  top: 42%;
+  top: 45%;
   transform: (-50%, -50%);
   margin: 0 auto;
   width: 100%;
   color: var(--white-900);
   text-align: center;
-  font-size: 36px;
+  font-size: 20px;
   font-weight: 700;
   z-index: 20;
 }
@@ -69,20 +69,20 @@
 }
 
 .circle-a {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   animation: pulse 1s infinite;
 }
 
 .circle-b {
-  width: 70px;
-  height: 70px;
+  width: 60px;
+  height: 60px;
   animation: pulse 2s infinite;
 }
 
 .circle-c {
-  width: 90px;
-  height: 90px;
+  width: 80px;
+  height: 80px;
   animation: pulse 3s infinite;
 }
 

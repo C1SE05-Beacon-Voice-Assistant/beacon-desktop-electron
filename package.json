@@ -26,7 +26,7 @@
     "electron-log": "^4.4.8",
     "electron-updater": "^6.1.4",
     "loudness": "^0.4.2",
-    "microsoft-cognitiveservices-speech-sdk": "^1.32.0",
+    "microsoft-cognitiveservices-speech-sdk": "^1.33.1",
     "moment": "^2.29.4",
     "node-cron": "^3.0.3",
     "node-machine-id": "^1.1.12",
