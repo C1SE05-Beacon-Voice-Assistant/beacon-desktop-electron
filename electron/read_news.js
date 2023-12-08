@@ -75,7 +75,7 @@ class ReadNews {
     );
     const result = await this.getNewsInList(articlesList);
 
-    if (result.length == 0) {
+    if (result.length === 0) {
       await textToSpeech("Rất tiếc tôi không tìm thấy tin tức nào");
       return [];
     }
@@ -129,7 +129,7 @@ class ReadNews {
   async selectOneToRead(newsList, num) {
     console.log(newsList);
 
-    if (newsList.length == 0) {
+    if (newsList.length === 0) {
       await textToSpeech("Rất tiếc, không có tin tức nào để đọc");
       return;
     }
