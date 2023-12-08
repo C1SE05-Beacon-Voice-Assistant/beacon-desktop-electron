@@ -3,14 +3,15 @@ import "@fontsource/open-sans/600.css";
 import "@fontsource/open-sans/800.css";
 import { createTheme, CssBaseline } from "@mui/material";
 import { ThemeProvider } from "@mui/system";
-import { useEffect, useState } from "react";
+import { useEffect, useState, createContext } from "react";
 import { Route, Routes } from "react-router-dom";
 import MainLayout from "~/layouts/MainLayout";
 import handleInput from "~/lib/handleSpeech";
 import { AppRouter } from "~/util/constants/appRoutes";
 import { AboutPage, ConversationPage, HomePage, SettingPage } from "./pages";
-
+export const ContentContext = createContext("");
 export default function App() {
+  const [content, setContent] = useState("");
   const theme = createTheme({
     palette: {
       mode: "dark",
@@ -23,18 +24,18 @@ export default function App() {
     window.electron.backgroundListen((result: string) => {
       console.log(result);
 
-      // handleInput(result, history).then((res: any) => {
-      //   console.log(res);
-      //   if (res?.type) {
-      //     setHistory((prev) => [...prev, ...res.result]);
-      //   }
-      // });
+      handleInput(result, history).then((res: any) => {
+        setContent(res.query)
+        if (res?.label) {
+          setHistory((prev) => [...prev, ...res.query]);
+        }
+      });
     });
 
     return () => {
       window.electron.stopBackgroundListen();
     };
-  }, [history]);
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
@@ -42,7 +43,14 @@ export default function App() {
         <CssBaseline />
         <div className="gradient-dark">
           <Routes>
-            <Route path={AppRouter.HOME} element={<HomePage />} />
+            <Route
+              path={AppRouter.HOME}
+              element={
+                <ContentContext.Provider value={content}>
+                  <HomePage />
+                </ContentContext.Provider>
+              }
+            />
             <Route
               path={AppRouter.CONVERSATION}
               element={<ConversationPage />}

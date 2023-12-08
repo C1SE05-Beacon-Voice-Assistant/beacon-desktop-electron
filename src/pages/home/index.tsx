@@ -1,33 +1,13 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import bot from "~/assets/bot.png";
 import microphone from "~/assets/microphone.png";
 import vector from "~/assets/vector.svg";
 
 import styles from "./HomePage.module.css";
-import handleInput from "~/lib/handleSpeech";
+import { ContentContext } from "~/App";
 
 export default function HomePage() {
-  const [isStart, setIsStart] = useState<boolean | null>(false);
-  const [history, setHistory] = useState<object[]>([]);
-  const [content, setContent] = useState<string | null>();
-
-  useEffect(() => {
-    window.electron.backgroundListen((result: string) => {
-      handleInput(result, history).then((res: any) => {
-        console.log(res);
-        if (res?.label) {
-          setIsStart(true);
-          setContent(res?.query)
-          setHistory((prev) => [...prev, ...res.result]);
-        }
-      });
-    });
-
-    return () => {
-      window.electron.stopBackgroundListen();
-      setIsStart(false);
-    };
-  }, [history]);
+  const content = useContext(ContentContext);
   return (
     <section className={styles.home__container}>
 
@@ -41,7 +21,7 @@ export default function HomePage() {
       </div>
       <div className={styles.title}>
         <div>
-        <div style={{ textAlign: 'center', width: '80%', margin: '0 auto'}}>{content ? content : "content content contentcontentcontentcontentcontent "}</div>
+        <div style={{ textAlign: 'center', width: '80%', margin: '0 auto'}}>{content}</div>
         </div>
       </div>
       <div className={styles.container}>
