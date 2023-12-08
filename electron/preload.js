@@ -8,7 +8,7 @@ const chromedriverPath = require("chromedriver").path.replace(
   "app.asar.unpacked"
 );
 const ExecuteIntent = require(path.join(__dirname, "execute_intent.js"));
-const BeaconSpeech = require(path.join(__dirname, "beacon_speech.js"));
+const { BeaconSpeech } = require(path.join(__dirname, "beacon_speech.js"));
 const {
   storeConversation,
   getAllConversations,
@@ -26,7 +26,7 @@ if (process.env.NODE_ENV === "development") {
     .setChromeService(chromeService)
     .build();
 }
-const executeIntent = new ExecuteIntent(driver);
+const initExecute = new ExecuteIntent(driver);
 
 contextBridge.exposeInMainWorld("electron", {
   backgroundListen: beacon.backgroundListen.bind(beacon),
@@ -34,7 +34,7 @@ contextBridge.exposeInMainWorld("electron", {
   storeConversation,
   getAllConversations,
   clearConversations,
-  executeIntent: executeIntent.run.bind(executeIntent),
+  executeIntent: initExecute.executeIntent.bind(initExecute),
   quitDriver: async () => {
     await driver.close();
     await driver.quit();
