@@ -61,18 +61,26 @@ class BeaconSpeech {
     return this.recognize(audioConfig);
   }
 
-  backgroundListen(callback) {
+  backgroundListen(callback, showText) {
     if (!this.keywordRecognitionActive) {
       this.keywordRecognize();
     }
+
+    this.speechRecognizer.recognizing = async (s, e) => {
+      const result = e.result;
+      if (result.reason === sdk.ResultReason.RecognizingSpeech) {
+        showText(result.text);
+      }
+    };
+
     this.speechRecognizer.recognized = async (s, e) => {
       const result = e.result;
       if (
         result.reason === sdk.ResultReason.RecognizedSpeech &&
         result.text.toLowerCase() != "phẩy."
       ) {
-        // console.log(`RECOGNIZED: Text=${result.text}`);
-        callback(e.result.text);
+        showText(result.text);
+        callback(result.text);
       } else if (result.reason === sdk.ResultReason.NoMatch) {
         console.log("NOMATCH part", this.keywordRetryCount);
         await this.handleNoMatch(); // Handle no match condition
