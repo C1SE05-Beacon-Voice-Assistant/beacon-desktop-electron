@@ -1,7 +1,13 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { contextBridge, ipcRenderer } = require("electron");
 const path = require("path");
-const executeIntent = require(path.join(__dirname, "execute_intent.js"));
+const { Builder } = require("selenium-webdriver");
+const { ServiceBuilder } = require("selenium-webdriver/chrome");
+const chromedriverPath = require("chromedriver").path.replace(
+  "app.asar",
+  "app.asar.unpacked"
+);
+const ExecuteIntent = require(path.join(__dirname, "execute_intent.js"));
 const { BeaconSpeech } = require(path.join(__dirname, "beacon_speech.js"));
 const {
   storeConversation,
@@ -10,6 +16,17 @@ const {
 } = require(path.join(__dirname, "conversation.js"));
 
 const beacon = new BeaconSpeech("Beacon", "Hanoi");
+let driver;
+if (process.env.NODE_ENV === "development") {
+  driver = new Builder().forBrowser("chrome").build();
+} else {
+  const chromeService = new ServiceBuilder(chromedriverPath);
+  driver = new Builder()
+    .forBrowser("chrome")
+    .setChromeService(chromeService)
+    .build();
+}
+const initExecute = new ExecuteIntent(driver);
 
 contextBridge.exposeInMainWorld("electron", {
   backgroundListen: beacon.backgroundListen.bind(beacon),
@@ -17,17 +34,13 @@ contextBridge.exposeInMainWorld("electron", {
   storeConversation,
   getAllConversations,
   clearConversations,
-  executeIntent: executeIntent,
+  executeIntent: initExecute.executeIntent.bind(initExecute),
+  quitDriver: async () => {
+    await driver.close();
+    await driver.quit();
+  },
 });
 
-contextBridge.exposeInMainWorld("selenium", {
-  getDriver: async () => {
-    try {
-      const driver = await ipcRenderer.invoke("get-driver");
-      return driver;
-    } catch (error) {
-      console.error("Error getting WebDriver:", error);
-      return null;
-    }
-  },
+contextBridge.exposeInMainWorld("electronAPI", {
+  quitDriver: (callback) => ipcRenderer.on("quit-driver", callback),
 });

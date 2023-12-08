@@ -1,13 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import type { BrowserWindowConstructorOptions as WindowOptions } from "electron";
-import { app, BrowserWindow, dialog, Tray, Menu, ipcMain } from "electron";
+import { app, BrowserWindow, dialog, Tray, Menu } from "electron";
 import log from "electron-log";
 import path, { join } from "path";
 import { autoUpdater } from "electron-updater";
 import MenuBuilder from "../src/menu";
-
-const { Builder } = require("selenium-webdriver");
-const chrome = require("selenium-webdriver/chrome");
 
 process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
 
@@ -25,17 +22,10 @@ if (!app.requestSingleInstanceLock()) {
 if (process.env.NODE_ENV === "development") {
   log.transports.file.resolvePath = () =>
     join(__dirname + "../logs", "main.log");
-
-  Object.defineProperty(app, "isPackaged", {
-    get() {
-      return true;
-    },
-  });
 }
 
 let mainWindow: BrowserWindow | null = null;
 let tray: Tray | null = null;
-let driverInstance: any = null;
 
 const createWindow = (options: WindowOptions = {}) => {
   if (mainWindow) {
@@ -69,9 +59,9 @@ const createWindow = (options: WindowOptions = {}) => {
   } else {
     mainWindow.loadFile(path.join(__dirname, "../dist/index.html"));
   }
-  if (process.env.NODE_ENV === "development") {
-    mainWindow.webContents.openDevTools();
-  }
+  // if (process.env.NODE_ENV === "development") {
+  mainWindow.webContents.openDevTools();
+  // }
 
   mainWindow.on("closed", () => {
     // hide window instead of closing it
@@ -82,8 +72,7 @@ const createWindow = (options: WindowOptions = {}) => {
 async function handleQuit() {
   if (process.platform !== "darwin") {
     quitDriver().then(() => {
-      console.log("quitDriver");
-
+      log.info("75: Driver quit");
       app.quit();
     });
   }
@@ -95,6 +84,7 @@ const createTray = () => {
     // let us then add handleQuit to click property
     { label: "Quit", click: handleQuit },
   ]);
+
   tray.setToolTip("Beacon Voice Assistant");
   tray.setContextMenu(contextMenu);
   tray.addListener("click", () => createWindow());
@@ -111,41 +101,26 @@ app.on("ready", async () => {
     provider: "github",
     owner: "C1SE05-Beacon-Voice-Assistant",
     repo: "beacon-desktop-electron",
-    private: true,
+    private: false,
   });
 
   autoUpdater.checkForUpdates();
-
-  try {
-    await initDriver();
-    ipcMain.handle("get-driver", async (event, args) => {
-      return driverInstance; // Send the driver instance to the renderer process
-    });
-  } catch (err) {
-    console.log(err);
-  }
 });
 
-async function initDriver() {
-  if (!driverInstance) {
-    driverInstance = await new Builder().forBrowser("chrome").build();
-  }
-}
-
 async function quitDriver() {
-  if (driverInstance) {
-    driverInstance.quit().then(() => {
-      driverInstance = null;
-    });
+  if (mainWindow) {
+    await mainWindow.webContents.send("quit-driver");
   }
 }
 
 app.on("before-quit", async () => {
-  console.log("before-quit");
   await quitDriver();
 });
 
 app.on("window-all-closed", () => {
+  quitDriver().then(() => {
+    log.info("122: Driver quit");
+  });
   // if (process.platform !== "darwin") {
   //   app.quit();
   //   process.exit(0);
@@ -175,8 +150,8 @@ autoUpdater.on("update-available", (updateInfo) => {
     dialog
       .showMessageBox({
         type: "info",
-        title: "Update available",
-        message: `New version ${updateInfo.version} is available and will be downloaded in the background.`,
+        title: "Tìm thấy phiên bản mới",
+        message: `Phiên bản mới ${updateInfo.version} đã sẵn sàng để tải xuống. Bạn có muốn tải xuống ngay bây giờ?`,
         buttons: ["OK", "Cancel"],
         textWidth: 300,
       })

@@ -1,5 +1,5 @@
 const path = require("path");
-const textToSpeech = require("./text_to_speech");
+const { textToSpeech } = require("./beacon_speech.js");
 const guide = require(path.join(__dirname, "helper/listen_to_music_guide.js"));
 
 class UserManual {

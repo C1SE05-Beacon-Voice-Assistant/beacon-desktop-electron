@@ -4,7 +4,7 @@ const readline = require("readline");
 const { promisify } = require("util");
 const NewsReader = require("./helpers/newsReader.js");
 const { By } = require("selenium-webdriver");
-const textToSpeech = require("./text_to_speech.js");
+const { textToSpeech } = require("./beacon_speech.js");
 
 const executeException = require("./situation_except");
 

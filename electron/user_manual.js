@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const textToSpeech = require("./text_to_speech");
+const { textToSpeech } = require("./beacon_speech.js");
 const { guide } = require("./helpers/guide");
 
 class UserManual {
