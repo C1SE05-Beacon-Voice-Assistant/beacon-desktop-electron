@@ -21,16 +21,16 @@ export default function App() {
   const [history, setHistory] = useState<object[]>([]);
 
   useEffect(() => {
-    window.electron.backgroundListen((result: string) => {
-      console.log(result);
-
-      handleInput(result, history).then((res: any) => {
-        setContent(res.query)
-        if (res?.label) {
-          setHistory((prev) => [...prev, ...res.query]);
-        }
-      });
-    });
+    window.electron.backgroundListen(
+      (result: string) => {
+        handleInput(result, history).then((res: any) => {
+          if (res?.label) {
+            setHistory((prev) => [...prev, ...res.query]);
+          }
+        });
+      },
+      (text: string) => setContent(text)
+    );
 
     return () => {
       window.electron.stopBackgroundListen();
