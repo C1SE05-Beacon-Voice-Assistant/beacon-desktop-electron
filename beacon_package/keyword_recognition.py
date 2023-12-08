@@ -3,7 +3,7 @@ import azure.cognitiveservices.speech as speechsdk
 
 def keyword_recognition():
     model = speechsdk.KeywordRecognitionModel(os.path.join(os.path.dirname(__file__), "final_highfa.table"))
-
+    
     keyword_recognizer = speechsdk.KeywordRecognizer()
 
     def recognized_cb(evt):
@@ -29,4 +29,5 @@ def keyword_recognition():
     return result_keyword_verify.text
 
 if __name__ == "__main__":
-    print(keyword_recognition())
+    pass
+    # print(keyword_recognition())
