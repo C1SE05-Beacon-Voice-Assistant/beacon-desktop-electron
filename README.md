@@ -139,14 +139,6 @@ or
   1
 ```
 
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)
-
-## Security
-
-See [SECURITY.md](./SECURITY.md) for more information.
-
 ## Authors (C1SE05)
 
 - [Truong Thang](https://github.com/yensubldg)
