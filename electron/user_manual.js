@@ -1,18 +1,20 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { textToSpeech } = require("./beacon_speech.js");
 const { guide } = require("./helpers/guide");
 const { textToSpeech, BeaconSpeech } = require("./beacon_speech.js");
 const beacon = new BeaconSpeech("Beacon", "Hanoi");
 class UserManual {
-  static async readIntroduction() {
+  constructor(beacon){
+    this.beacon = beacon
+  }
+   async readIntroduction() {
     await textToSpeech(guide.introduction);
   }
 
-  static async readRequirements() {
+   async readRequirements() {
     await textToSpeech(guide.requirements);
   }
 
-  static async readFull() {
+   async readFull() {
     const keys = Object.keys(guide)
     const guides = []
     for (let i = 0; i < keys.length; i++) {
@@ -21,15 +23,15 @@ class UserManual {
     await textToSpeech(guides.toString())
   }
 
-  static async readMusic() {
+   async readMusic() {
     await textToSpeech(guide.play_music);
   }
 
-  static async readVolume() {
+   async readVolume() {
     await textToSpeech(guide.control_vol);
   }
 
-  static async readNews() {
+   async readNews() {
     await textToSpeech(guide.read_news);
   }
 
@@ -47,7 +49,8 @@ class UserManual {
     await textToSpeech(options);
     while (true) {
       try {
-        let input = await beacon.recognizeFromMicrophone();
+        let isExits = false
+        let input = await this.beacon.recognizeFromMicrophone();
         const result = input?.toLowerCase();
         switch (result) {
           case "một.":
@@ -77,27 +80,35 @@ class UserManual {
 
           switch (+optionChosen[0]) {
             case 1: {
-              await UserManual.readIntroduction();
+              isExits = true
+              await this.readIntroduction();
               break;
             }
             case 2: {
-              await UserManual.readNews()
+              isExits = true
+              await this.readNews()
               break;
             }
             case 3: {
-              await UserManual.readMusic();
+              isExits = true
+              await this.readMusic();
               break;
             }
             case 4: {
-              await UserManual.readVolume();
+              isExits = true
+              await this.readVolume();
               break;
             }
             case 5: {
-              await UserManual.readFull();
+              isExits = true
+              await this.readFull();
               break;
             }
             case 0:
               return;
+          }
+          if(isExits) {
+            break
           }
         }
       } catch (error) {

@@ -1,9 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import * as sdk from "microsoft-cognitiveservices-speech-sdk";
-const { PythonShell } = require("python-shell");
-const { options } = require("./helpers/optionPyshell");
 const { speechConfigDefault } = require("./helpers/config");
-const {detectSpeakerDeviceIsMuting} = require("./detect_speaker_device_is_muting")
 const {
   TextSpeak: { OUT_LISTEN, ACTIVE },
 } = require("./helpers/enum");
@@ -110,8 +107,8 @@ class BeaconSpeech {
 
   async keywordRecognize() {
     await textToSpeech(OUT_LISTEN[0]);
-    const data = await PythonShell.run("keyword_recognition.py", options);
-    if (data[0] == "Hey Beacon") {
+    // const data = await PythonShell.run("keyword_recognition.py", options);
+    if (true) {
       await textToSpeech(ACTIVE[Math.floor(Math.random() * ACTIVE.length)]);
       this.keywordRecognitionActive = true;
       this.keywordRetryCount = 0;
@@ -136,7 +133,6 @@ const createSpeechConfig = () => {
 };
 
 const textToSpeech = async (text) => {
-  detectSpeakerDeviceIsMuting()
   const synthesizer = new sdk.SpeechSynthesizer(createSpeechConfig());
 
   try {

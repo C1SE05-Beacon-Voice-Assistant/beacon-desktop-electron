@@ -8,7 +8,7 @@ const chromedriverPath = require("chromedriver").path.replace(
   "app.asar.unpacked"
 );
 const ExecuteIntent = require(path.join(__dirname, "execute_intent.js"));
-const { BeaconSpeech } = require(path.join(__dirname, "beacon_speech.js"));
+const { BeaconSpeech, textToSpeech } = require(path.join(__dirname, "beacon_speech.js"));
 const { UserManual } = require("./user_manual.js");
 const {
   storeConversation,
@@ -27,7 +27,10 @@ if (process.env.NODE_ENV === "development") {
     .setChromeService(chromeService)
     .build();
 }
-const initExecute = new ExecuteIntent(driver);
+const userManual = new UserManual(beacon)
+const initExecute = new ExecuteIntent(driver, userManual);
+
+textToSpeech("Nói đọc hướng dẫn để nghe hướng dẫn từ bi cần").then((res)=>res);
 
 contextBridge.exposeInMainWorld("electron", {
   backgroundListen: beacon.backgroundListen.bind(beacon),
@@ -45,3 +48,6 @@ contextBridge.exposeInMainWorld("electron", {
 contextBridge.exposeInMainWorld("electronAPI", {
   quitDriver: (callback) => ipcRenderer.on("quit-driver", callback),
 });
+module.exports = {
+  userManual
+}

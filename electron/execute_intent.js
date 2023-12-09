@@ -5,7 +5,9 @@ const ReadNews = require("./read_news.js");
 const gptGenerate = require("./gpt_generate.js");
 const { TextSpeak } = require("./helpers/enum.js");
 const { textToSpeech } = require("./beacon_speech.js");
-
+const {
+  detectSpeakerDeviceIsMuting,
+} = require("./detect_speaker_device_is_muting.js");
 /**
  * @description handle output of intent
  * @param {string} label
@@ -46,19 +48,39 @@ const handleOutput = (label, query) => {
 };
 
 class ExecuteIntent {
-  constructor(driver) {
+  constructor(driver, userManual) {
     this.driver = driver;
+    this.userManual = userManual;
+    this.isReadManual = true;
   }
   async executeIntent(output, history) {
-    const label = output.label;
-    const query = output.query;
+    detectSpeakerDeviceIsMuting();
+
+    let { label, query } = output;
     const listenControl = await listenToMusic(this.driver);
+
     const readNewsControl = new ReadNews(this.driver);
     const volumeControl = await beaconVolume();
-
-    console.log(output);
-
     const features = [
+      {
+        name: "user_manual",
+        feature_name: async () => {
+          const musicRegex = new RegExp("nhạc");
+          const readNewsRegex = new RegExp("báo");
+          const volumeRegex = new RegExp("âm");
+          if (label) {
+            if (musicRegex.test(query)) {
+              await this.userManual.readMusic();
+            } else if (readNewsRegex.test(query)) {
+              await this.userManual.readNews();
+            } else if (volumeRegex.test(query)) {
+              await this.userManual.readVolume();
+            } else {
+              await this.userManual.start();
+            }
+          }
+        },
+      },
       {
         name: "play_music",
         feature_name: async () => {
@@ -209,7 +231,9 @@ class ExecuteIntent {
     //   }
     // });
     for (let f of features) {
-      if (f.name === label) return f.feature_name();
+      if (f.name === label){
+        return f.feature_name();
+      }
     }
   }
 }
