@@ -69,7 +69,10 @@ class BeaconSpeech {
 
     this.speechRecognizer.recognizing = async (s, e) => {
       const result = e.result;
-      if (result.reason === sdk.ResultReason.RecognizingSpeech) {
+      if (
+        result.reason === sdk.ResultReason.RecognizingSpeech &&
+        result.text.toLowerCase() != "phẩy"
+      ) {
         showText(result.text);
       }
     };
@@ -109,14 +112,13 @@ class BeaconSpeech {
   }
 
   async keywordRecognize() {
-
     await textToSpeech(OUT_LISTEN[0]);
     const data = await PythonShell.run("keyword_recognition.py", options);
     if (data[0] == "Hey Beacon") {
       await textToSpeech(ACTIVE[Math.floor(Math.random() * ACTIVE.length)]);
-      if(this.callBotTime === 0) {
+      if (this.callBotTime === 0) {
         setTimeout(() => {
-          textToSpeech("Nói làm sao sử dụng  để nghe hướng dẫn từ bi cần")
+          textToSpeech("Nói làm sao sử dụng  để nghe hướng dẫn từ bi cần");
         }, 2000);
         ++this.callBotTime;
       }
@@ -143,8 +145,13 @@ const createSpeechConfig = () => {
   return config;
 };
 
-const textToSpeech = async (text) => {
-  const synthesizer = new sdk.SpeechSynthesizer(createSpeechConfig());
+const textToSpeech = async (text, beacon) => {
+  if (!text) return;
+  if (beacon) {
+    if (!beacon.keywordRecognitionActive) return;
+    beacon.stopBackgroundListen();
+  }
+  var synthesizer = new sdk.SpeechSynthesizer(createSpeechConfig());
 
   try {
     await new Promise((resolve, reject) => {
@@ -152,22 +159,33 @@ const textToSpeech = async (text) => {
         text,
         (result) => {
           if (result.reason === sdk.ResultReason.SynthesizingAudioCompleted) {
-            resolve();
+            // calculate the total time in seconds that audio was synthesized
+            // convert the time from ticks to seconds
+            const audioDuration = result.audioDuration / 10000000;
+            //  console.log(`Audio was synthesized for ${audioDuration} seconds`);
+
+            // resolve the promise when audioDuration seconds have passed
+            setTimeout(() => {
+              resolve();
+            }, parseInt(audioDuration * 950));
           } else {
-            console.error(
-              `Speech synthesis canceled, ${result.errorDetails}\nDid you set the speech resource key and region values?`
-            );
             reject(new Error(result.errorDetails));
           }
           synthesizer.close();
+          synthesizer = null;
         },
         (err) => {
           console.trace("err - " + err);
           synthesizer.close();
+          synthesizer = null;
           reject(err);
         }
       );
     });
+
+    if (beacon) {
+      beacon.speechRecognizer.startContinuousRecognitionAsync();
+    }
   } catch (error) {
     console.error("Error:", error.message);
   }

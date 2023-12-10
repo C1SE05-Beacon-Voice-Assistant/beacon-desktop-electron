@@ -1,38 +1,43 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { guide } = require("./helpers/guide");
-const { textToSpeech, BeaconSpeech } = require("./beacon_speech.js");
-const beacon = new BeaconSpeech("Beacon", "Hanoi");
+const { textToSpeech } = require("./beacon_speech.js");
+
 class UserManual {
-  constructor(beacon){
-    this.beacon = beacon
-  }
-   async readIntroduction() {
-    await textToSpeech(guide.introduction);
+  constructor(beacon) {
+    this.beacon = beacon;
   }
 
-   async readRequirements() {
-    await textToSpeech(guide.requirements);
+  async customRead(text) {
+    return await textToSpeech(text, this.beacon);
   }
 
-   async readFull() {
-    const keys = Object.keys(guide)
-    const guides = []
+  async readIntroduction() {
+    await this.customRead(guide.introduction);
+  }
+
+  async readRequirements() {
+    await this.customRead(guide.requirements);
+  }
+
+  async readFull() {
+    const keys = Object.keys(guide);
+    const guides = [];
     for (let i = 0; i < keys.length; i++) {
-      guides.push(guide[keys[i]])
+      guides.push(guide[keys[i]]);
     }
-    await textToSpeech(guides.toString())
+    await this.customRead(guides.toString());
   }
 
-   async readMusic() {
-    await textToSpeech(guide.play_music);
+  async readMusic() {
+    await this.customRead(guide.play_music);
   }
 
-   async readVolume() {
-    await textToSpeech(guide.control_vol);
+  async readVolume() {
+    await this.customRead(guide.control_vol);
   }
 
-   async readNews() {
-    await textToSpeech(guide.read_news);
+  async readNews() {
+    await this.customRead(guide.read_news);
   }
 
   async start() {
@@ -44,7 +49,7 @@ class UserManual {
         Nếu muốn điều chỉnh âm lượng thì nói làm sao để điều chỉnh âm lượng
         Nếu muốn đọc toàn bộ hướng dẫn thì nói làm sao để nghe toàn bộ hướng dẫn
     `;
-    await textToSpeech(options);
+    await this.customRead(options);
   }
 }
 

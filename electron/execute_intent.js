@@ -53,6 +53,7 @@ class ExecuteIntent {
     this.userManual = userManual;
     this.isReadManual = true;
   }
+
   async executeIntent(output, history) {
     detectSpeakerDeviceIsMuting();
 
@@ -76,7 +77,7 @@ class ExecuteIntent {
               await this.userManual.readNews();
             } else if (volumeRegex.test(query)) {
               await this.userManual.readVolume();
-            }else if (appIntroductionRegex.test(query)) {
+            } else if (appIntroductionRegex.test(query)) {
               console.log(appIntroductionRegex);
               await this.userManual.readIntroduction();
             } else {
