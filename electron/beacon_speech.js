@@ -27,7 +27,7 @@ class BeaconSpeech {
     );
     this.recognizer = null;
     this.keywordRetryCount = 0; // Track the number of consecutive no matches
-    this.keywordRetryLimit = 2; // Define the limit for consecutive no matches
+    this.keywordRetryLimit = 4; // Define the limit for consecutive no matches
     this.keywordRecognitionActive = false; // Flag to track keyword recognition state
   }
 
