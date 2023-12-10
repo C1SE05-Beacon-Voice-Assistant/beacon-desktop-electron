@@ -138,7 +138,7 @@ const createSpeechConfig = () => {
 };
 
 const textToSpeech = async (text) => {
-  detectSpeakerDeviceIsMuting();
+  await detectSpeakerDeviceIsMuting();
   const synthesizer = new sdk.SpeechSynthesizer(createSpeechConfig());
 
   try {

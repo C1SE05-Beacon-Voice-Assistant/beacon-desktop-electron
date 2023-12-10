@@ -168,7 +168,7 @@ class ReadNews {
           result = await this.search(SearchNewsBy.LATEST);
           break;
         case "2":
-          result = await this.search(SearchNewsBy.HOTTEST);
+          result = await this.search(SearchNewsBy.BREAKING);
           break;
         case "3":
           result = await this.search(SearchNewsBy.MOST_READ);

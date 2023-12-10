@@ -18,30 +18,41 @@ export default function App() {
     },
   });
 
+  const [text, setText] = useState<string>("");
   const [history, setHistory] = useState<object[]>([]);
-  const [list, setList] = useState<any[]>([]);
+  const [oldList, setOldList] = useState<any>({}); // only for news
 
   useEffect(() => {
     window.electron.backgroundListen(
       (result: string) => {
-        handleInput(result, history, list).then((res: any) => {
-          if (res?.type === "gpt_ai") {
-            setHistory((prev) => [...prev, ...res.query]);
-          } else if (res?.result?.newsList) {
-            const newsList = res.result.newsList;
-            setList(newsList); //if the label is read_news related, set new articles list
-            console.log("data: ", newsList);
-          }
-        });
+        setText(result);
       },
       (text: string) => setContent(text)
     );
-    console.log("state: ", list);
 
     return () => {
       window.electron.stopBackgroundListen();
     };
-  }, [list, history]);
+  }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+    handleInput(text, history, oldList).then((res: any) => {
+      if (!isMounted) return;
+      if (res?.type === "gpt_ai") {
+        setHistory((prev) => [...prev, ...res.query]);
+      } else if (res?.result?.newsList) {
+        setOldList({
+          label: res.result.label,
+          newsList: res.result.newsList,
+        }); // Using functional update
+      }
+    });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [text]);
 
   return (
     <ThemeProvider theme={theme}>

@@ -6,6 +6,9 @@ const gptGenerate = require("./gpt_generate.js");
 const { TextSpeak } = require("./helpers/enum.js");
 const { textToSpeech } = require("./beacon_speech.js");
 const { SearchNewsBy } = require("./helpers/enum.js");
+const {
+  detectSpeakerDeviceIsMuting,
+} = require("./detect_speaker_device_is_muting.js");
 
 /**
  * @description handle output of intent
@@ -44,7 +47,7 @@ const handleOutput = (label, query) => {
     if (label == "read_news") {
       query = query.split(/[0-2]/);
     } else if (label == "search_news") {
-      query = queryreplace(/(tin tức|bản tin|thời sự)/, "").trim();
+      query = query.replace(/(tin tức|bản tin|thời sự)/, "").trim();
     }
     return {
       label: label,
@@ -58,6 +61,7 @@ class ExecuteIntent {
     this.driver = driver;
   }
   async executeIntent(output, history, list) {
+    await detectSpeakerDeviceIsMuting();
     const label = output.label;
     const query = output.query;
     const listenControl = await listenToMusic(this.driver);
@@ -179,8 +183,10 @@ class ExecuteIntent {
       {
         name: "breaking_news",
         feature_name: async () => {
+          const newsList = await readNewsControl.search(SearchNewsBy.BREAKING);
           return {
-            newsList: await readNewsControl.search(SearchNewsBy.HOTTEST),
+            label: label,
+            newsList,
           };
         },
       },
@@ -227,11 +233,7 @@ class ExecuteIntent {
         },
       },
     ];
-    // features.forEach(async (feature) => {
-    //   if (feature.name === output_type) {
-    //     await feature.feature_name();
-    //   }
-    // });
+
     for (let f of features) {
       if (f.name === label) return f.feature_name();
     }
