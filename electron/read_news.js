@@ -84,10 +84,12 @@ class ReadNews {
       Tìm thấy ${result.length} kết quả, vui lòng chọn 1 tin tức mà bạn muốn đọc.
     `);
 
-    // const newsListSpeech = `Tìm thấy ${result.length} kết quả, vui lòng chọn 1 tin tức mà bạn muốn đọc.`;
-    // for (let i = 0; i < result.length; i++) {
-    //   await textToSpeech(`${i + 1}. ${result[i].title}`);
-    // }
+    const newsListSpeech = `Tìm thấy ${result.length} kết quả, vui lòng chọn 1 tin tức mà bạn muốn đọc.`;
+    for (let i = 0; i < result.length; i++) {
+      newsListSpeech += `${i + 1}. ${result[i].title}. `;
+    }
+
+    // await textToSpeech(newsListSpeech);
 
     return result;
   }
@@ -116,9 +118,12 @@ class ReadNews {
       Tìm thấy ${newsList.length} kết quả, vui lòng chọn 1 tin tức mà bạn muốn đọc.
     `);
 
-      for (let i = 0; i < newsList.length; i++) {
-        await textToSpeech(`${i + 1}. ${newsList[i].title}`);
+      const newsListSpeech = `Tìm thấy ${result.length} kết quả, vui lòng chọn 1 tin tức mà bạn muốn đọc.`;
+      for (let i = 0; i < result.length; i++) {
+        newsListSpeech += `${i + 1}. ${result[i].title}. `;
       }
+
+      // await textToSpeech(newsListSpeech);
 
       return newsList;
     } catch (error) {
@@ -128,7 +133,7 @@ class ReadNews {
   }
 
   async selectOneToRead(newsList, num) {
-    console.log(newsList);
+    console.log(newsList, num);
 
     if (newsList.length === 0) {
       await textToSpeech("Rất tiếc, không có tin tức nào để đọc");

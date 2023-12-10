@@ -17,6 +17,9 @@ const {
  * return *
  */
 const handleOutput = (label, query) => {
+  // change query to lowercase to standardlize the query
+  // Bài báo != bài báo => to avoid this error scenario
+  query = query.toLowerCase();
   // if label match volume, get number from query
   const matchVolume = label.match(/volume/gi) && query.match(/\d+/g);
   if (matchVolume) {
@@ -41,11 +44,16 @@ const handleOutput = (label, query) => {
   // if label match news, get keyword from query
   // example query: "đọc tin tức về covid" -> "covid"
   // example query: "đọc tin tức số 2" -> "2"
-  // example query: "tìm tin tức mới nhất" -> query: any
-  const matchNews = /(tin tức|bản tin|thời sự)/.test(query);
+  // example query: "tìm tin tức mới nhất" -> query: none
+  const matchNews = /(tin tức|bản tin|thời sự|bài báo)/.test(query);
   if (matchNews) {
     if (label == "read_news") {
-      query = query.split(/[0-2]/);
+      query = query.match(/[1-3]/)[0];
+      console.log("Chọn bài báo số: ", query);
+      if (query.length == 0)
+        throw Error(
+          "Lựa chọn không hợp lệ, lựa chọn phải nằm trong khoảng (1-3)"
+        );
     } else if (label == "search_news") {
       query = query.replace(/(tin tức|bản tin|thời sự)/, "").trim();
     }
@@ -193,7 +201,7 @@ class ExecuteIntent {
       {
         name: "read_news",
         feature_name: async () => {
-          const index = handleOutput(label, query);
+          const index = handleOutput(label, query)?.query;
           return readNewsControl.selectOneToRead(list, index - 1);
         }, //index start with 0
       },

@@ -27,11 +27,11 @@ def get_audio_output():
 
 
 if __name__ == "__main__":
-    # input_devices = get_audio_input()
-    # output_devices = get_audio_output()
+    input_devices = get_audio_input()
+    output_devices = get_audio_output()
 
-    # for ide in input_devices:
-    #     print(ide)
-    # for ode in output_devices:
-    #     print(ode)
-    pass
+    for ide in input_devices:
+        print(ide)
+    for ode in output_devices:
+        print(ode)
+    # pass

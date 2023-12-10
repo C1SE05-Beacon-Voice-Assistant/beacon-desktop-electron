@@ -37,7 +37,7 @@ class Schedule:
 
 
 if __name__ == "__main__":
-    # conversion = Schedule()
-    # conversion.send_request()
-    # conversion.clear_log()
-    pass
+    conversion = Schedule()
+    conversion.send_request()
+    conversion.clear_log()
+    # pass
