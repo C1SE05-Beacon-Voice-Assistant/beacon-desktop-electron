@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import * as sdk from "microsoft-cognitiveservices-speech-sdk";
+import { PythonShell } from "python-shell";
+const { options } = require("./helpers/optionPyshell");
 const { speechConfigDefault } = require("./helpers/config");
 const {
   TextSpeak: { OUT_LISTEN, ACTIVE },
@@ -107,8 +109,8 @@ class BeaconSpeech {
 
   async keywordRecognize() {
     await textToSpeech(OUT_LISTEN[0]);
-    // const data = await PythonShell.run("keyword_recognition.py", options);
-    if (true) {
+    const data = await PythonShell.run("keyword_recognition.py", options);
+    if (data[0] == "Hey Beacon") {
       await textToSpeech(ACTIVE[Math.floor(Math.random() * ACTIVE.length)]);
       this.keywordRecognitionActive = true;
       this.keywordRetryCount = 0;
