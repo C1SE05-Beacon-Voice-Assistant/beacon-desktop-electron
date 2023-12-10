@@ -65,6 +65,7 @@ class ExecuteIntent {
       {
         name: "user_manual",
         feature_name: async () => {
+          const appIntroductionRegex = new RegExp("giới");
           const musicRegex = new RegExp("nhạc");
           const readNewsRegex = new RegExp("báo");
           const volumeRegex = new RegExp("âm");
@@ -75,6 +76,9 @@ class ExecuteIntent {
               await this.userManual.readNews();
             } else if (volumeRegex.test(query)) {
               await this.userManual.readVolume();
+            }else if (appIntroductionRegex.test(query)) {
+              console.log(appIntroductionRegex);
+              await this.userManual.readIntroduction();
             } else {
               await this.userManual.start();
             }
@@ -231,7 +235,7 @@ class ExecuteIntent {
     //   }
     // });
     for (let f of features) {
-      if (f.name === label){
+      if (f.name === label) {
         return f.feature_name();
       }
     }

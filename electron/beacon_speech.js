@@ -10,6 +10,7 @@ const {
 class BeaconSpeech {
   constructor(name, location) {
     this.name = name;
+    this.callBotTime = 0;
     this.location = location;
     const { subscriptionKey, region, speechRecognitionLanguage, endpointId } =
       speechConfigDefault;
@@ -98,7 +99,7 @@ class BeaconSpeech {
       if (this.keywordRetryCount >= this.keywordRetryLimit) {
         this.keywordRecognitionActive = false;
         this.keywordRetryCount = 0;
-        this.stopBackgroundListen();
+        // this.stopBackgroundListen();
         await textToSpeech(
           OUT_LISTEN[Math.floor(Math.random() * OUT_LISTEN.length)]
         );
@@ -108,10 +109,18 @@ class BeaconSpeech {
   }
 
   async keywordRecognize() {
+
     await textToSpeech(OUT_LISTEN[0]);
     const data = await PythonShell.run("keyword_recognition.py", options);
     if (data[0] == "Hey Beacon") {
       await textToSpeech(ACTIVE[Math.floor(Math.random() * ACTIVE.length)]);
+      if(this.callBotTime === 0) {
+        setTimeout(() => {
+          textToSpeech("Nói làm sao sử dụng  để nghe hướng dẫn từ bi cần")
+        }, 2000);
+        ++this.callBotTime;
+      }
+
       this.keywordRecognitionActive = true;
       this.keywordRetryCount = 0;
       this.speechRecognizer.startContinuousRecognitionAsync();

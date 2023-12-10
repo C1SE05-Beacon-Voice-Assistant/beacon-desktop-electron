@@ -29,9 +29,6 @@ if (process.env.NODE_ENV === "development") {
 }
 const userManual = new UserManual(beacon)
 const initExecute = new ExecuteIntent(driver, userManual);
-
-textToSpeech("Nói đọc hướng dẫn để nghe hướng dẫn từ bi cần").then((res)=>res);
-
 contextBridge.exposeInMainWorld("electron", {
   backgroundListen: beacon.backgroundListen.bind(beacon),
   stopBackgroundListen: beacon.stopBackgroundListen.bind(beacon),

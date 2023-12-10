@@ -37,84 +37,14 @@ class UserManual {
 
   async start() {
     let options = `
-        Bạn muốn tôi hướng dẫn sử dụng cho chức năng nào? (Vui lòng đọc số thứ tự để chọn)
-        1. Giới thiệu về ứng dụng
-        2. Hướng dẫn chức năng đọc tin tức
-        3. Hướng dẫn chức năng phát nhạc
-        4. Hướng dẫn chức năng điều chỉnh âm lượng máy tính
-        5. Đọc toàn bộ hướng dẫn
-        0. Kết thúc đọc hướng dẫn
+        Dưới đây là hướng dẫn:
+        Nếu muốn nghe giới thiệu về ứng dụng thì nói làm sao để biết về ứng dụng
+        Nếu muốn nghe tin tức thì nói làm sao để nghe tin tức
+        Nếu muốn nghe nhạc thì nói làm sao để nghe nhạc
+        Nếu muốn điều chỉnh âm lượng thì nói làm sao để điều chỉnh âm lượng
+        Nếu muốn đọc toàn bộ hướng dẫn thì nói làm sao để nghe toàn bộ hướng dẫn
     `;
-
     await textToSpeech(options);
-    while (true) {
-      try {
-        let isExits = false
-        let input = await this.beacon.recognizeFromMicrophone();
-        const result = input?.toLowerCase();
-        switch (result) {
-          case "một.":
-            input = 1;
-            break;
-          case "hai.":
-            input = 2;
-            break;
-          case "ba.":
-            input = 3;
-            break;
-          case "bốn.":
-            input = 4;
-            break;
-          case "năm.":
-            input = 5;
-            break;
-        }
-        if (input) {
-          input = input?.split("")[0];
-          console.log("input", input);
-          const optionChosen = input.match(/^[0-9]$/);
-          if (!optionChosen) {
-            await textToSpeech("Lựa chọn không hợp lệ");
-            continue;
-          }
-
-          switch (+optionChosen[0]) {
-            case 1: {
-              isExits = true
-              await this.readIntroduction();
-              break;
-            }
-            case 2: {
-              isExits = true
-              await this.readNews()
-              break;
-            }
-            case 3: {
-              isExits = true
-              await this.readMusic();
-              break;
-            }
-            case 4: {
-              isExits = true
-              await this.readVolume();
-              break;
-            }
-            case 5: {
-              isExits = true
-              await this.readFull();
-              break;
-            }
-            case 0:
-              return;
-          }
-          if(isExits) {
-            break
-          }
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    }
   }
 }
 
