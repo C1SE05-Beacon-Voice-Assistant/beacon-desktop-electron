@@ -65,20 +65,43 @@ const handleOutput = (label, query) => {
 };
 
 class ExecuteIntent {
-  constructor(driver) {
+  constructor(driver, userManual) {
     this.driver = driver;
+    this.userManual = userManual;
+    this.isReadManual = true;
   }
   async executeIntent(output, history, list) {
     await detectSpeakerDeviceIsMuting();
     const label = output.label;
     const query = output.query;
     const listenControl = await listenToMusic(this.driver);
+
     const readNewsControl = new ReadNews(this.driver);
     const volumeControl = await beaconVolume();
-
-    console.log(output);
-
     const features = [
+      {
+        name: "user_manual",
+        feature_name: async () => {
+          const appIntroductionRegex = new RegExp("giới");
+          const musicRegex = new RegExp("nhạc");
+          const readNewsRegex = new RegExp("báo");
+          const volumeRegex = new RegExp("âm");
+          if (label) {
+            if (musicRegex.test(query)) {
+              await this.userManual.readMusic();
+            } else if (readNewsRegex.test(query)) {
+              await this.userManual.readNews();
+            } else if (volumeRegex.test(query)) {
+              await this.userManual.readVolume();
+            } else if (appIntroductionRegex.test(query)) {
+              console.log(appIntroductionRegex);
+              await this.userManual.readIntroduction();
+            } else {
+              await this.userManual.start();
+            }
+          }
+        },
+      },
       {
         name: "play_music",
         feature_name: async () => {
@@ -242,7 +265,9 @@ class ExecuteIntent {
     ];
 
     for (let f of features) {
-      if (f.name === label) return f.feature_name();
+      if (f.name === label) {
+        return f.feature_name();
+      }
     }
   }
 }

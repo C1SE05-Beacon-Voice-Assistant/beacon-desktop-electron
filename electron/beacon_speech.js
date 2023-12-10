@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import * as sdk from "microsoft-cognitiveservices-speech-sdk";
-const { PythonShell } = require("python-shell");
+import { PythonShell } from "python-shell";
 const { options } = require("./helpers/optionPyshell");
 const { speechConfigDefault } = require("./helpers/config");
 const {
@@ -13,6 +13,7 @@ const {
 class BeaconSpeech {
   constructor(name, location) {
     this.name = name;
+    this.callBotTime = 0;
     this.location = location;
     const { subscriptionKey, region, speechRecognitionLanguage, endpointId } =
       speechConfigDefault;
@@ -29,7 +30,7 @@ class BeaconSpeech {
     );
     this.recognizer = null;
     this.keywordRetryCount = 0; // Track the number of consecutive no matches
-    this.keywordRetryLimit = 2; // Define the limit for consecutive no matches
+    this.keywordRetryLimit = 4; // Define the limit for consecutive no matches
     this.keywordRecognitionActive = false; // Flag to track keyword recognition state
   }
 
@@ -71,7 +72,10 @@ class BeaconSpeech {
 
     this.speechRecognizer.recognizing = async (s, e) => {
       const result = e.result;
-      if (result.reason === sdk.ResultReason.RecognizingSpeech) {
+      if (
+        result.reason === sdk.ResultReason.RecognizingSpeech &&
+        result.text.toLowerCase() != "phẩy"
+      ) {
         showText(result.text);
       }
     };
@@ -101,7 +105,7 @@ class BeaconSpeech {
       if (this.keywordRetryCount >= this.keywordRetryLimit) {
         this.keywordRecognitionActive = false;
         this.keywordRetryCount = 0;
-        this.stopBackgroundListen();
+        // this.stopBackgroundListen();
         await textToSpeech(
           OUT_LISTEN[Math.floor(Math.random() * OUT_LISTEN.length)]
         );
@@ -115,6 +119,13 @@ class BeaconSpeech {
     const data = await PythonShell.run("keyword_recognition.py", options);
     if (data[0] == "Hey Beacon") {
       await textToSpeech(ACTIVE[Math.floor(Math.random() * ACTIVE.length)]);
+      if (this.callBotTime === 0) {
+        setTimeout(() => {
+          textToSpeech("Nói làm sao sử dụng  để nghe hướng dẫn từ bi cần");
+        }, 2000);
+        ++this.callBotTime;
+      }
+
       this.keywordRecognitionActive = true;
       this.keywordRetryCount = 0;
       this.speechRecognizer.startContinuousRecognitionAsync();
@@ -137,9 +148,13 @@ const createSpeechConfig = () => {
   return config;
 };
 
-const textToSpeech = async (text) => {
-  await detectSpeakerDeviceIsMuting();
-  const synthesizer = new sdk.SpeechSynthesizer(createSpeechConfig());
+const textToSpeech = async (text, beacon) => {
+  if (!text) return;
+  if (beacon) {
+    if (!beacon.keywordRecognitionActive) return;
+    beacon.stopBackgroundListen();
+  }
+  var synthesizer = new sdk.SpeechSynthesizer(createSpeechConfig());
 
   try {
     await new Promise((resolve, reject) => {
@@ -147,22 +162,33 @@ const textToSpeech = async (text) => {
         text,
         (result) => {
           if (result.reason === sdk.ResultReason.SynthesizingAudioCompleted) {
-            resolve();
+            // calculate the total time in seconds that audio was synthesized
+            // convert the time from ticks to seconds
+            const audioDuration = result.audioDuration / 10000000;
+            //  console.log(`Audio was synthesized for ${audioDuration} seconds`);
+
+            // resolve the promise when audioDuration seconds have passed
+            setTimeout(() => {
+              resolve();
+            }, parseInt(audioDuration * 950));
           } else {
-            console.error(
-              `Speech synthesis canceled, ${result.errorDetails}\nDid you set the speech resource key and region values?`
-            );
             reject(new Error(result.errorDetails));
           }
           synthesizer.close();
+          synthesizer = null;
         },
         (err) => {
           console.trace("err - " + err);
           synthesizer.close();
+          synthesizer = null;
           reject(err);
         }
       );
     });
+
+    if (beacon) {
+      beacon.speechRecognizer.startContinuousRecognitionAsync();
+    }
   } catch (error) {
     console.error("Error:", error.message);
   }
