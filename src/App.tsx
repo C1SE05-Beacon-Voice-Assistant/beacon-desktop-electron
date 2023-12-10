@@ -19,23 +19,29 @@ export default function App() {
   });
 
   const [history, setHistory] = useState<object[]>([]);
+  const [list, setList] = useState<any[]>([]);
 
   useEffect(() => {
     window.electron.backgroundListen(
       (result: string) => {
-        handleInput(result, history).then((res: any) => {
-          if (res?.label) {
+        handleInput(result, history, list).then((res: any) => {
+          if (res?.type === "gpt_ai") {
             setHistory((prev) => [...prev, ...res.query]);
+          } else if (res?.result?.newsList) {
+            const newsList = res.result.newsList;
+            setList(newsList); //if the label is read_news related, set new articles list
+            console.log("data: ", newsList);
           }
         });
       },
       (text: string) => setContent(text)
     );
+    console.log("state: ", list);
 
     return () => {
       window.electron.stopBackgroundListen();
     };
-  }, []);
+  }, [list, history]);
 
   return (
     <ThemeProvider theme={theme}>

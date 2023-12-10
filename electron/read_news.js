@@ -59,7 +59,7 @@ class ReadNews {
 
   async search(by) {
     let url = "";
-    if (by === SearchNewsBy.HOTTEST) url = "https://vnexpress.net/tin-nong";
+    if (by === SearchNewsBy.BREAKING) url = "https://vnexpress.net/tin-nong";
     else if (by === SearchNewsBy.LATEST)
       url = "https://vnexpress.net/tin-tuc-24h";
     else if (by === SearchNewsBy.MOST_READ)
@@ -84,9 +84,10 @@ class ReadNews {
       Tìm thấy ${result.length} kết quả, vui lòng chọn 1 tin tức mà bạn muốn đọc.
     `);
 
-    for (let i = 0; i < result.length; i++) {
-      await textToSpeech(`${i + 1}. ${result[i].title}`);
-    }
+    // const newsListSpeech = `Tìm thấy ${result.length} kết quả, vui lòng chọn 1 tin tức mà bạn muốn đọc.`;
+    // for (let i = 0; i < result.length; i++) {
+    //   await textToSpeech(`${i + 1}. ${result[i].title}`);
+    // }
 
     return result;
   }

@@ -5,6 +5,7 @@ const ReadNews = require("./read_news.js");
 const gptGenerate = require("./gpt_generate.js");
 const { TextSpeak } = require("./helpers/enum.js");
 const { textToSpeech } = require("./beacon_speech.js");
+const { SearchNewsBy } = require("./helpers/enum.js");
 
 /**
  * @description handle output of intent
@@ -36,11 +37,18 @@ const handleOutput = (label, query) => {
 
   // if label match news, get keyword from query
   // example query: "đọc tin tức về covid" -> "covid"
+  // example query: "đọc tin tức số 2" -> "2"
+  // example query: "tìm tin tức mới nhất" -> query: any
   const matchNews = /(tin tức|bản tin|thời sự)/.test(query);
   if (matchNews) {
+    if (label == "read_news") {
+      query = query.split(/[0-2]/);
+    } else if (label == "search_news") {
+      query = queryreplace(/(tin tức|bản tin|thời sự)/, "").trim();
+    }
     return {
       label: label,
-      query: query.replace(/(tin tức|bản tin|thời sự)/, "").trim(),
+      query: query,
     };
   }
 };
@@ -49,7 +57,7 @@ class ExecuteIntent {
   constructor(driver) {
     this.driver = driver;
   }
-  async executeIntent(output, history) {
+  async executeIntent(output, history, list) {
     const label = output.label;
     const query = output.query;
     const listenControl = await listenToMusic(this.driver);
@@ -139,34 +147,50 @@ class ExecuteIntent {
        *
        */
 
-      // {
-      //   name: "search_news",
-      //   feature_name: async () => {
-      //     const searchKey = handleOutput(label, query);
-      //     await textToSpeech(TextSpeak.SEARCHING);
-      //     const data = await readNewsControl.searchByKeyword(searchKey);
-      //     if (data) {
-      //       await textToSpeech(data);
-      //     }
-      //     return data;
-      //   },
-      // },
-      // {
-      //   name: "latest_news",
-      //   feature_name: async () => object.search(SearchNewsBy.LATEST),
-      // },
-      // {
-      //   name: "most_read_news",
-      //   feature_name: async () => object.search(SearchNewsBy.MOST_READ),
-      // },
-      // {
-      //   name: "hottest_news",
-      //   feature_name: async () => object.search(SearchNewsBy.MOST_READ),
-      // },
-      // {
-      //   name: "read_news",
-      //   feature_name: async () => object.selectOneToRead(newsList, index - 1), //index start with 0
-      // },
+      {
+        name: "search_news",
+        feature_name: async () => {
+          const searchKey = handleOutput(label, query);
+          await textToSpeech(TextSpeak.SEARCHING);
+          const data = await readNewsControl.searchByKeyword(searchKey);
+          // if (data) {
+          //   await textToSpeech(data);
+          // }
+          return { newsList: data };
+        },
+      },
+      {
+        name: "latest_news",
+        feature_name: async () => {
+          // const newsList = await readNewsControl.search(SearchNewsBy.LATEST);
+          return {
+            newsList: await readNewsControl.search(SearchNewsBy.LATEST),
+          };
+        },
+      },
+      {
+        name: "most_read_news",
+        feature_name: async () => {
+          return {
+            newsList: await readNewsControl.search(SearchNewsBy.MOST_READ),
+          };
+        },
+      },
+      {
+        name: "breaking_news",
+        feature_name: async () => {
+          return {
+            newsList: await readNewsControl.search(SearchNewsBy.HOTTEST),
+          };
+        },
+      },
+      {
+        name: "read_news",
+        feature_name: async () => {
+          const index = handleOutput(label, query);
+          return readNewsControl.selectOneToRead(list, index - 1);
+        }, //index start with 0
+      },
 
       /**
        * User Manual intent

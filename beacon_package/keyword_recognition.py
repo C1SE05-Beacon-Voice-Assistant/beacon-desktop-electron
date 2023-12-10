@@ -29,5 +29,4 @@ def keyword_recognition():
     return result_keyword_verify.text
 
 if __name__ == "__main__":
-    pass
-    # print(keyword_recognition())
+    print(keyword_recognition())
