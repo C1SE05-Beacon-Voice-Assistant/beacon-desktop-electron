@@ -106,6 +106,8 @@ beacon-package/*/__pycache__
 package-lock.json
 
 dist-electron/
+dist-electron../
+dist-electron..
 
 .env.production
 
