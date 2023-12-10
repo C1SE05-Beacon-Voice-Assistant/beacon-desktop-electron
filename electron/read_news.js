@@ -75,21 +75,22 @@ class ReadNews {
     );
     const result = await this.getNewsInList(articlesList);
 
-    if (result.length === 0) {
+    if (!result || result.length === 0) {
       await textToSpeech("Rất tiếc tôi không tìm thấy tin tức nào");
       return [];
     }
 
-    await textToSpeech(`
-      Tìm thấy ${result.length} kết quả, vui lòng chọn 1 tin tức mà bạn muốn đọc.
-    `);
+    // await textToSpeech(`
+    //   Tìm thấy ${result.length} kết quả, vui lòng chọn 1 tin tức mà bạn muốn đọc.
+    // `);
 
     const newsListSpeech = `Tìm thấy ${result.length} kết quả, vui lòng chọn 1 tin tức mà bạn muốn đọc.`;
     for (let i = 0; i < result.length; i++) {
-      newsListSpeech += `${i + 1}. ${result[i].title}. `;
+      const option = `${i + 1}. ${result[i].title}. `;
+      newsListSpeech += option;
     }
 
-    // await textToSpeech(newsListSpeech);
+    // await textToSpeech(newsListSpeech); //uncomment this in prod
 
     return result;
   }
@@ -104,7 +105,7 @@ class ReadNews {
       // return this.getNewsInList(articlesList);
       const newsList = await this.getNewsInList(articlesList);
 
-      if (newsList.length === 0) {
+      if (!newsList || newsList.length === 0) {
         await textToSpeech(
           `Không tìm thấy kết quả tìm kiếm cho từ khóa ${keyword}`
         );
@@ -114,16 +115,17 @@ class ReadNews {
         );
       }
 
-      await textToSpeech(`
-      Tìm thấy ${newsList.length} kết quả, vui lòng chọn 1 tin tức mà bạn muốn đọc.
-    `);
+      //   await textToSpeech(`
+      //   Tìm thấy ${newsList.length} kết quả, vui lòng chọn 1 tin tức mà bạn muốn đọc.
+      // `);
 
       const newsListSpeech = `Tìm thấy ${result.length} kết quả, vui lòng chọn 1 tin tức mà bạn muốn đọc.`;
       for (let i = 0; i < result.length; i++) {
-        newsListSpeech += `${i + 1}. ${result[i].title}. `;
+        const option = `${i + 1}. ${result[i].title}. `;
+        newsListSpeech += option;
       }
 
-      // await textToSpeech(newsListSpeech);
+      // await textToSpeech(newsListSpeech); //uncoment this in prod
 
       return newsList;
     } catch (error) {

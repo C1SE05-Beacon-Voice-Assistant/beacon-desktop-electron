@@ -162,7 +162,7 @@ class ExecuteIntent {
       {
         name: "search_news",
         feature_name: async () => {
-          const searchKey = handleOutput(label, query);
+          const searchKey = handleOutput(label, query).query;
           await textToSpeech(TextSpeak.SEARCHING);
           const data = await readNewsControl.searchByKeyword(searchKey);
           // if (data) {
@@ -174,7 +174,6 @@ class ExecuteIntent {
       {
         name: "latest_news",
         feature_name: async () => {
-          // const newsList = await readNewsControl.search(SearchNewsBy.LATEST);
           return {
             newsList: await readNewsControl.search(SearchNewsBy.LATEST),
           };
