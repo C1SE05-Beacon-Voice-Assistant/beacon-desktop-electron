@@ -2,7 +2,7 @@ import re
 import sys
 import json
 from g4f import ChatCompletion
-from g4f.Provider import Bing, You
+from g4f.Provider import You
 import g4f.models
 
 g4f.debug.logging = False  # Enable logging
@@ -17,9 +17,8 @@ def generate_gpt_response(input_message):
 
     res = ChatCompletion.create(
         model=g4f.models.default,
-        # model="gpt-3.5-turbo",
         messages=input_message,
-        # stream=True,
+        stream=True,
         provider=You
     )
 

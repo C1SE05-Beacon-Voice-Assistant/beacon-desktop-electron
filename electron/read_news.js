@@ -59,7 +59,7 @@ class ReadNews {
 
   async search(by) {
     let url = "";
-    if (by === SearchNewsBy.HOTTEST) url = "https://vnexpress.net/tin-nong";
+    if (by === SearchNewsBy.BREAKING) url = "https://vnexpress.net/tin-nong";
     else if (by === SearchNewsBy.LATEST)
       url = "https://vnexpress.net/tin-tuc-24h";
     else if (by === SearchNewsBy.MOST_READ)
@@ -75,18 +75,22 @@ class ReadNews {
     );
     const result = await this.getNewsInList(articlesList);
 
-    if (result.length === 0) {
+    if (!result || result.length === 0) {
       await textToSpeech("Rất tiếc tôi không tìm thấy tin tức nào");
       return [];
     }
 
-    await textToSpeech(`
-      Tìm thấy ${result.length} kết quả, vui lòng chọn 1 tin tức mà bạn muốn đọc.
-    `);
+    // await textToSpeech(`
+    //   Tìm thấy ${result.length} kết quả, vui lòng chọn 1 tin tức mà bạn muốn đọc.
+    // `);
 
+    const newsListSpeech = `Tìm thấy ${result.length} kết quả, vui lòng chọn 1 tin tức mà bạn muốn đọc.`;
     for (let i = 0; i < result.length; i++) {
-      await textToSpeech(`${i + 1}. ${result[i].title}`);
+      const option = `${i + 1}. ${result[i].title}. `;
+      newsListSpeech += option;
     }
+
+    // await textToSpeech(newsListSpeech); //uncomment this in prod
 
     return result;
   }
@@ -101,7 +105,7 @@ class ReadNews {
       // return this.getNewsInList(articlesList);
       const newsList = await this.getNewsInList(articlesList);
 
-      if (newsList.length === 0) {
+      if (!newsList || newsList.length === 0) {
         await textToSpeech(
           `Không tìm thấy kết quả tìm kiếm cho từ khóa ${keyword}`
         );
@@ -111,13 +115,17 @@ class ReadNews {
         );
       }
 
-      await textToSpeech(`
-      Tìm thấy ${newsList.length} kết quả, vui lòng chọn 1 tin tức mà bạn muốn đọc.
-    `);
+      //   await textToSpeech(`
+      //   Tìm thấy ${newsList.length} kết quả, vui lòng chọn 1 tin tức mà bạn muốn đọc.
+      // `);
 
-      for (let i = 0; i < newsList.length; i++) {
-        await textToSpeech(`${i + 1}. ${newsList[i].title}`);
+      const newsListSpeech = `Tìm thấy ${result.length} kết quả, vui lòng chọn 1 tin tức mà bạn muốn đọc.`;
+      for (let i = 0; i < result.length; i++) {
+        const option = `${i + 1}. ${result[i].title}. `;
+        newsListSpeech += option;
       }
+
+      // await textToSpeech(newsListSpeech); //uncoment this in prod
 
       return newsList;
     } catch (error) {
@@ -127,7 +135,7 @@ class ReadNews {
   }
 
   async selectOneToRead(newsList, num) {
-    console.log(newsList);
+    console.log(newsList, num);
 
     if (newsList.length === 0) {
       await textToSpeech("Rất tiếc, không có tin tức nào để đọc");
@@ -167,7 +175,7 @@ class ReadNews {
           result = await this.search(SearchNewsBy.LATEST);
           break;
         case "2":
-          result = await this.search(SearchNewsBy.HOTTEST);
+          result = await this.search(SearchNewsBy.BREAKING);
           break;
         case "3":
           result = await this.search(SearchNewsBy.MOST_READ);

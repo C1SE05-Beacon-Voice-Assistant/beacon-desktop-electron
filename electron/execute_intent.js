@@ -5,9 +5,11 @@ const ReadNews = require("./read_news.js");
 const gptGenerate = require("./gpt_generate.js");
 const { TextSpeak } = require("./helpers/enum.js");
 const { textToSpeech } = require("./beacon_speech.js");
+const { SearchNewsBy } = require("./helpers/enum.js");
 const {
   detectSpeakerDeviceIsMuting,
 } = require("./detect_speaker_device_is_muting.js");
+
 /**
  * @description handle output of intent
  * @param {string} label
@@ -15,6 +17,9 @@ const {
  * return *
  */
 const handleOutput = (label, query) => {
+  // change query to lowercase to standardlize the query
+  // Bài báo != bài báo => to avoid this error scenario
+  query = query.toLowerCase();
   // if label match volume, get number from query
   const matchVolume = label.match(/volume/gi) && query.match(/\d+/g);
   if (matchVolume) {
@@ -38,11 +43,23 @@ const handleOutput = (label, query) => {
 
   // if label match news, get keyword from query
   // example query: "đọc tin tức về covid" -> "covid"
-  const matchNews = /(tin tức|bản tin|thời sự)/.test(query);
+  // example query: "đọc tin tức số 2" -> "2"
+  // example query: "tìm tin tức mới nhất" -> query: none
+  const matchNews = /(tin tức|bản tin|thời sự|bài báo)/.test(query);
   if (matchNews) {
+    if (label == "read_news") {
+      query = query.match(/[1-3]/)[0];
+      console.log("Chọn bài báo số: ", query);
+      if (query.length == 0)
+        throw Error(
+          "Lựa chọn không hợp lệ, lựa chọn phải nằm trong khoảng (1-3)"
+        );
+    } else if (label == "search_news") {
+      query = query.replace(/(tin tức|bản tin|thời sự)/, "").trim();
+    }
     return {
       label: label,
-      query: query.replace(/(tin tức|bản tin|thời sự)/, "").trim(),
+      query: query,
     };
   }
 };
@@ -53,11 +70,10 @@ class ExecuteIntent {
     this.userManual = userManual;
     this.isReadManual = true;
   }
-
-  async executeIntent(output, history) {
-    detectSpeakerDeviceIsMuting();
-
-    let { label, query } = output;
+  async executeIntent(output, history, list) {
+    await detectSpeakerDeviceIsMuting();
+    const label = output.label;
+    const query = output.query;
     const listenControl = await listenToMusic(this.driver);
 
     const readNewsControl = new ReadNews(this.driver);
@@ -166,34 +182,51 @@ class ExecuteIntent {
        *
        */
 
-      // {
-      //   name: "search_news",
-      //   feature_name: async () => {
-      //     const searchKey = handleOutput(label, query);
-      //     await textToSpeech(TextSpeak.SEARCHING);
-      //     const data = await readNewsControl.searchByKeyword(searchKey);
-      //     if (data) {
-      //       await textToSpeech(data);
-      //     }
-      //     return data;
-      //   },
-      // },
-      // {
-      //   name: "latest_news",
-      //   feature_name: async () => object.search(SearchNewsBy.LATEST),
-      // },
-      // {
-      //   name: "most_read_news",
-      //   feature_name: async () => object.search(SearchNewsBy.MOST_READ),
-      // },
-      // {
-      //   name: "hottest_news",
-      //   feature_name: async () => object.search(SearchNewsBy.MOST_READ),
-      // },
-      // {
-      //   name: "read_news",
-      //   feature_name: async () => object.selectOneToRead(newsList, index - 1), //index start with 0
-      // },
+      {
+        name: "search_news",
+        feature_name: async () => {
+          const searchKey = handleOutput(label, query).query;
+          await textToSpeech(TextSpeak.SEARCHING);
+          const data = await readNewsControl.searchByKeyword(searchKey);
+          // if (data) {
+          //   await textToSpeech(data);
+          // }
+          return { newsList: data };
+        },
+      },
+      {
+        name: "latest_news",
+        feature_name: async () => {
+          return {
+            newsList: await readNewsControl.search(SearchNewsBy.LATEST),
+          };
+        },
+      },
+      {
+        name: "most_read_news",
+        feature_name: async () => {
+          return {
+            newsList: await readNewsControl.search(SearchNewsBy.MOST_READ),
+          };
+        },
+      },
+      {
+        name: "breaking_news",
+        feature_name: async () => {
+          const newsList = await readNewsControl.search(SearchNewsBy.BREAKING);
+          return {
+            label: label,
+            newsList,
+          };
+        },
+      },
+      {
+        name: "read_news",
+        feature_name: async () => {
+          const index = handleOutput(label, query)?.query;
+          return readNewsControl.selectOneToRead(list, index - 1);
+        }, //index start with 0
+      },
 
       /**
        * User Manual intent
@@ -230,11 +263,7 @@ class ExecuteIntent {
         },
       },
     ];
-    // features.forEach(async (feature) => {
-    //   if (feature.name === output_type) {
-    //     await feature.feature_name();
-    //   }
-    // });
+
     for (let f of features) {
       if (f.name === label) {
         return f.feature_name();

@@ -15,16 +15,28 @@ const {
   getAllConversations,
   clearConversations,
 } = require(path.join(__dirname, "conversation.js"));
+const chrome = require("selenium-webdriver/chrome");
 
 const beacon = new BeaconSpeech("Beacon", "Hanoi");
 let driver;
+let chromeOptions = new chrome.Options();
+chromeOptions.setUserPreferences({
+  "profile.managed_default_content_settings.images": 2, // disbale img
+  // "profile.default_content_setting_values.notifications": 2, // disable notify popup
+  // 'profile.managed_default_content_settings.popups' : 2, // disable popup
+});
+
 if (process.env.NODE_ENV === "development") {
-  driver = new Builder().forBrowser("chrome").build();
+  driver = new Builder()
+    .forBrowser("chrome")
+    .setChromeOptions(chromeOptions)
+    .build();
 } else {
   const chromeService = new ServiceBuilder(chromedriverPath);
   driver = new Builder()
     .forBrowser("chrome")
     .setChromeService(chromeService)
+    .setChromeOptions(chromeOptions)
     .build();
 }
 const userManual = new UserManual(beacon);

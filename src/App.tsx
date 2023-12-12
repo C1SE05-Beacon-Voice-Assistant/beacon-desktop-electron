@@ -18,16 +18,14 @@ export default function App() {
     },
   });
 
+  const [text, setText] = useState<string>("");
   const [history, setHistory] = useState<object[]>([]);
+  const [oldList, setOldList] = useState<any>({}); // only for news
 
   useEffect(() => {
     window.electron.backgroundListen(
       (result: string) => {
-        handleInput(result, history).then((res: any) => {
-          if (res?.label) {
-            setHistory((prev) => [...prev, ...res.query]);
-          }
-        });
+        setText(result);
       },
       (text: string) => setContent(text)
     );
@@ -36,6 +34,25 @@ export default function App() {
       window.electron.stopBackgroundListen();
     };
   }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+    handleInput(text, history, oldList).then((res: any) => {
+      if (!isMounted) return;
+      if (res?.type === "gpt_ai") {
+        setHistory((prev) => [...prev, ...res.query]);
+      } else if (res?.result?.newsList) {
+        setOldList({
+          label: res.result.label,
+          newsList: res.result.newsList,
+        }); // Using functional update
+      }
+    });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [text]);
 
   return (
     <ThemeProvider theme={theme}>

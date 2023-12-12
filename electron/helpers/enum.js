@@ -1,8 +1,8 @@
 const SearchNewsBy = {
   KEYWORD: "keyword",
-  HOTTEST: "hottest",
   MOST_READ: "mostRead",
   LATEST: "latest",
+  BREAKING: "breaking",
 };
 
 const NewsTypes = {

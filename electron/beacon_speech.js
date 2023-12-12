@@ -4,6 +4,9 @@ import { PythonShell } from "python-shell";
 const { options } = require("./helpers/optionPyshell");
 const { speechConfigDefault } = require("./helpers/config");
 const {
+  detectSpeakerDeviceIsMuting,
+} = require("./detect_speaker_device_is_muting");
+const {
   TextSpeak: { OUT_LISTEN, ACTIVE },
 } = require("./helpers/enum");
 
