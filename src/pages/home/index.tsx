@@ -1,35 +1,17 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import bot from "~/assets/bot.png";
 import microphone from "~/assets/microphone.png";
 import vector from "~/assets/vector.svg";
-import { handleInput } from "~/lib/handleSpeech";
+
 import styles from "./HomePage.module.css";
+import { ContentContext } from "~/App";
 
 export default function HomePage() {
-  const [isStart, setIsStart] = useState<boolean | null>(false);
-  const [resultNews, setResultNews] = useState<any[]>([]);
-  const [currentCommand, setCurrentCommand] = useState<any>();
-
-  // useEffect(() => {
-  //   window.electron.backgroundListen((result: string) => {
-  //     handleInput(result, currentCommand, resultNews).then((res) => {
-  //       console.log(`New result: ${res.result}`);
-  //       console.log(`Old result: ${resultNews}`);
-  //       if (res.command && res.result) {
-  //         setCurrentCommand(res.command);
-  //         setResultNews(res.result);
-  //       }
-  //     });
-  //   });
-
-  //   return () => {
-  //     window.electron.stopBackgroundListen();
-  //   };
-  // }, [resultNews, currentCommand]);
-
+  const content = useContext(ContentContext);
   return (
     <section className={styles.home__container}>
-      <div className={styles.bot__vector}>
+
+     <div className={styles.bot__vector}>
         <div className={styles.bot}>
           <img src={bot} alt={bot} />
         </div>
@@ -39,17 +21,10 @@ export default function HomePage() {
       </div>
       <div className={styles.title}>
         <div>
-          {isStart ? (
-            <p>Xin chào, Tiên</p>
-          ) : (
-            <p>
-              Xin chào! Tôi có thể giúp gì <br></br> cho bạn?
-            </p>
-          )}
+        <div style={{ textAlign: 'center', width: '80%', margin: '0 auto'}}>{content}</div>
         </div>
       </div>
-      {isStart && (
-        <div className={styles.container}>
+      <div className={styles.container}>
           <div className={styles.microphone}>
             <img src={microphone} alt={microphone} />
           </div>
@@ -57,7 +32,6 @@ export default function HomePage() {
           <div className={`${styles.circle} ${styles["circle-b"]}`}></div>
           <div className={`${styles.circle} ${styles["circle-c"]}`}></div>
         </div>
-      )}
     </section>
   );
 }

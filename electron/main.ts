@@ -1,11 +1,10 @@
-"use strict";
-
+/* eslint-disable @typescript-eslint/no-var-requires */
 import type { BrowserWindowConstructorOptions as WindowOptions } from "electron";
 import { app, BrowserWindow, dialog, Tray, Menu } from "electron";
 import log from "electron-log";
 import path, { join } from "path";
-import MenuBuilder from "../src/menu";
 import { autoUpdater } from "electron-updater";
+import MenuBuilder from "../src/menu";
 
 process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
 
@@ -14,16 +13,15 @@ process.env.VITE_PUBLIC = app.isPackaged
   ? process.env.DIST
   : path.join(process.env.DIST, "../public");
 
+if (!app.requestSingleInstanceLock()) {
+  app.quit();
+  process.exit(0);
+}
+
 // set path for logs root project in dev mode
 if (process.env.NODE_ENV === "development") {
   log.transports.file.resolvePath = () =>
-    join(__dirname + "/../../logs", "main.log");
-
-  Object.defineProperty(app, "isPackaged", {
-    get() {
-      return true;
-    },
-  });
+    join(__dirname + "../logs", "main.log");
 }
 
 let mainWindow: BrowserWindow | null = null;
@@ -34,7 +32,9 @@ const createWindow = (options: WindowOptions = {}) => {
     mainWindow.focus();
     return;
   }
+
   const config: WindowOptions = {
+    // show: false,
     width: parseInt(process.env.ELECTRON_WIDTH) || 833,
     height: parseInt(process.env.ELECTRON_HEIGHT) || 562,
     icon: path.join(process.env.VITE_PUBLIC, "icon.png"),
@@ -42,7 +42,9 @@ const createWindow = (options: WindowOptions = {}) => {
       nodeIntegration: true,
       contextIsolation: true,
       preload: path.join(__dirname, "./preload.js"),
+      // nodeIntegrationInWorker: true,
     },
+    // opacity: 0,
     resizable: false,
     ...options,
   };
@@ -57,8 +59,9 @@ const createWindow = (options: WindowOptions = {}) => {
   } else {
     mainWindow.loadFile(path.join(__dirname, "../dist/index.html"));
   }
-
+  // if (process.env.NODE_ENV === "development") {
   mainWindow.webContents.openDevTools();
+  // }
 
   mainWindow.on("closed", () => {
     // hide window instead of closing it
@@ -66,9 +69,12 @@ const createWindow = (options: WindowOptions = {}) => {
   });
 };
 
-function handleQuit() {
+async function handleQuit() {
   if (process.platform !== "darwin") {
-    app.quit();
+    quitDriver().then(() => {
+      log.info("75: Driver quit");
+      app.quit();
+    });
   }
 }
 
@@ -78,6 +84,7 @@ const createTray = () => {
     // let us then add handleQuit to click property
     { label: "Quit", click: handleQuit },
   ]);
+
   tray.setToolTip("Beacon Voice Assistant");
   tray.setContextMenu(contextMenu);
   tray.addListener("click", () => createWindow());
@@ -87,20 +94,33 @@ app.whenReady().then(() => {
   createTray();
 });
 
-app.on("ready", () => {
+app.on("ready", async () => {
   createWindow();
 
   autoUpdater.setFeedURL({
     provider: "github",
     owner: "C1SE05-Beacon-Voice-Assistant",
     repo: "beacon-desktop-electron",
-    private: true,
+    private: false,
   });
 
   autoUpdater.checkForUpdates();
 });
 
+async function quitDriver() {
+  if (mainWindow) {
+    await mainWindow.webContents.send("quit-driver");
+  }
+}
+
+app.on("before-quit", async () => {
+  await quitDriver();
+});
+
 app.on("window-all-closed", () => {
+  quitDriver().then(() => {
+    log.info("122: Driver quit");
+  });
   // if (process.platform !== "darwin") {
   //   app.quit();
   //   process.exit(0);
@@ -125,18 +145,20 @@ autoUpdater.allowDowngrade = true;
 autoUpdater.allowPrerelease = true;
 
 autoUpdater.on("update-available", (updateInfo) => {
-  // show update available notification for user
-  dialog
-    .showMessageBox({
-      type: "info",
-      title: "Update available",
-      message: `New version ${updateInfo.version} is available and will be downloaded in the background.`,
-      buttons: ["OK", "Cancel"],
-    })
-    .then((result: any) => {
-      console.log(result);
-      if (result.response === 0) {
-        autoUpdater.downloadUpdate();
-      }
-    });
+  // if new version > current version
+  if (updateInfo.version > app.getVersion()) {
+    dialog
+      .showMessageBox({
+        type: "info",
+        title: "Tìm thấy phiên bản mới",
+        message: `Phiên bản mới ${updateInfo.version} đã sẵn sàng để tải xuống. Bạn có muốn tải xuống ngay bây giờ?`,
+        buttons: ["OK", "Cancel"],
+        textWidth: 300,
+      })
+      .then((result) => {
+        if (result.response === 0) {
+          autoUpdater.downloadUpdate();
+        }
+      });
+  }
 });

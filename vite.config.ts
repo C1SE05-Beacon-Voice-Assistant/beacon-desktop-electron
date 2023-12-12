@@ -37,11 +37,7 @@ const config = defineConfig({
           ],
         }),
       ],
-      output: {
-        manualChunks: undefined,
-      },
     },
-    chunkSizeWarningLimit: 1000,
   },
   resolve: {
     alias: {

@@ -106,5 +106,28 @@ beacon-package/*/__pycache__
 package-lock.json
 
 dist-electron/
+dist-electron../
+dist-electron..
 
 .env.production
+
+*.zip
+
+*.table
+
+beacon_package/Model/
+
+*.gz
+
+beacon_package/phobert-base/
+
+beacon_package/intent_recognition/phobert-base/
+
+beacon_package/intent_recognition/model/
+beacon_package/**/*.bk.py
+
+*.ipynb
+
+*.csv
+
+beacon_package/intent_recognition/cache/

@@ -29,7 +29,7 @@ const copyFiles = (src, dest) => {
   });
 };
 
-const src = path.join(__dirname, "public/assets");
+const src = path.join(__dirname, "assets");
 
 const dest = path.join(__dirname, "dist-electron/assets");
 
