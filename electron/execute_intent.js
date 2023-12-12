@@ -67,6 +67,66 @@ const handleOutput = (label, query) => {
   }
 };
 
+const handleVolume = (query) => {
+  // if label match volume, get number from query
+  const matchVolume = query.match(/\d+/g);
+  if (matchVolume) {
+    return parseInt(matchVolume[0]);
+  }
+  return -1;
+};
+
+const handleMusic = (query) => {
+  const matchMusic = query.match(/(?<=bài hát ).*/gi);
+  if (matchMusic) {
+    return matchMusic[0];
+  }
+  return "";
+};
+
+/**
+ * @description get keyword from the command.
+ * @example "Tìm kiếm cho tôi những bài báo về đại dịch covid" => "đại dịch covid"
+ * @param {string} query
+ * return {string}
+ */
+const handleSearchKey = (query) => {
+  const pattern = /tin tức về|bài báo về|thời sự về|điểm báo về/;
+
+  const match = query.match(pattern);
+  let keyword = "";
+
+  if (match) {
+    const position = match.index;
+    keyword = query.substring(position + match[0].length);
+
+    console.log(keyword);
+  }
+  return keyword;
+};
+
+/**
+ * @description get the first number in range[1-3] in a "Choose a news to read" command.
+ * @example: "Đọc cho tôi tin tức số 2" => 2
+ * @param {string} query
+ * @return {number} index
+ */
+const handleReadNews = (query) => {
+  // change query to lowercase to standardlize the query
+  // Bài báo != bài báo => to avoid this error scenario
+  query = query.toLowerCase();
+
+  query = query.replace(/một/, "1");
+  query = query.replace(/hai/, "2");
+  query = query.replace(/ba/, "3");
+
+  let index = query.match(/[1-3]/)[0];
+  console.log("Chọn bài báo số: ", index);
+  if (query.length == 0) index = -1;
+
+  return index;
+};
+
 class ExecuteIntent {
   constructor(driver, userManual) {
     this.driver = driver;
@@ -108,9 +168,10 @@ class ExecuteIntent {
       {
         name: "play_music",
         feature_name: async () => {
-          const music = handleOutput(label, query);
+          // const music = handleOutput(label, query);
+          const music = handleMusic(query);
           if (music) {
-            await listenControl.searchSong(music.query);
+            await listenControl.searchSong(music);
             await listenControl.playOnYoutube();
           }
         },
@@ -130,15 +191,17 @@ class ExecuteIntent {
       {
         name: "increase_volume",
         feature_name: async () => {
-          const volume = handleOutput(label, query);
-          if (volume) await volumeControl.increaseVolume(volume.query);
+          // const volume = handleOutput(label, query);
+          const volume = handleVolume(query);
+          if (volume) await volumeControl.increaseVolume(volume);
         },
       },
       {
         name: "decrease_volume",
         feature_name: async () => {
-          const volume = handleOutput(label, query);
-          if (volume) await volumeControl.decreaseVolume(volume.query);
+          // const volume = handleOutput(label, query);
+          const volume = handleVolume(query);
+          if (volume) await volumeControl.decreaseVolume(volume);
         },
       },
       {
@@ -188,12 +251,10 @@ class ExecuteIntent {
       {
         name: "search_news",
         feature_name: async () => {
-          const searchKey = handleOutput(label, query).query;
+          // const searchKey = handleOutput(label, query).query;
+          const searchKey = handleSearchKey(query);
           await textToSpeech(TextSpeak.SEARCHING);
           const data = await readNewsControl.searchByKeyword(searchKey);
-          // if (data) {
-          //   await textToSpeech(data);
-          // }
           return { newsList: data };
         },
       },
@@ -226,7 +287,8 @@ class ExecuteIntent {
       {
         name: "read_news",
         feature_name: async () => {
-          const index = handleOutput(label, query)?.query;
+          // const index = handleOutput(label, query)?.query;
+          const index = handleReadNews(query);
           return readNewsControl.selectOneToRead(list, index - 1);
         }, //index start with 0
       },
