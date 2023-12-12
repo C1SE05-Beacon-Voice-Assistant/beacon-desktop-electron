@@ -48,6 +48,9 @@ const handleOutput = (label, query) => {
   const matchNews = /(tin tức|bản tin|thời sự|bài báo)/.test(query);
   if (matchNews) {
     if (label == "read_news") {
+      query = query.replace(/một/, "1");
+      query = query.replace(/hai/, "2");
+      query = query.replace(/ba/, "3");
       query = query.match(/[1-3]/)[0];
       console.log("Chọn bài báo số: ", query);
       if (query.length == 0)
@@ -84,7 +87,7 @@ class ExecuteIntent {
         feature_name: async () => {
           const appIntroductionRegex = new RegExp("giới");
           const musicRegex = new RegExp("nhạc");
-          const readNewsRegex = new RegExp("báo");
+          const readNewsRegex = new RegExp("tin tức");
           const volumeRegex = new RegExp("âm");
           if (label) {
             if (musicRegex.test(query)) {
@@ -153,7 +156,7 @@ class ExecuteIntent {
       {
         name: "mute",
         feature_name: async () => {
-          await volumeControl.mute();
+          // await volumeControl.mute();
         },
       },
       {
@@ -266,6 +269,7 @@ class ExecuteIntent {
 
     for (let f of features) {
       if (f.name === label) {
+        console.log("Execute feature: ", f.name);
         return f.feature_name();
       }
     }
@@ -273,31 +277,3 @@ class ExecuteIntent {
 }
 
 module.exports = ExecuteIntent;
-// read_nnuews
-// user_maal
-// next_content
-// pre_content
-// end_of_content
-// middle_of_content
-// back
-// up_to
-// start_content
-// stop_content
-// restart_content
-// pause_content
-// resume_content
-// your_choice
-// increase_volume
-// decrease_volume
-// default_volume
-// min_volume
-// max_volume
-// mute
-// un_mute
-// const features = [
-//   {
-//     name: '',
-//     feature: ReadNewsController
-//   }
-// ]
-//

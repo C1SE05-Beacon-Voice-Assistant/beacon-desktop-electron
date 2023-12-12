@@ -4,7 +4,7 @@ const handleInput = async (input: string, history: object[], oldList?: any) => {
   const intent = await recognizeIntent(input);
   // if intent include "Phẩy" => rerturn
   if (intent.query.toLowerCase().includes("phẩy")) return;
-  if (oldList.label) intent.label = oldList.label;
+  // if (oldList.label) intent.label = oldList.label;
   const result = await window.electron.executeIntent(
     intent,
     history,

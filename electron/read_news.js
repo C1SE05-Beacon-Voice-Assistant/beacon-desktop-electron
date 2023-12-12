@@ -40,14 +40,13 @@ class ReadNews {
         const url = await item
           .findElement(By.tagName("a"))
           .getAttribute("href");
-
         const spanText = await item.findElements(
           By.className("location-stamp")
         );
         if (spanText.length > 0) {
           description = description.replace(await spanText[0].getText(), "");
         }
-
+        console.log(title, description, url);
         result.push({ title, description, url });
       } catch (error) {
         console.error("An error occurred while processing an item:", error);
@@ -70,9 +69,12 @@ class ReadNews {
       );
 
     await this.driver.get(url);
-    const articlesList = await this.driver.findElements(
-      By.xpath(`//div[@id='automation_TV0']//article[position()<4]`)
+    let articlesList = await this.driver.findElements(
+      By.css(".list-news-subfolder article.item-news")
     );
+
+    articlesList = articlesList.slice(0, 3);
+
     const result = await this.getNewsInList(articlesList);
 
     if (!result || result.length === 0) {
@@ -84,13 +86,13 @@ class ReadNews {
     //   Tìm thấy ${result.length} kết quả, vui lòng chọn 1 tin tức mà bạn muốn đọc.
     // `);
 
-    const newsListSpeech = `Tìm thấy ${result.length} kết quả, vui lòng chọn 1 tin tức mà bạn muốn đọc.`;
+    var newsListSpeech = `Tìm thấy ${result.length} kết quả, vui lòng chọn 1 tin tức mà bạn muốn đọc.`;
     for (let i = 0; i < result.length; i++) {
       const option = `${i + 1}. ${result[i].title}. `;
       newsListSpeech += option;
     }
 
-    // await textToSpeech(newsListSpeech); //uncomment this in prod
+    await textToSpeech(newsListSpeech); //uncomment this in prod
 
     return result;
   }
@@ -119,13 +121,13 @@ class ReadNews {
       //   Tìm thấy ${newsList.length} kết quả, vui lòng chọn 1 tin tức mà bạn muốn đọc.
       // `);
 
-      const newsListSpeech = `Tìm thấy ${result.length} kết quả, vui lòng chọn 1 tin tức mà bạn muốn đọc.`;
-      for (let i = 0; i < result.length; i++) {
-        const option = `${i + 1}. ${result[i].title}. `;
+      var newsListSpeech = `Tìm thấy ${newsList.length} kết quả, vui lòng chọn 1 tin tức mà bạn muốn đọc.`;
+      for (let i = 0; i < newsList.length; i++) {
+        const option = `${i + 1}. ${newsList[i].title}. `;
         newsListSpeech += option;
       }
 
-      // await textToSpeech(newsListSpeech); //uncoment this in prod
+      await textToSpeech(newsListSpeech); //uncoment this in prod
 
       return newsList;
     } catch (error) {
@@ -154,8 +156,8 @@ class ReadNews {
       newsList[num].description
     );
 
-    await textToSpeech(result.title); //for testing only, comment this in production
-    // await textToSpeech(result.content) //uncomment this in production
+    // await textToSpeech(result.title); //for testing only, comment this in production
+    await textToSpeech(result.content); //uncomment this in production
 
     // return result;
   }
