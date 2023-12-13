@@ -2,7 +2,6 @@
 const beaconVolume = require("./control_volume.js");
 const listenToMusic = require("./listen_to_music.js");
 const ReadNews = require("./read_news.js");
-const gptGenerate = require("./gpt_generate.js");
 const { TextSpeak } = require("./helpers/enum.js");
 const { textToSpeech } = require("./beacon_speech.js");
 const { SearchNewsBy } = require("./helpers/enum.js");
@@ -294,38 +293,11 @@ class ExecuteIntent {
       },
 
       /**
-       * User Manual intent
-       *
-       */
-
-      // {
-      //   name: "user_manual",
-      //   feature_name: async () => object.start(),
-      // },
-
-      /**
        * GPT AI generate
        */
       {
         name: "gpt_ai",
-        feature_name: async () => {
-          const userData = {
-            role: "user",
-            content: query,
-          };
-          await textToSpeech(TextSpeak.SEARCHING);
-          const data = await gptGenerate([...history, userData]);
-          if (data) {
-            await textToSpeech(data[0]);
-          }
-          return [
-            userData,
-            {
-              role: "assistant",
-              content: data[0],
-            },
-          ];
-        },
+        feature_name: async () => {},
       },
     ];
 
