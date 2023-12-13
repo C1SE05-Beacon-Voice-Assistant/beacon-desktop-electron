@@ -1,7 +1,7 @@
 {
   "name": "beacon-desktop-electron",
   "version": "1.0.1",
-  "description": "Beacon Desktop Electron App",
+  "description": "Beacon Voice Assistant Desktop App",
   "license": "MIT",
   "main": "dist-electron/main.js",
   "author": "Beacon Team",
