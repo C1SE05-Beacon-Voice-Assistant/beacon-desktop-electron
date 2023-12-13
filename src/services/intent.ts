@@ -1,5 +1,5 @@
 import axios from "axios";
-const API_INTENT_URL = "https://api.beacon.id.vn/intent";
+const API_INTENT_URL = "http://localhost:8000/intent";
 
 type Intent = {
   label: string;
@@ -16,6 +16,7 @@ export const recognizeIntent = async (text: string): Promise<Intent> => {
   const response = await axios.post(
     API_INTENT_URL,
     {
+      user: '654f6b55388deecbf94c17c0',
       query: cleanText,
     },
     {

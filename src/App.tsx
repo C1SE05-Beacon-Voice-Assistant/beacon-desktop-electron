@@ -9,9 +9,12 @@ import MainLayout from "~/layouts/MainLayout";
 import handleInput from "~/lib/handleSpeech";
 import { AppRouter } from "~/util/constants/appRoutes";
 import { AboutPage, ConversationPage, HomePage, SettingPage } from "./pages";
+import axios from "axios";
 export const ContentContext = createContext("");
+export const ConversationContext = createContext([]);
 export default function App() {
   const [content, setContent] = useState("");
+  const [conversation, setConversation] = useState([]);
   const theme = createTheme({
     palette: {
       mode: "dark",
@@ -47,7 +50,14 @@ export default function App() {
           newsList: res.result.newsList,
         }); // Using functional update
       }
-    });
+    }).then(async() => {
+      const {data} = await axios.get(`http://127.0.0.1:8000/api/data/user/654f6b55388deecbf94c17c0`)
+      setConversation([...data])
+
+    }).catch(err => {
+      console.log(err);
+
+    })
 
     return () => {
       isMounted = false;
@@ -70,7 +80,11 @@ export default function App() {
             />
             <Route
               path={AppRouter.CONVERSATION}
-              element={<ConversationPage />}
+              element={
+                <ConversationContext.Provider value={conversation.reverse()}>
+                  <ConversationPage />
+                </ConversationContext.Provider>
+              }
             />
             <Route path={AppRouter.SETTING} element={<SettingPage />} />
             <Route path={AppRouter.ABOUT_TEAM} element={<AboutPage />} />
