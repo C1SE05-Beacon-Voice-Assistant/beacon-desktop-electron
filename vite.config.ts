@@ -24,6 +24,9 @@ const helpersPath = readdirSync(resolve(projectRootDir, "electron/helpers"))
   }, {});
 
 const config = defineConfig({
+  define: {
+    "process.env": process.env,
+  },
   build: {
     sourcemap: true,
     rollupOptions: {

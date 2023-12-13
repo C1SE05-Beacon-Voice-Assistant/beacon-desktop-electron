@@ -14,6 +14,8 @@ export interface IElectron {
     list: object[]
   ) => Promise<any>;
   quitDriver: () => void;
+  getMAC: () => Promise<string>;
+  getUserId: () => Promise<any>;
 }
 
 export interface IElectronAPI {

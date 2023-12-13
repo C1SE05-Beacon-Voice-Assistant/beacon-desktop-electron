@@ -1,5 +1,4 @@
-import axios from "axios";
-const API_INTENT_URL = "http://localhost:8000/intent";
+import axios from "~/lib/axios";
 
 type Intent = {
   label: string;
@@ -12,19 +11,13 @@ type Intent = {
  * @returns {object} - Intent object
  */
 export const recognizeIntent = async (text: string): Promise<Intent> => {
+  const userId = await window.electron.getUserId();
+  if (!userId) throw new Error("User not found");
   const cleanText = text.replace(/[.,!?;:'"()[\]{}<>\\/|`~@#$%^&*_+=]/g, "");
-  const response = await axios.post(
-    API_INTENT_URL,
-    {
-      user: '654f6b55388deecbf94c17c0',
-      query: cleanText,
-    },
-    {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
+  const response = await axios.post("/intent", {
+    user_id: userId._id,
+    query: cleanText,
+  });
 
   return {
     label: response.data.result.label,
