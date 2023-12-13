@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
+const os = require("os");
 const axios = require("axios");
 const { machineIdSync } = require("node-machine-id");
 
@@ -10,10 +11,14 @@ const mac = machineIdSync({
   original: true,
 });
 
-async function start() {
+async function isExist() {
   try {
     const response = await instance.get(`/users/mac/${mac}`);
-    return true;
+    if (response.data) {
+      return response.data;
+    }
+
+    return false;
   } catch (err) {
     if (err.response && err.response.status === 404) {
       return false;
@@ -25,6 +30,7 @@ async function start() {
 async function register(userInfo) {
   const data = {
     ...userInfo,
+    name: os.userInfo().username,
     email: "test@test.com",
     dob: "2000-12-25T15:24:14.035Z",
     gender: true,
@@ -39,18 +45,10 @@ async function register(userInfo) {
   }
 }
 
-// register({
-//   name: "test",
-//   email: "test@test.com",
-//   dob: "2023-11-04T15:24:14.035Z",
-//   gender: true,
-//   phone: "0123456789",
-// })
-//   .then((res) => {
-//     console.log("pass", res);
-//   })
-//   .catch((err) => {
-//     console.log("fail", err);
-//   });
+async function getMAC() {
+  return machineIdSync({
+    original: true,
+  });
+}
 
-module.exports = { start, register };
+module.exports = { isExist, register, getMAC };

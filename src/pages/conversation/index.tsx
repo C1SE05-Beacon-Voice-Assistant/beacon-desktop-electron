@@ -1,27 +1,11 @@
 import styles from "./Conversation.module.css";
 import Bot from "~/components/bot";
-import { useEffect, useState } from "react";
-import { getAllConversation } from "~/services/conversation";
+import { memo, useContext} from "react";
 import { diffDate } from "~/lib/date";
+import { ConversationContext } from "~/App";
 
-export default function Conversation() {
-  const [conversations, setConversation] = useState([]);
-  useEffect(() => {
-    getAllConversation()
-      .then((res) => res.text())
-      .then((data) => {
-        const conversations = data.split("\n"); // Split content into lines
-        // Append each line to the conversation array
-        const arrTmp: Array<object> = [];
-        conversations.forEach((line: any) => {
-          if (line) {
-            arrTmp.push(line);
-          }
-        });
-        setConversation(arrTmp);
-      });
-  }, []);
-
+ function Conversation() {
+  const conversation = useContext(ConversationContext)
   return (
     <div className={styles.container}>
       <div className="body">
@@ -30,10 +14,10 @@ export default function Conversation() {
         </h1>
 
         <div className={styles["content-wrapper"]}>
-          {conversations.length > 0 ? (
-            conversations.reverse().map((item, index) => {
-              const data = JSON.parse(item);
+          {conversation.length > 0 ? (
+            conversation.map((item, index) => {
               return (
+                item.query &&
                 <div key={index} className={styles.content}>
                   <div className={styles.conversion}>
                     <div className={styles.svg}>
@@ -51,9 +35,9 @@ export default function Conversation() {
                         />
                       </svg>
                     </div>
-                    <div className={styles.message}>{data.query}</div>
+                    <div className={styles.message}>{item.query}</div>
                   </div>
-                  <p className={styles.time}>{diffDate(data.date)}</p>
+                  <p className={styles.time}>{diffDate(item.date)}</p>
                 </div>
               );
             })
@@ -68,3 +52,4 @@ export default function Conversation() {
     </div>
   );
 }
+export default memo(Conversation)

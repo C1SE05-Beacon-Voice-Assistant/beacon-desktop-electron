@@ -9,13 +9,32 @@ const chromedriverPath = require("chromedriver").path.replace(
 );
 const ExecuteIntent = require(path.join(__dirname, "execute_intent.js"));
 const { BeaconSpeech } = require(path.join(__dirname, "beacon_speech.js"));
-const { UserManual } = require("./user_manual.js");
+const { UserManual } = require(path.join(__dirname, "user_manual.js"));
 const {
   storeConversation,
   getAllConversations,
   clearConversations,
 } = require(path.join(__dirname, "conversation.js"));
+const { getMAC, isExist, register } = require(path.join(__dirname, "start.js"));
 const chrome = require("selenium-webdriver/chrome");
+
+/**
+ * @description Check if user is registered
+ */
+(async () => {
+  const isRegistered = await isExist();
+  if (!isRegistered) {
+    await register({
+      phone: "0123456789",
+    })
+      .then((res) => {
+        console.log("pass", res);
+      })
+      .catch((err) => {
+        console.log("fail", err);
+      });
+  }
+})();
 
 const beacon = new BeaconSpeech("Beacon", "Hanoi");
 let driver;
@@ -53,6 +72,8 @@ contextBridge.exposeInMainWorld("electron", {
     await driver.close();
     await driver.quit();
   },
+  getMAC,
+  getUserId: isExist,
 });
 
 contextBridge.exposeInMainWorld("electronAPI", {

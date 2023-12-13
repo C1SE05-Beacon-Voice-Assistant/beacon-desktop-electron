@@ -9,9 +9,13 @@ import MainLayout from "~/layouts/MainLayout";
 import handleInput from "~/lib/handleSpeech";
 import { AppRouter } from "~/util/constants/appRoutes";
 import { AboutPage, ConversationPage, HomePage, SettingPage } from "./pages";
+import { getAllConversation } from "./services/conversation";
 export const ContentContext = createContext("");
+export const ConversationContext = createContext([]);
+
 export default function App() {
   const [content, setContent] = useState("");
+  const [conversation, setConversation] = useState([]);
   const theme = createTheme({
     palette: {
       mode: "dark",
@@ -37,17 +41,31 @@ export default function App() {
 
   useEffect(() => {
     let isMounted = true;
-    handleInput(text, history, oldList).then((res: any) => {
-      if (!isMounted) return;
-      if (res?.type === "gpt_ai") {
-        setHistory((prev) => [...prev, ...res.query]);
-      } else if (res?.result?.newsList) {
-        setOldList({
-          label: res.result.label,
-          newsList: res.result.newsList,
-        }); // Using functional update
-      }
-    });
+    handleInput(text, history, oldList)
+      .then((res: any) => {
+        if (!isMounted) return;
+        if (res?.type === "gpt_ai") {
+          setHistory((prev) => [...prev, ...res.query]);
+        } else if (res?.result?.newsList) {
+          setOldList({
+            label: res.result.label,
+            newsList: res.result.newsList,
+          }); // Using functional update
+        }
+      })
+      .then(() => {
+        return getAllConversation();
+      })
+      .then((res) => {
+        const data = res.data;
+        console.log(res.data);
+        if (data.length > 0) {
+          setConversation(data);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
     return () => {
       isMounted = false;
@@ -70,7 +88,11 @@ export default function App() {
             />
             <Route
               path={AppRouter.CONVERSATION}
-              element={<ConversationPage />}
+              element={
+                <ConversationContext.Provider value={conversation.reverse()}>
+                  <ConversationPage />
+                </ConversationContext.Provider>
+              }
             />
             <Route path={AppRouter.SETTING} element={<SettingPage />} />
             <Route path={AppRouter.ABOUT_TEAM} element={<AboutPage />} />

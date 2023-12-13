@@ -82,10 +82,6 @@ class ReadNews {
       return [];
     }
 
-    // await textToSpeech(`
-    //   Tìm thấy ${result.length} kết quả, vui lòng chọn 1 tin tức mà bạn muốn đọc.
-    // `);
-
     var newsListSpeech = `Tìm thấy ${result.length} kết quả, vui lòng chọn 1 tin tức mà bạn muốn đọc.`;
     for (let i = 0; i < result.length; i++) {
       const option = `${i + 1}. ${result[i].title}. `;
@@ -99,6 +95,13 @@ class ReadNews {
 
   async searchByKeyword(keyword) {
     try {
+      if (keyword === "") {
+        await textToSpeech(
+          "Xin lỗi, tôi không thể xác định được từ khóa mà bạn muốn tìm kiếm"
+        );
+        return [];
+      }
+
       const url = `https://timkiem.vnexpress.net/?q=${keyword}`;
       await this.driver.get(url);
       const articlesList = await this.driver.findElements(
@@ -111,15 +114,8 @@ class ReadNews {
         await textToSpeech(
           `Không tìm thấy kết quả tìm kiếm cho từ khóa ${keyword}`
         );
-
-        throw new Error(
-          `Không tìm thấy kết quả tìm kiếm cho từ khóa ${keyword}`
-        );
+        return [];
       }
-
-      //   await textToSpeech(`
-      //   Tìm thấy ${newsList.length} kết quả, vui lòng chọn 1 tin tức mà bạn muốn đọc.
-      // `);
 
       var newsListSpeech = `Tìm thấy ${newsList.length} kết quả, vui lòng chọn 1 tin tức mà bạn muốn đọc.`;
       for (let i = 0; i < newsList.length; i++) {
@@ -140,7 +136,7 @@ class ReadNews {
     console.log(newsList, num);
 
     if (newsList.length === 0) {
-      await textToSpeech("Rất tiếc, không có tin tức nào để đọc");
+      // await textToSpeech("Rất tiếc, không có tin tức nào để đọc");
       return;
     }
     if (newsList.length < num) {
@@ -156,10 +152,10 @@ class ReadNews {
       newsList[num].description
     );
 
-    // await textToSpeech(result.title); //for testing only, comment this in production
+    await textToSpeech(result.title); //for testing only, comment this in production
     await textToSpeech(result.content); //uncomment this in production
 
-    // return result;
+    return result;
   }
 
   async start() {
