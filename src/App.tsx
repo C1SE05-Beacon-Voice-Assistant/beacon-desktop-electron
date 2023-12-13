@@ -44,8 +44,10 @@ export default function App() {
     handleInput(text, history, oldList)
       .then((res: any) => {
         if (!isMounted) return;
+        console.log(res);
+
         if (res?.type === "gpt_ai") {
-          setHistory((prev) => [...prev, ...res.query]);
+          setHistory((prev) => [...prev, ...res.result]);
         } else if (res?.result?.newsList) {
           setOldList({
             label: res.result.label,
@@ -58,7 +60,6 @@ export default function App() {
       })
       .then((res) => {
         const data = res.data;
-        console.log(res.data);
         if (data.length > 0) {
           setConversation(data);
         }

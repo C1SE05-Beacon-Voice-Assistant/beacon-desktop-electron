@@ -4,7 +4,7 @@ const axios = require("axios");
 const { machineIdSync } = require("node-machine-id");
 
 const instance = axios.create({
-  baseURL: process.env.API_URL || "http://localhost:8000/api",
+  baseURL: process.env.BACKEND_URL || "http://localhost:8000",
 });
 
 const mac = machineIdSync({
@@ -13,7 +13,7 @@ const mac = machineIdSync({
 
 async function isExist() {
   try {
-    const response = await instance.get(`/users/mac/${mac}`);
+    const response = await instance.get(`/api/users/mac/${mac}`);
     if (response.data) {
       return response.data;
     }
@@ -38,7 +38,7 @@ async function register(userInfo) {
   };
 
   try {
-    const response = await instance.post("/users", data);
+    const response = await instance.post("/api/users", data);
     return response.data;
   } catch (error) {
     return error;
@@ -51,4 +51,4 @@ async function getMAC() {
   });
 }
 
-module.exports = { isExist, register, getMAC };
+module.exports = { isExist, register, getMAC, instance };
