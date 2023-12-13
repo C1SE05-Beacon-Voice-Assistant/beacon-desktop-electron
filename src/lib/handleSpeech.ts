@@ -1,6 +1,7 @@
 import { recognizeIntent } from "~/services/intent";
 
 const handleInput = async (input: string, history: object[], oldList?: any) => {
+  if (!input) return;
   const intent = await recognizeIntent(input);
   // if intent include "Phẩy" => rerturn
   if (intent.query.toLowerCase().includes("phẩy")) return;
@@ -13,7 +14,6 @@ const handleInput = async (input: string, history: object[], oldList?: any) => {
 
   if (result)
     return {
-      // type: "gpt",
       type: intent.label,
       result,
     };

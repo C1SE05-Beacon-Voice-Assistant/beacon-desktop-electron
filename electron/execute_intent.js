@@ -8,6 +8,7 @@ const { SearchNewsBy } = require("./helpers/enum.js");
 const {
   detectSpeakerDeviceIsMuting,
 } = require("./detect_speaker_device_is_muting.js");
+const gptGenerate = require("./gpt_generate.js");
 
 /**
  * @description handle output of intent
@@ -297,7 +298,20 @@ class ExecuteIntent {
        */
       {
         name: "gpt_ai",
-        feature_name: async () => {},
+        feature_name: async () => {
+          const messages = [
+            ...history,
+            {
+              role: "user",
+              content: query,
+            },
+          ];
+          const { data } = await gptGenerate(messages);
+          console.log(data);
+          await textToSpeech(data.result.content);
+          if (data.history.length > 0) return [...data.history, data.result];
+          return [data.result];
+        },
       },
     ];
 

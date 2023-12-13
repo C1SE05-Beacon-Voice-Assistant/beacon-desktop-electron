@@ -1,12 +1,9 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { PythonShell } = require("python-shell");
-const { options } = require("./helpers/optionPyshell");
+const { instance } = require("./start");
 
 async function gptGenerate(arrayInput) {
-  const data = await PythonShell.run("gpt_integration.py", {
-    ...options,
-    mode: "text",
-    args: JSON.stringify(arrayInput),
+  const data = await instance.post("/generate", {
+    history: arrayInput,
   });
 
   return data;
@@ -19,7 +16,7 @@ async function gptGenerate(arrayInput) {
 //   },
 //   {
 //     role: "assistant",
-//     content: "Chào bạn, đây là Bing. Bạn muốn tôi giúp gì?",
+//     content: "Chào bạn, đây là Beacon. Bạn muốn tôi giúp gì?",
 //   },
 //   {
 //     role: "user",
