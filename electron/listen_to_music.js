@@ -134,7 +134,7 @@ class MusicPlayer {
   async playOnYoutube() {
     try {
       this.platformName = "youtube";
-      const url = `https://yewtu.be/search?q=${this.songName}`;
+      const url = `https://yewtu.be/search?q=${`Bài hát ${this.songName}`}`;
       await this.driver.get(url);
 
       const songList = await this.driver.findElements(
