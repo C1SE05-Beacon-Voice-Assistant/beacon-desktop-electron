@@ -65,6 +65,11 @@ async function beaconVolume() {
     await setVolume(0);
   }
 
+  async function autoUnmute() {
+    const mute = await loudness.getMuted();
+    if (mute) await loudness.setMuted(false);
+  }
+
   return {
     setVolume,
     getVolume,
@@ -74,6 +79,7 @@ async function beaconVolume() {
     unmute,
     setVolumeToMax,
     setVolumeToMin,
+    autoUnmute,
   };
 }
 

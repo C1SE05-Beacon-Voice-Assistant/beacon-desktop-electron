@@ -4,7 +4,7 @@ const axios = require("axios");
 const { machineIdSync } = require("node-machine-id");
 
 const instance = axios.create({
-  baseURL: process.env.BACKEND_URL || "http://localhost:8000",
+  baseURL: process.env.BACKEND_URL || "https://api.beacon.id.vn",
 });
 
 const mac = machineIdSync({

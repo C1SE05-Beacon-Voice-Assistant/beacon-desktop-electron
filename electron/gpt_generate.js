@@ -22,6 +22,6 @@ async function gptGenerate(arrayInput) {
 //     role: "user",
 //     content: "Tôi muốn đặt lịch hẹn",
 //   },
-// ]).then((data) => console.log(data[0]));
+// ]).then((data) => console.log(data.data));
 
 module.exports = gptGenerate;

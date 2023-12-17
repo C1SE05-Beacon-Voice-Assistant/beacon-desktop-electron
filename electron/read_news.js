@@ -4,7 +4,6 @@ const readline = require("readline");
 const { promisify } = require("util");
 const NewsReader = require("./helpers/newsReader.js");
 const { By } = require("selenium-webdriver");
-const { textToSpeech } = require("./beacon_speech.js");
 
 const executeException = require("./situation_except");
 
@@ -16,15 +15,11 @@ const rl = readline.createInterface({
 const questionAsync = promisify(rl.question).bind(rl);
 
 class ReadNews {
-  constructor(chromeDriver) {
+  constructor(chromeDriver, beacon) {
     this.driver = chromeDriver;
+    this.beacon = beacon;
     this.newsReader = new NewsReader();
   }
-
-  // constructor() {
-  //   this.driver = new ChromeDriver().getInstance();
-  //   this.newsReader = new NewsReader();
-  // }
 
   async getNewsInList(list) {
     const result = [];
@@ -78,7 +73,7 @@ class ReadNews {
     const result = await this.getNewsInList(articlesList);
 
     if (!result || result.length === 0) {
-      await textToSpeech("Rất tiếc tôi không tìm thấy tin tức nào");
+      await this.beacon.textToSpeech("Rất tiếc tôi không tìm thấy tin tức nào");
       return [];
     }
 
@@ -88,7 +83,7 @@ class ReadNews {
       newsListSpeech += option;
     }
 
-    await textToSpeech(newsListSpeech); //uncomment this in prod
+    await this.beacon.textToSpeech(newsListSpeech); //uncomment this in prod
 
     return result;
   }
@@ -96,7 +91,7 @@ class ReadNews {
   async searchByKeyword(keyword) {
     try {
       if (keyword === "") {
-        await textToSpeech(
+        await this.beacon.textToSpeech(
           "Xin lỗi, tôi không thể xác định được từ khóa mà bạn muốn tìm kiếm"
         );
         return [];
@@ -111,7 +106,7 @@ class ReadNews {
       const newsList = await this.getNewsInList(articlesList);
 
       if (!newsList || newsList.length === 0) {
-        await textToSpeech(
+        await this.beacon.textToSpeech(
           `Không tìm thấy kết quả tìm kiếm cho từ khóa ${keyword}`
         );
         return [];
@@ -123,7 +118,7 @@ class ReadNews {
         newsListSpeech += option;
       }
 
-      await textToSpeech(newsListSpeech); //uncoment this in prod
+      await this.beacon.textToSpeech(newsListSpeech); //uncoment this in prod
 
       return newsList;
     } catch (error) {
@@ -136,11 +131,13 @@ class ReadNews {
     console.log(newsList, num);
 
     if (newsList.length === 0) {
-      // await textToSpeech("Rất tiếc, không có tin tức nào để đọc");
+      // await this.beacon.textToSpeech("Rất tiếc, không có tin tức nào để đọc");
       return;
     }
     if (newsList.length < num) {
-      await textToSpeech(`Lựa chọn ${num + 1} của bạn không hợp lệ`);
+      await this.beacon.textToSpeech(
+        `Lựa chọn ${num + 1} của bạn không hợp lệ`
+      );
       return;
     }
 
@@ -152,8 +149,8 @@ class ReadNews {
       newsList[num].description
     );
 
-    await textToSpeech(result.title); //for testing only, comment this in production
-    await textToSpeech(result.content); //uncomment this in production
+    await this.beacon.textToSpeech(result.title); //for testing only, comment this in production
+    await this.beacon.textToSpeech(result.content); //uncomment this in production
 
     return result;
   }

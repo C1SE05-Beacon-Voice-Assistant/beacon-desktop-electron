@@ -11,4 +11,4 @@ const checkInternetConnection = (callback) => {
     });
 };
 
-module.exports = { checkInternetConnection };
+module.exports = checkInternetConnection;
