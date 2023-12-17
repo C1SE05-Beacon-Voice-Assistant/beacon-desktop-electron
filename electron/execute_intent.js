@@ -219,7 +219,7 @@ class ExecuteIntent {
       {
         name: "mute",
         feature_name: async () => {
-          // await volumeControl.mute();
+          await volumeControl.mute();
         },
       },
       {
@@ -230,6 +230,13 @@ class ExecuteIntent {
       },
       {
         name: "set_volume",
+        feature_name: async () => {
+          const volume = handleOutput(label, query);
+          if (volume) await volumeControl.setVolume(volume.query);
+        },
+      },
+      {
+        name: "default_volume",
         feature_name: async () => {
           const volume = handleOutput(label, query);
           if (volume) await volumeControl.setVolume(volume.query);
