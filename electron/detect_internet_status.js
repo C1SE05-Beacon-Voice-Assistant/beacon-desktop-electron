@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const http = require("http");
 
-const checkInternetConnection = (callback) => {
+const checkInternetConnection = async () => {
   http
     .get("http://www.google.com", (res) => {
-      callback(true);
+      return true;
     })
     .on("error", () => {
-      callback(false);
+      return false;
     });
 };
 

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const loudness = require("loudness");
-const executeException = require("./situation_except");
+const executeException = require("./execute_exception");
 
 async function beaconVolume() {
   const volume = await loudness.getVolume();
