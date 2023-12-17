@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import * as sdk from "microsoft-cognitiveservices-speech-sdk";
-import { PythonShell } from "python-shell";
+const { PythonShell } = require("python-shell");
 const { options } = require("./helpers/optionPyshell");
 const { speechConfigDefault } = require("./helpers/config");
 const {
   TextSpeak: { OUT_LISTEN, ACTIVE },
 } = require("./helpers/enum");
 const loudness = require("loudness");
-const fs = require("fs");
 
 async function autoUnmute() {
   const mute = await loudness.getMuted();
