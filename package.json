@@ -30,7 +30,6 @@
     "moment": "^2.29.4",
     "node-cron": "^3.0.3",
     "node-machine-id": "^1.1.12",
-    "play-sound": "^1.1.6",
     "python-shell": "^5.0.0",
     "selenium-webdriver": "^4.15.0",
     "sound-play": "^1.1.0"
