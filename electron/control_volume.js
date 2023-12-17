@@ -61,7 +61,7 @@ async function beaconVolume() {
   }
 
   async function setVolumeToMin() {
-    await setVolume(0);
+    await setVolume(1);
   }
 
   async function autoUnmute() {
