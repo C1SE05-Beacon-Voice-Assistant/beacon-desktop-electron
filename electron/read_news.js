@@ -5,7 +5,7 @@ const { promisify } = require("util");
 const NewsReader = require("./helpers/newsReader.js");
 const { By } = require("selenium-webdriver");
 
-const executeException = require("./situation_except");
+const executeException = require("./execute_exception");
 
 const rl = readline.createInterface({
   input: process.stdin,
