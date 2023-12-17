@@ -4,25 +4,29 @@ import { PythonShell } from "python-shell";
 const { options } = require("./helpers/optionPyshell");
 const { speechConfigDefault } = require("./helpers/config");
 const {
-  detectSpeakerDeviceIsMuting,
-} = require("./detect_speaker_device_is_muting");
-const {
   TextSpeak: { OUT_LISTEN, ACTIVE },
 } = require("./helpers/enum");
+const loudness = require("loudness");
+const fs = require("fs");
 
+async function autoUnmute() {
+  const mute = await loudness.getMuted();
+  if (mute) await loudness.setMuted(false);
+}
 class BeaconSpeech {
   constructor(name, location) {
     this.name = name;
     this.callBotTime = 0;
     this.location = location;
-    const { subscriptionKey, region, speechRecognitionLanguage, endpointId } =
+    const { subscriptionKey, region, speechRecognitionLanguage } =
       speechConfigDefault;
+    this.synthesizer = new sdk.SpeechSynthesizer(createSpeechConfig());
     this.speechConfig = sdk.SpeechConfig.fromSubscription(
       subscriptionKey,
       region
     );
     this.speechConfig.speechRecognitionLanguage = speechRecognitionLanguage;
-    this.speechConfig.endpointId = endpointId;
+    // this.speechConfig.endpointId = endpointId;
     this.speechRecognizer = new sdk.SpeechRecognizer(
       this.speechConfig,
       sdk.AudioConfig.fromDefaultMicrophoneInput(),
@@ -32,6 +36,7 @@ class BeaconSpeech {
     this.keywordRetryCount = 0; // Track the number of consecutive no matches
     this.keywordRetryLimit = 4; // Define the limit for consecutive no matches
     this.keywordRecognitionActive = false; // Flag to track keyword recognition state
+    this.isSpeechSynthesisActive = false;
   }
 
   recognize(audioConfig) {
@@ -100,6 +105,7 @@ class BeaconSpeech {
   }
 
   async handleNoMatch() {
+    if (this.isSpeechSynthesisActive) return;
     if (this.keywordRecognitionActive) {
       this.keywordRetryCount++;
       if (this.keywordRetryCount >= this.keywordRetryLimit) {
@@ -122,7 +128,7 @@ class BeaconSpeech {
       if (this.callBotTime === 0) {
         setTimeout(() => {
           textToSpeech("Nói làm sao sử dụng  để nghe hướng dẫn từ bi cần");
-        }, 2000);
+        }, 1000);
         ++this.callBotTime;
       }
 
@@ -131,6 +137,57 @@ class BeaconSpeech {
       this.speechRecognizer.startContinuousRecognitionAsync();
     } else {
       await textToSpeech("Tôi không nghe rõ, bạn có thể nói lại được không?");
+    }
+  }
+
+  async textToSpeech(text) {
+    await autoUnmute();
+    if (!text || this.isSpeechSynthesisActive) return;
+    if (!this.keywordRecognitionActive) return;
+    this.stopBackgroundListen();
+    this.isSpeechSynthesisActive = true;
+    try {
+      await new Promise((resolve, reject) => {
+        this.synthesizer.speakTextAsync(
+          text,
+          (result) => {
+            if (result.reason === sdk.ResultReason.SynthesizingAudioCompleted) {
+              const audioDuration = result.audioDuration / 10000000;
+              setTimeout(() => {
+                resolve();
+              }, parseInt(audioDuration * 950));
+            } else {
+              reject(new Error(result.errorDetails));
+            }
+          },
+          (err) => {
+            console.trace("err - " + err);
+            reject(err);
+          }
+        );
+      });
+
+      this.isSpeechSynthesisActive = false;
+      this.speechRecognizer.startContinuousRecognitionAsync();
+    } catch (error) {
+      console.error("Error:", error.message);
+
+      this.isSpeechSynthesisActive = false;
+    }
+  }
+
+  async stopTextToSpeech() {
+    console.log("stopTextToSpeech");
+    try {
+      // Stop the speech synthesis
+      this.synthesizer.close();
+
+      // Reset the synthesizer
+      this.synthesizer = new sdk.SpeechSynthesizer(createSpeechConfig());
+
+      this.isSpeechSynthesisActive = false;
+    } catch (error) {
+      console.error("Error while stopping text to speech:", error);
     }
   }
 }
@@ -148,12 +205,9 @@ const createSpeechConfig = () => {
   return config;
 };
 
-const textToSpeech = async (text, beacon) => {
+const textToSpeech = async (text) => {
+  await autoUnmute();
   if (!text) return;
-  if (beacon) {
-    if (!beacon.keywordRecognitionActive) return;
-    beacon.stopBackgroundListen();
-  }
   var synthesizer = new sdk.SpeechSynthesizer(createSpeechConfig());
 
   try {
@@ -162,12 +216,7 @@ const textToSpeech = async (text, beacon) => {
         text,
         (result) => {
           if (result.reason === sdk.ResultReason.SynthesizingAudioCompleted) {
-            // calculate the total time in seconds that audio was synthesized
-            // convert the time from ticks to seconds
             const audioDuration = result.audioDuration / 10000000;
-            //  console.log(`Audio was synthesized for ${audioDuration} seconds`);
-
-            // resolve the promise when audioDuration seconds have passed
             setTimeout(() => {
               resolve();
             }, parseInt(audioDuration * 950));
@@ -185,10 +234,6 @@ const textToSpeech = async (text, beacon) => {
         }
       );
     });
-
-    if (beacon) {
-      beacon.speechRecognizer.startContinuousRecognitionAsync();
-    }
   } catch (error) {
     console.error("Error:", error.message);
   }

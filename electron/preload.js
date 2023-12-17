@@ -9,7 +9,6 @@ const chromedriverPath = require("chromedriver").path.replace(
 );
 const ExecuteIntent = require(path.join(__dirname, "execute_intent.js"));
 const { BeaconSpeech } = require(path.join(__dirname, "beacon_speech.js"));
-const { UserManual } = require(path.join(__dirname, "user_manual.js"));
 const {
   storeConversation,
   getAllConversations,
@@ -58,8 +57,8 @@ if (process.env.NODE_ENV === "development") {
     .setChromeOptions(chromeOptions)
     .build();
 }
-const userManual = new UserManual(beacon);
-const initExecute = new ExecuteIntent(driver, userManual);
+
+const initExecute = new ExecuteIntent(driver, beacon);
 
 contextBridge.exposeInMainWorld("electron", {
   backgroundListen: beacon.backgroundListen.bind(beacon),
