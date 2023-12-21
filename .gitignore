@@ -131,3 +131,5 @@ beacon_package/**/*.bk.py
 *.csv
 
 beacon_package/intent_recognition/cache/
+
+build/python-3.9.0-amd64.exe
