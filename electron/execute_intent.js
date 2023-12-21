@@ -1,14 +1,11 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const beaconVolume = require("./control_volume.js");
-const listenToMusic = require("./listen_to_music.js");
+const MusicPlayer = require("./listen_to_music.js");
 const ReadNews = require("./read_news.js");
 const { TextSpeak } = require("./helpers/enum.js");
-const { textToSpeech } = require("./beacon_speech.js");
 const { SearchNewsBy } = require("./helpers/enum.js");
-const {
-  detectSpeakerDeviceIsMuting,
-} = require("./detect_speaker_device_is_muting.js");
 const gptGenerate = require("./gpt_generate.js");
+const UserManual = require("./user_manual.js");
 
 /**
  * @description handle output of intent
@@ -128,19 +125,19 @@ const handleReadNews = (query) => {
 };
 
 class ExecuteIntent {
-  constructor(driver, userManual) {
+  constructor(driver, beacon) {
     this.driver = driver;
-    this.userManual = userManual;
+    this.beacon = beacon;
     this.isReadManual = true;
+    this.userManual = new UserManual(this.beacon);
+    this.listenControl = new MusicPlayer(this.driver, this.beacon);
+    this.readNewsControl = new ReadNews(this.driver, this.beacon);
   }
   async executeIntent(output, history, list) {
-    await detectSpeakerDeviceIsMuting();
     const label = output.label;
     const query = output.query;
-    const listenControl = await listenToMusic(this.driver);
-
-    const readNewsControl = new ReadNews(this.driver);
     const volumeControl = await beaconVolume();
+    volumeControl.autoUnmute();
     const features = [
       {
         name: "user_manual",
@@ -171,22 +168,25 @@ class ExecuteIntent {
           // const music = handleOutput(label, query);
           const music = handleMusic(query);
           if (music) {
-            await listenControl.searchSong(music);
-            await listenControl.playOnYoutube();
+            await this.listenControl.searchSong(music);
+            await this.listenControl.playOnYoutube();
           }
         },
       },
       {
         name: "pause_content",
-        feature_name: async () => listenControl.pause(),
+        feature_name: async () => this.listenControl.pause(),
       },
       {
         name: "stop_content",
-        feature_name: async () => listenControl.stop(),
+        feature_name: async () => {
+          await this.beacon.stopTextToSpeech();
+          await this.listenControl.stop();
+        },
       },
       {
         name: "resume_content",
-        feature_name: async () => listenControl.resume(),
+        feature_name: async () => this.listenControl.resume(),
       },
       {
         name: "increase_volume",
@@ -219,7 +219,7 @@ class ExecuteIntent {
       {
         name: "mute",
         feature_name: async () => {
-          // await volumeControl.mute();
+          await volumeControl.mute();
         },
       },
       {
@@ -230,6 +230,13 @@ class ExecuteIntent {
       },
       {
         name: "set_volume",
+        feature_name: async () => {
+          const volume = handleOutput(label, query);
+          if (volume) await volumeControl.setVolume(volume.query);
+        },
+      },
+      {
+        name: "default_volume",
         feature_name: async () => {
           const volume = handleOutput(label, query);
           if (volume) await volumeControl.setVolume(volume.query);
@@ -253,8 +260,8 @@ class ExecuteIntent {
         feature_name: async () => {
           // const searchKey = handleOutput(label, query).query;
           const searchKey = handleSearchKey(query);
-          await textToSpeech(TextSpeak.SEARCHING);
-          const data = await readNewsControl.searchByKeyword(searchKey);
+          await this.beacon.textToSpeech(TextSpeak.SEARCHING);
+          const data = await this.readNewsControl.searchByKeyword(searchKey);
           return { newsList: data };
         },
       },
@@ -262,7 +269,7 @@ class ExecuteIntent {
         name: "latest_news",
         feature_name: async () => {
           return {
-            newsList: await readNewsControl.search(SearchNewsBy.LATEST),
+            newsList: await this.readNewsControl.search(SearchNewsBy.LATEST),
           };
         },
       },
@@ -270,14 +277,16 @@ class ExecuteIntent {
         name: "most_read_news",
         feature_name: async () => {
           return {
-            newsList: await readNewsControl.search(SearchNewsBy.MOST_READ),
+            newsList: await this.readNewsControl.search(SearchNewsBy.MOST_READ),
           };
         },
       },
       {
         name: "breaking_news",
         feature_name: async () => {
-          const newsList = await readNewsControl.search(SearchNewsBy.BREAKING);
+          const newsList = await this.readNewsControl.search(
+            SearchNewsBy.BREAKING
+          );
           return {
             label: label,
             newsList,
@@ -289,7 +298,7 @@ class ExecuteIntent {
         feature_name: async () => {
           // const index = handleOutput(label, query)?.query;
           const index = handleReadNews(query);
-          return readNewsControl.selectOneToRead(list, index - 1);
+          return this.readNewsControl.selectOneToRead(list, index - 1);
         }, //index start with 0
       },
 
@@ -308,7 +317,7 @@ class ExecuteIntent {
           ];
           const { data } = await gptGenerate(messages);
           console.log(data);
-          await textToSpeech(data.result.content);
+          await this.beacon.textToSpeech(data.result.content);
           if (data.history.length > 0) return [...data.history, data.result];
           return [data.result];
         },

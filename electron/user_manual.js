@@ -1,14 +1,12 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { guide } = require("./helpers/guide");
-const { textToSpeech } = require("./beacon_speech.js");
-
 class UserManual {
   constructor(beacon) {
     this.beacon = beacon;
   }
 
   async customRead(text) {
-    return await textToSpeech(text, this.beacon);
+    return await this.beacon.textToSpeech(text);
   }
 
   async readIntroduction() {
@@ -53,6 +51,4 @@ class UserManual {
   }
 }
 
-module.exports = {
-  UserManual,
-};
+module.exports = UserManual;

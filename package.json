@@ -1,15 +1,15 @@
 {
   "name": "beacon-desktop-electron",
-  "version": "1.0.2",
+  "version": "1.0.3-beta.1",
   "description": "Beacon Voice Assistant Desktop App",
   "license": "MIT",
   "main": "dist-electron/main.js",
   "author": "Beacon Team",
   "scripts": {
     "copy": "node ./copyStaticFiles.js",
-    "dev": "npm run copy && rm -rf ./dist-electron && vite",
+    "dev": "rm -rf ./dist-electron && npm run copy && vite",
     "make": "npm run build && electron-builder build --win",
-    "build": "npm run copy && rm -rf ./dist-electron && vite build",
+    "build": "rm -rf ./dist-electron && npm run copy && vite build",
     "release": "npm run copy && vite build && electron-builder --publish always",
     "lint": "eslint --ext .ts,.tsx ."
   },
@@ -30,6 +30,7 @@
     "moment": "^2.29.4",
     "node-cron": "^3.0.3",
     "node-machine-id": "^1.1.12",
+    "play-sound": "^1.1.6",
     "python-shell": "^5.0.0",
     "selenium-webdriver": "^4.15.0",
     "sound-play": "^1.1.0"

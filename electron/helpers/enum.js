@@ -18,11 +18,11 @@ const TextSpeak = {
   SEARCHING: "Đang tìm kiếm",
   NO_RESULT: "Không tìm thấy kết quả",
   OUT_LISTEN: [
-    "Nói hey bi cần để gọi tôi",
-    "Tôi đi ngủ nhé",
-    "Tạm biệt",
-    "Tạm biệt nhé",
-    "Tạm biệt bạn",
+    "         Nói hey bi cần để gọi tôi",
+    "         Tôi đi ngủ nhé",
+    "         Tạm biệt",
+    "         Tạm biệt nhé",
+    "         Tạm biệt bạn",
   ],
   ACTIVE: [
     "Tôi đây",

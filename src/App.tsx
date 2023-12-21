@@ -44,8 +44,6 @@ export default function App() {
     handleInput(text, history, oldList)
       .then((res: any) => {
         if (!isMounted) return;
-        console.log(res);
-
         if (res?.type === "gpt_ai") {
           setHistory((prev) => [...prev, ...res.result]);
         } else if (res?.result?.newsList) {
@@ -71,7 +69,7 @@ export default function App() {
     return () => {
       isMounted = false;
     };
-  }, [text]);
+  }, [content]);
 
   return (
     <ThemeProvider theme={theme}>

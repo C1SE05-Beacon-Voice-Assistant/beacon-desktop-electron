@@ -9,7 +9,6 @@ const chromedriverPath = require("chromedriver").path.replace(
 );
 const ExecuteIntent = require(path.join(__dirname, "execute_intent.js"));
 const { BeaconSpeech } = require(path.join(__dirname, "beacon_speech.js"));
-const { UserManual } = require(path.join(__dirname, "user_manual.js"));
 const {
   storeConversation,
   getAllConversations,
@@ -17,6 +16,22 @@ const {
 } = require(path.join(__dirname, "conversation.js"));
 const { getMAC, isExist, register } = require(path.join(__dirname, "start.js"));
 const chrome = require("selenium-webdriver/chrome");
+const executeException = require(path.join(__dirname, "execute_exception.js"));
+const checkInternetConnection = require(path.join(
+  __dirname,
+  "detect_internet_status.js"
+));
+
+/**
+ * @description Check internet connection
+ */
+(async () => {
+  const isInternet = await checkInternetConnection();
+  console.log(isInternet);
+  if (!isInternet) {
+    executeException("noInternet");
+  }
+})();
 
 /**
  * @description Check if user is registered
@@ -58,8 +73,8 @@ if (process.env.NODE_ENV === "development") {
     .setChromeOptions(chromeOptions)
     .build();
 }
-const userManual = new UserManual(beacon);
-const initExecute = new ExecuteIntent(driver, userManual);
+
+const initExecute = new ExecuteIntent(driver, beacon);
 
 contextBridge.exposeInMainWorld("electron", {
   backgroundListen: beacon.backgroundListen.bind(beacon),
