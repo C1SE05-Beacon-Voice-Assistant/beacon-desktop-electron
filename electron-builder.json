@@ -8,7 +8,7 @@
     "buildResources": "public",
     "output": "release/build"
   },
-  "extraResources": ["./public/**"],
+  "extraResources": ["./public/**", "!./public/*.exe"],
   "files": [
     "dist",
     "dist-electron",
@@ -33,7 +33,8 @@
     "allowToChangeInstallationDirectory": true,
     "deleteAppDataOnUninstall": true,
     "uninstallDisplayName": "beacon-uninstall",
-    "license": "LICENSE.txt"
+    "license": "LICENSE.txt",
+    "include": "build/installer.nsh"
   },
   "win": {
     "target": ["nsis"]
