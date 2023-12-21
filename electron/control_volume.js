@@ -21,7 +21,7 @@ async function beaconVolume() {
 
   async function increaseVolume(number) {
     try {
-      await setVolume(volume + 1 >= 100 ? 100 : volume + 1);
+      if (number > volume) await setVolume(number >= 100 ? 100 : number);
     } catch (error) {
       console.error("An error occurred while increasing the volume:", error);
       executeException("increaseVolume");
@@ -30,8 +30,7 @@ async function beaconVolume() {
 
   async function decreaseVolume(number) {
     try {
-      console.log(volume);
-      await setVolume(volume - 1 < 0 ? 0 : volume - 1);
+      if (number < volume) await setVolume(number <= 10 ? 10 : number);
     } catch (error) {
       console.error("An error occurred while decreasing the volume:", error);
       executeException("decreaseVolume");
