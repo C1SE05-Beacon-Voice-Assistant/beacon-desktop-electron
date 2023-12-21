@@ -2,13 +2,15 @@
 const http = require("http");
 
 const checkInternetConnection = async () => {
-  http
-    .get("http://www.google.com", (res) => {
-      return true;
-    })
-    .on("error", () => {
-      return false;
-    });
+  return new Promise((resolve) => {
+    http
+      .get("http://www.google.com", (res) => {
+        resolve(true);
+      })
+      .on("error", (err) => {
+        resolve(false);
+      });
+  });
 };
 
 module.exports = checkInternetConnection;
