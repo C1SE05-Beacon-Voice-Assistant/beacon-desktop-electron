@@ -110,6 +110,7 @@ dist-electron../
 dist-electron..
 
 .env.production
+.env.local
 
 *.zip
 
@@ -133,3 +134,4 @@ beacon_package/**/*.bk.py
 beacon_package/intent_recognition/cache/
 
 */python-3.9.0-amd64.exe
+

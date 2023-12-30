@@ -69,7 +69,7 @@ export default function App() {
     return () => {
       isMounted = false;
     };
-  }, [content]);
+  }, [text]);
 
   return (
     <ThemeProvider theme={theme}>
