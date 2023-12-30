@@ -1,6 +1,6 @@
 {
   "name": "beacon-voice-assistant",
-  "version": "1.0.3.1",
+  "version": "1.0.3",
   "description": "Beacon Voice Assistant Desktop App",
   "license": "MIT",
   "main": "dist-electron/main.js",
