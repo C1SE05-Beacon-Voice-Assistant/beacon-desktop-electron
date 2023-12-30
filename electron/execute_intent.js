@@ -266,7 +266,7 @@ class ExecuteIntent {
         },
       },
       {
-        name: "latest_news",
+        name: "last_news",
         feature_name: async () => {
           return {
             newsList: await this.readNewsControl.search(SearchNewsBy.LATEST),
